@@ -1,58 +1,102 @@
-// core
+// core c
 #pragma once
-#include <array>
-#include <vector>
+#include <math.h>  // atan2
+// core cpp
+#include <array>   // array
+#include <vector>  // verctor
+
+using namespace std;
 
 typedef struct Point {
 	/*
-		A cartesian product.
+	A point on the Euclidian plane.
 	*/
+
+	// vars
 	double x = 0.0;
 	double y = 0.0;
+	double r = 0.0;
+	double theta = 0.0;
 
-	Point() {};
-	Point(double x, double y): x(x), y(y) {};
+	// constructors
+	Point(){};
+	Point(double x, double y) { updateCart(x, y); };
+
+	// methods
+	void updateCart(double new_x, double new_y) {
+		/*
+		Update the point using cartesian coordinates.
+		*/
+
+		x = new_x;
+		y = new_y;
+		r = pow(pow(x, 2) + pow(y, 2), 0.5);
+		theta = atan2(y, x);
+	}
+
+	void updatePol(double new_r, double new_theta) {
+		/*
+		Update the point using polar coordinates.
+		*/
+
+		r = new_r;
+		theta = new_theta;
+		x = r * cos(theta);
+		y = r * sin(theta);
+	}
 } Point;
 
 typedef struct Line {
 	/*
-		A line from point a to point b.
+	A straight line from point a to point b.
 	*/
+
+	// vars
 	Point a;
 	Point b;
 
-	Line() {};
-	Line(Point a, Point b): a(a), b(b) {};
+	// constructors
+	Line(){};
+	Line(Point a, Point b): a(a), b(b){};
 } Line;
 
-// An array of Points
-struct Vertices : public std::vector<Point> {
+typedef struct Vertices : public vector<Point> {
 	/*
-		An array of points.
+	An array of points.
 	*/
-	std::vector<std::array<double, 2>> convertVerticesToVector() {
+
+	// constructors
+	Vertices(){};
+
+	// methods
+	vector<array<double, 2>> convertVerticesToVector() {
 		// covert to vector of arrays
-		std::vector<std::array<double, 2>> out;
+		vector<array<double, 2>> out;
 		for (int i = 0; i < size(); i++) {
 			out.push_back({{at(i).x, at(i).y}});
 		}
 		return out;
 	}
-};
+} Vertices;
 
-// typedef struct Circle {
+typedef struct Polygon {
+} Polygon;
 
-// } Circle;
+typedef struct Circle {
+	/*
+	A circle defined on the euclidian plane.
+	*/
 
-// typedef struct Polygon {
-// 	/*
-// 		An ordered set of n vertices.
-// 	*/
-// 	int n;				// number of vertices
-// 	Vertices vertices;	// dynamic array of vertices
+	// vars
+	double r = 1.0;	 // radius
+	Point origin;	 // center
 
-// 	Polygon() {};
-// 	Polygon(Vertices v): vertices(v) {
-// 		n = v.size();
-// 	};
-// } Polygon;
+	// constructors
+	Circle(){};
+	Circle(double r): r(r){};
+	Circle(Point origin): origin(origin){};
+	Circle(double r, Point origin): r(r), origin(origin){};
+} Circle;
+
+typedef struct Ellipse {
+} Ellipse;

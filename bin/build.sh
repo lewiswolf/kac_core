@@ -15,17 +15,12 @@ do
 	esac
 done
 
-# if $DEV, run a simpler build task
-# else build the entire project
-if [[ "$DEV" == "true" ]]; then
-	cd "test/build"
-		if build; then
-			echo
-			./geometry_test
-		fi
-	cd ../../
-else
-	cd "test/build"
+# build tests and run if in dev mode 
+cd "test/build"
+	if [ "$DEV" == "true" ] && build; then
+		echo
+		./geometry_test
+	else
 		build
-	cd ../../
-fi
+	fi
+cd ../../

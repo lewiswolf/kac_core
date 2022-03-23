@@ -5,8 +5,6 @@
 #include <array>   // array
 #include <vector>  // verctor
 
-using namespace std;
-
 typedef struct Point {
 	/*
 	A point on the Euclidian plane.
@@ -60,7 +58,7 @@ typedef struct Line {
 	Line(Point a, Point b): a(a), b(b){};
 } Line;
 
-typedef struct Vertices : public vector<Point> {
+typedef struct Vertices : public std::vector<Point> {
 	/*
 	An array of points.
 	*/
@@ -69,14 +67,17 @@ typedef struct Vertices : public vector<Point> {
 	Vertices(){};
 
 	// methods
-	vector<array<double, 2>> convertVerticesToVector() {
-		// covert to vector of arrays
-		vector<array<double, 2>> out;
-		for (int i = 0; i < size(); i++) {
-			out.push_back({{at(i).x, at(i).y}});
-		}
-		return out;
-	}
+	// std::vector<std::array<double, 2>> convertVerticesToVector() {
+	// 	/*
+	// 	Covert to vector of arrays.
+	// 	*/
+
+	// 	std::vector<std::array<double, 2>> out;
+	// 	for (int i = 0; i < size(); i++) {
+	// 		out.push_back({{at(i).x, at(i).y}});
+	// 	}
+	// 	return out;
+	// }
 } Vertices;
 
 typedef struct Polygon {

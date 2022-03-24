@@ -1,7 +1,10 @@
+#pragma once
+
+// core
 #include <algorithm>
 #include <vector>
 
-std::vector<double> calculateLinearSeries(int const& N) {
+std::vector<double> calculateLinearSeries(const int& N) {
 	/*
 	Calculate the relationship between the modes of the harmonic series.
 
@@ -10,16 +13,11 @@ std::vector<double> calculateLinearSeries(int const& N) {
 	*/
 
 	std::vector<double> series(N);
-	unsigned int i = 1;	 // cpp11 does not support declaring the iterator in the
-						 // lambda function
-	std::generate(series.begin(), series.end(), [&]() mutable {
-		i++;
-		return i;
-	});
+	for (unsigned int i = 0; i < N; i++) { series[i] = i + 1; };
 	return series;
 }
 
-std::vector<double> calculateLinearModes(double const& f0, int const& N) {
+std::vector<double> calculateLinearModes(const double& f0, const int& N) {
 	/*
 	Calculate the harmonic series of a given fundamental.
 
@@ -29,11 +27,6 @@ std::vector<double> calculateLinearModes(double const& f0, int const& N) {
 	*/
 
 	std::vector<double> modes(N);
-	unsigned int i = 1;	 // cpp11 does not support declaring the iterator in the
-						 // lambda function
-	std::generate(modes.begin(), modes.end(), [&]() mutable {
-		i++;
-		return f0 * i;
-	});
+	for (unsigned int i = 0; i < N; i++) { modes[i] = f0 * (i + 1); };
 	return modes;
 }

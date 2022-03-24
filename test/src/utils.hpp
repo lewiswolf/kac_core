@@ -1,6 +1,18 @@
+#pragma once
+
+// core
 #include <chrono>
 #include <iostream>
 #include <string>
+
+void booleanTest(const bool& b) {
+	if (b) {
+		std::cout << "✅\n";
+	} else {
+		std::cout << "❌\n";
+		throw;
+	}
+}
 
 class Timer {
    public:

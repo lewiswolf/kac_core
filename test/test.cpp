@@ -22,15 +22,23 @@ int main() {
 	std::cout << "isConvex: ";
 	std::cout << (isConvex(v) ? "true" : "false") << "\n\n";
 
-	std::cout << "for 1000 vertices";
+	std::cout << "for 1000 vertices...\n";
 	Vertices test;
 	{
-		Timer timer("generateConvexPolygon");
+		Timer timer("	generateConvexPolygon");
 		test = generateConvexPolygon(1000);
 	}
 	{
-		Timer timer("isConvex");
+		Timer timer("	isConvex");
 		isConvex(test);
+	}
+	{
+		Timer timer("	isColinear");
+		isColinear(test[999], test[0], test[1]);
+		for (unsigned int i = 1; i < 999; i++) {
+			isColinear(test[i - 1], test[i], test[i + 1]);
+		};
+		isColinear(test[998], test[999], test[0]);
 	}
 
 	// std::cout << "bessel J_0(4): ";

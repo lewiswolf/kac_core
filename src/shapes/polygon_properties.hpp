@@ -1,5 +1,9 @@
 #pragma once
 
+bool isColinear(const Point& a, const Point& b, const Point& c) {
+	return ((c.y - b.y) * (b.x - a.x) == (b.y - a.y) * (c.x - b.x));
+};
+
 bool isConvex(const Vertices& v) {
 	/*
 	Tests whether or not a given array of vertices forms a convex polygon. This
@@ -29,7 +33,3 @@ bool isConvex(const Vertices& v) {
 	}
 	return true;
 }
-
-bool isColinear(const Point& a, const Point& b, const Point& c) {
-	return ((c.y - b.y) * (b.x - a.x) == (b.y - a.y) * (c.x - b.x));
-};

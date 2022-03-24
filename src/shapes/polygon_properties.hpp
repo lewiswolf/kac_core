@@ -10,11 +10,10 @@ bool isConvex(Vertices const& v) {
 	// anonymous function declaration of cross product - z component early, see
 	// np.cross =>
 	// https://numpy.org/doc/stable/reference/generated/numpy.cross.html
-	std::function<double(Point, Point, Point)> crossProductZ =
-		[&](Point p, Point p_plus, Point p_minus) {
-			return (p.x - p_minus.x) * (p_plus.y - p.y) -
-				   (p_plus.x - p.x) * (p.y - p_minus.y);
-		};
+	auto crossProductZ = [](Point p, Point p_plus, Point p_minus) {
+		return (p.x - p_minus.x) * (p_plus.y - p.y) -
+			   (p_plus.x - p.x) * (p.y - p_minus.y);
+	};
 
 	// determine the direction of the initial point using the cross product.
 	bool clockwise = crossProductZ(v[0], v[1], v[v.size() - 1]) < 0;

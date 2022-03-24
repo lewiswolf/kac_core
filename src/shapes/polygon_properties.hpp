@@ -7,15 +7,21 @@ bool isConvex(Vertices const& v) {
 	not a polygon (2D) has its vertices ordered clockwise or counter-clockwise'.
 	*/
 
-	// determine whether the initial point is clockwise using the above cross
-	// product.
-	bool clockwise = ((v[0].x - v[v.size() - 1].x) * (v[1].y - v[0].y) -
-					  (v[1].x - v[0].x) * (v[0].y - v[v.size() - 1].y)) < 0;
+	// anonymous function declaration of cross product - z component early, see
+	// np.cross =>
+	// https://numpy.org/doc/stable/reference/generated/numpy.cross.html
+	std::function<double(Point, Point, Point)> crossProductZ =
+		[&](Point p, Point p_plus, Point p_minus) {
+			return (p.x - p_minus.x) * (p_plus.y - p.y) -
+				   (p_plus.x - p.x) * (p.y - p_minus.y);
+		};
+
+	// determine the direction of the initial point using the cross product.
+	bool clockwise = crossProductZ(v[0], v[1], v[v.size() - 1]) < 0;
 
 	// loop over remaining points
 	for (unsigned int i = 1; i < v.size(); i++) {
-		if (((v[i].x - v[i - 1].x) * (v[(i + 1) % v.size()].y - v[i].y) -
-			 (v[(i + 1) % v.size()].x - v[i].x) * (v[i].y - v[i - 1].y)) < 0 !=
+		if (crossProductZ(v[i], v[(i + 1) % v.size()], v[i - 1]) < 0 !=
 			clockwise) {
 			return false;
 		}

@@ -1,3 +1,5 @@
+#pragma once
+
 // core
 #include <math.h>	 // atan
 #include <stdlib.h>	 // rand, RAND_MAX
@@ -37,8 +39,7 @@ Vertices generateConvexPolygon(int const &n) {
 	// divide the interior points into two chains
 	for (unsigned int i = 1; i < n; i++) {
 		if (i != n - 1) {
-			// if (rand() % 2 == 1) {
-			if (i % 2 == 1) {
+			if (rand() % 2 == 1) {
 				X[i] = X_rand[i] - X_rand[last_true];
 				Y[i] = Y_rand[i] - Y_rand[last_true];
 				last_true = i;
@@ -57,14 +58,11 @@ Vertices generateConvexPolygon(int const &n) {
 
 	// randomly combine x and y
 	std::shuffle(Y.begin(), Y.end(), std::default_random_engine(time(NULL)));
-	for (unsigned int i = 0; i < n; i++) {
-		v.push_back(Point(X[i], Y[i]));
-	}
+	for (unsigned int i = 0; i < n; i++) { v.push_back(Point(X[i], Y[i])); }
 
 	// sort by polar angle
 	std::sort(v.begin(), v.end(),
 			  [](Point p1, Point p2) { return p1.theta < p2.theta; });
-	std::cout << std::endl;
 
 	// arrange points end to end to form a polygon
 	double x_min, x_max, y_min, y_max = 0;

@@ -1,10 +1,12 @@
+/*
+Tests and profiling for /shapes.
+*/
+
 // core
 #include <iostream>
 #include <stdlib.h>
-
 // src
 #include "../../src/geometry.hpp"
-
 // test
 #include "./utils.hpp"
 
@@ -16,11 +18,16 @@ void testShapes() {
 	booleanTest(v.size() == N);
 	std::cout << "Test if generatedConvexPolygon is convex... ";
 	booleanTest(isConvex(v));
+	std::cout << "Test that generatedConvexPolygon does not produce colinear "
+				 "points... ";
+	batchBooleanTest(N, [&N, &v](unsigned int i) {
+		return !isColinear(v[i > 0 ? i - 1 : N - 1], v[i], v[(i + 1) % N]);
+	});
 
 	// efficiency
 	const int efficiency = 1000;
-	std::cout << "\nEfficiency for " << efficiency << " vertices...\n";
 	Vertices test_v;
+	std::cout << "\nEfficiency for " << efficiency << " vertices...\n";
 	{
 		Timer timer("	generateConvexPolygon");
 		test_v = generateConvexPolygon(efficiency);

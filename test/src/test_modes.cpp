@@ -1,3 +1,7 @@
+/*
+Tests and profiling for /modes.
+*/
+
 // core
 #include <iostream>
 #include <vector>
@@ -13,9 +17,9 @@ void testModes() {
 	std::cout << "Test if besselJ is accurate... ";
 	booleanTest(std::abs(besselJ(0, 4.2) - -0.37655) < 0.01 &&
 				std::abs(besselJ(1, 1.2) - 0.498289) < 0.01);
-	std::cout << "Test if the 0th mode from caculateLinearModes is f_0... ";
+	std::cout << "Test if the 0th mode from calculateLinearModes is f_0... ";
 	booleanTest(calculateLinearModes(440.0, 10)[0] == 440.0);
-	std::cout << "Test if the 0th element from caculateLinearSeries is 1... ";
+	std::cout << "Test if the 0th element from calculateLinearSeries is 1... ";
 	booleanTest(calculateLinearSeries(10)[0] == 1);
 
 	// efficiency
@@ -30,14 +34,14 @@ void testModes() {
 		besselJZero(10, 10);
 	}
 	{
-		Timer timer("	calculateCircularSeries");
-		calculateCircularSeries(floor(sqrt(efficiency)),
-								floor(sqrt(efficiency)));
-	}
-	{
 		Timer timer("	calculateCircularModes");
 		calculateCircularModes(440.0, floor(sqrt(efficiency)),
 							   floor(sqrt(efficiency)));
+	}
+	{
+		Timer timer("	calculateCircularSeries");
+		calculateCircularSeries(floor(sqrt(efficiency)),
+								floor(sqrt(efficiency)));
 	}
 	{
 		Timer timer("	calculateLinearModes");

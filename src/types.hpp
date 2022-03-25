@@ -1,9 +1,8 @@
-// core c
 #pragma once
-#include <math.h>  // atan2
-// core cpp
-#include <array>   // array
-#include <vector>  // verctor
+
+// core
+#include <math.h>
+#include <vector>
 
 typedef struct Point {
 	/*
@@ -58,27 +57,7 @@ typedef struct Line {
 	Line(Point a, Point b): a(a), b(b){};
 } Line;
 
-typedef struct Vertices : public std::vector<Point> {
-	/*
-	An array of points.
-	*/
-
-	// constructors
-	Vertices(){};
-
-	// methods
-	// std::vector<std::array<double, 2>> convertVerticesToVector() {
-	// 	/*
-	// 	Covert to vector of arrays.
-	// 	*/
-
-	// 	std::vector<std::array<double, 2>> out;
-	// 	for (int i = 0; i < size(); i++) {
-	// 		out.push_back({{at(i).x, at(i).y}});
-	// 	}
-	// 	return out;
-	// }
-} Vertices;
+typedef std::vector<Point> Vertices;
 
 typedef struct Polygon {
 } Polygon;

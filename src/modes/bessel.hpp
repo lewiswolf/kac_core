@@ -1,5 +1,8 @@
-#pragma once
+/*
+Functions for calculating the bessel functions and their zero crossings.
+*/
 
+#pragma once
 // core
 #include <math.h>
 #include <vector>
@@ -8,11 +11,11 @@ double besselJ(const int& n, const double& x) {
 	/*
 	Calculates the bessel function of the first kind J_n(x)
 	Adapted from void bess() http://www.falstad.com/circosc-java/CircOsc.java
-	Inputs:
-		n - bessel order
-		x - x coordinate
-	Outputs:
-		y - y value for J_n(x)
+	params:
+		n = bessel order
+		x = x coordinate
+	output:
+		y = J_n(x)
 	*/
 
 	// calculate J_k(x) for all k < n
@@ -35,25 +38,26 @@ double besselJ(const int& n, const double& x) {
 double besselJZero(const int& n, const int& m) {
 	/*
 	Calculates the mth zero crossing of bessel functions of the first kind
-	Adapted from double zeroj() http://www.falstad.com/circosc-java/CircOsc.java
-	Input:
-		n - bessel order
-		m - mth zero
-	Output:
-		z_nm - mth zero crossing of J_n()
+	Adapted from `double zeroj()`, see =>
+	http://www.falstad.com/circosc-java/CircOsc.java
+	params:
+		n = bessel order
+		m = mth zero
+	output:
+		z_nm = mth zero crossing of J_n()
 	*/
 
-	// Asymtotic expansions found in Theory of Bessel Functions p.506
+	// asymptotic expansions found in Theory of Bessel Functions p.506
 	double beta = (m + 0.5 * n - 0.25) * M_PI;
 	double beta8 = beta * 8;
 	double mu = 4 * n * n;
 	double z_nm = beta - (mu - 1) / beta8;
 	z_nm -= 4 * (mu - 1) * (7 * mu - 31) / (3 * pow(beta8, 3));
-	z_nm -= 32 * (mu - 1) * (83 * pow(mu, 2) - 982 * mu + 3779) /
-			(15 * pow(beta8, 5));
-	z_nm -= 64 * (mu - 1) *
-			(6949 * pow(mu, 3) - 153855 * pow(mu, 2) + 1585743 * mu - 6277237) /
-			(105 * pow(beta8, 7));
+	z_nm -= 32 * (mu - 1) * (83 * pow(mu, 2) - 982 * mu + 3779)
+		/ (15 * pow(beta8, 5));
+	z_nm -= 64 * (mu - 1)
+		* (6949 * pow(mu, 3) - 153855 * pow(mu, 2) + 1585743 * mu - 6277237)
+		/ (105 * pow(beta8, 7));
 
 	// Newton's method for approximating roots
 	for (unsigned int i = 1; i <= 5; i++) {
@@ -76,6 +80,5 @@ double besselJZero(const int& n, const int& m) {
 		double deriv = -j[n + 2] + n / z_nm * j[n + 1];
 		z_nm -= j[n + 1] / deriv;
 	}
-
 	return z_nm;
 }

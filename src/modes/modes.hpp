@@ -1,3 +1,7 @@
+/*
+Central import for all files in /modes.
+*/
+
 #pragma once
 
 #include "bessel.hpp"

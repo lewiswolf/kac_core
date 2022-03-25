@@ -10,7 +10,6 @@ void booleanTest(const bool& b) {
 		std::cout << "✅\n";
 	} else {
 		std::cout << "❌\n";
-		throw;
 	}
 }
 

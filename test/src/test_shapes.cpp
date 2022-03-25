@@ -18,22 +18,23 @@ void testShapes() {
 	booleanTest(isConvex(v));
 
 	// efficiency
-	std::cout << "\nEfficiency for 1000 vertices...\n";
-	Vertices test;
+	const int efficiency = 1000;
+	std::cout << "\nEfficiency for " << efficiency << " vertices...\n";
+	Vertices test_v;
 	{
 		Timer timer("	generateConvexPolygon");
-		test = generateConvexPolygon(1000);
+		test_v = generateConvexPolygon(efficiency);
 	}
 	{
 		Timer timer("	isConvex");
-		isConvex(test);
+		isConvex(test_v);
 	}
 	{
 		Timer timer("	isColinear");
-		isColinear(test[999], test[0], test[1]);
-		for (unsigned int i = 1; i < 999; i++) {
-			isColinear(test[i - 1], test[i], test[i + 1]);
+		isColinear(test_v[efficiency - 1], test_v[0], test_v[1]);
+		for (unsigned int i = 1; i < efficiency - 1; i++) {
+			isColinear(test_v[i - 1], test_v[i], test_v[i + 1]);
 		};
-		isColinear(test[998], test[999], test[0]);
+		isColinear(test_v[efficiency - 2], test_v[efficiency - 1], test_v[0]);
 	}
 }

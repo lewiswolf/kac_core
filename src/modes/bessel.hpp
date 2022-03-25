@@ -76,8 +76,7 @@ double besselJZero(const int& n, const int& m) {
 		for (unsigned int i = 2; i <= n_top; i += 2) { norm += 2 * j[i + 1]; }
 		for (unsigned int i = 1; i < n_top + 2; i++) { j[i] = j[i] / norm; }
 		// use the recursion relation to evaluate derivative
-		double deriv = -j[n + 2] + n / z_nm * j[n + 1];
-		z_nm -= j[n + 1] / deriv;
+		z_nm -= j[n + 1] / (-j[n + 2] + n / z_nm * j[n + 1]);
 	}
 	return z_nm;
 }

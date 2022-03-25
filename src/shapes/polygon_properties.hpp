@@ -1,6 +1,14 @@
+/*
+Utility functions for working with polygons.
+*/
+
 #pragma once
 
 bool isColinear(const Point& a, const Point& b, const Point& c) {
+	/*
+	Determines whether or not a given set of three vertices are colinear.
+	*/
+
 	return ((c.y - b.y) * (b.x - a.x) == (b.y - a.y) * (c.x - b.x));
 };
 
@@ -13,21 +21,18 @@ bool isConvex(const Vertices& v) {
 	not a polygon (2D) has its vertices ordered clockwise or counter-clockwise'.
 	*/
 
-	// anonymous function declaration of cross product - z component early, see
-	// np.cross =>
+	// cross product - z component only, see np.cross =>
 	// https://numpy.org/doc/stable/reference/generated/numpy.cross.html
 	auto crossProductZ = [](Point p, Point p_plus, Point p_minus) {
-		return (p.x - p_minus.x) * (p_plus.y - p.y) -
-			   (p_plus.x - p.x) * (p.y - p_minus.y);
+		return (p.x - p_minus.x) * (p_plus.y - p.y)
+			- (p_plus.x - p.x) * (p.y - p_minus.y);
 	};
-
-	// determine the direction of the initial point using the cross product.
+	// determine the direction of the initial point using the cross product
 	bool clockwise = crossProductZ(v[0], v[1], v[v.size() - 1]) < 0;
-
 	// loop over remaining points
 	for (unsigned int i = 1; i < v.size(); i++) {
-		if (crossProductZ(v[i], v[(i + 1) % v.size()], v[i - 1]) < 0 !=
-			clockwise) {
+		if (crossProductZ(v[i], v[(i + 1) % v.size()], v[i - 1]) < 0
+			!= clockwise) {
 			return false;
 		}
 	}

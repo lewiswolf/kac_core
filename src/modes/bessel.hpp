@@ -4,7 +4,6 @@ Functions for calculating the bessel functions and their zero crossings.
 
 #pragma once
 // core
-#include <math.h>
 #include <vector>
 
 double besselJ(const int& n, const double& x) {

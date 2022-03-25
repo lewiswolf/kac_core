@@ -1,5 +1,8 @@
-#pragma once
+/*
+🙇‍♀️🙇🙇‍♂️
+*/
 
+#pragma once
 // core
 #include <math.h>
 #include <vector>
@@ -12,32 +15,19 @@ typedef struct Point {
 	// vars
 	double x = 0.0;
 	double y = 0.0;
-	double r = 0.0;
-	double theta = 0.0;
+	double r() { return pow(pow(x, 2) + pow(y, 2), 0.5); }
+	double theta() { return atan2(y, x); }
 
 	// constructors
-	Point(){};
-	Point(double x, double y) { updateCart(x, y); };
+	Point() {};
+	Point(double x, double y): x(x), y(y) {};
 
 	// methods
-	void updateCart(double new_x, double new_y) {
-		/*
-		Update the point using cartesian coordinates.
-		*/
-
-		x = new_x;
-		y = new_y;
-		r = pow(pow(x, 2) + pow(y, 2), 0.5);
-		theta = atan2(y, x);
-	}
-
-	void updatePol(double new_r, double new_theta) {
+	void updatePol(double r, double theta) {
 		/*
 		Update the point using polar coordinates.
 		*/
 
-		r = new_r;
-		theta = new_theta;
 		x = r * cos(theta);
 		y = r * sin(theta);
 	}
@@ -53,14 +43,12 @@ typedef struct Line {
 	Point b;
 
 	// constructors
-	Line(){};
-	Line(Point a, Point b): a(a), b(b){};
+	Line() {};
+	Line(Point a, Point b): a(a), b(b) {};
 } Line;
 
+// A polygon defined on the euclidian plane.
 typedef std::vector<Point> Vertices;
-
-typedef struct Polygon {
-} Polygon;
 
 typedef struct Circle {
 	/*
@@ -68,14 +56,14 @@ typedef struct Circle {
 	*/
 
 	// vars
-	double r = 1.0;	 // radius
-	Point origin;	 // center
+	double r = 1.0;	   // radius
+	Point origin;	   // center
 
 	// constructors
-	Circle(){};
-	Circle(double r): r(r){};
-	Circle(Point origin): origin(origin){};
-	Circle(double r, Point origin): r(r), origin(origin){};
+	Circle() {};
+	Circle(double r): r(r) {};
+	Circle(Point origin): origin(origin) {};
+	Circle(double r, Point origin): r(r), origin(origin) {};
 } Circle;
 
 typedef struct Ellipse {

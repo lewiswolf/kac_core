@@ -3,68 +3,71 @@
 */
 
 #pragma once
+
 // core
 #include <math.h>
 #include <vector>
 
-typedef struct Point {
-	/*
-	A point on the Euclidian plane.
-	*/
-
-	// vars
-	double x = 0.0;
-	double y = 0.0;
-	double r() { return pow(pow(x, 2) + pow(y, 2), 0.5); }
-	double theta() { return atan2(y, x); }
-
-	// constructors
-	Point() {};
-	Point(double x, double y): x(x), y(y) {};
-
-	// methods
-	void updatePol(double r, double theta) {
+namespace geometry {
+	typedef struct Point {
 		/*
-		Update the point using polar coordinates.
+		A point on the Euclidian plane.
 		*/
 
-		x = r * cos(theta);
-		y = r * sin(theta);
-	}
-} Point;
+		// vars
+		double x = 0.0;
+		double y = 0.0;
+		double r() { return pow(pow(x, 2) + pow(y, 2), 0.5); }
+		double theta() { return atan2(y, x); }
 
-typedef struct Line {
-	/*
-	A straight line from point a to point b.
-	*/
+		// constructors
+		Point() {};
+		Point(double x, double y): x(x), y(y) {};
 
-	// vars
-	Point a;
-	Point b;
+		// methods
+		void updatePol(double r, double theta) {
+			/*
+			Update the point using polar coordinates.
+			*/
 
-	// constructors
-	Line() {};
-	Line(Point a, Point b): a(a), b(b) {};
-} Line;
+			x = r * cos(theta);
+			y = r * sin(theta);
+		}
+	} Point;
 
-// A polygon defined on the euclidian plane.
-typedef std::vector<Point> Vertices;
+	typedef struct Line {
+		/*
+		A straight line from point a to point b.
+		*/
 
-typedef struct Circle {
-	/*
-	A circle defined on the euclidian plane.
-	*/
+		// vars
+		Point a;
+		Point b;
 
-	// vars
-	double r = 1.0;	   // radius
-	Point origin;	   // center
+		// constructors
+		Line() {};
+		Line(Point a, Point b): a(a), b(b) {};
+	} Line;
 
-	// constructors
-	Circle() {};
-	Circle(double r): r(r) {};
-	Circle(Point origin): origin(origin) {};
-	Circle(double r, Point origin): r(r), origin(origin) {};
-} Circle;
+	// A polygon defined on the euclidian plane.
+	typedef std::vector<Point> Vertices;
 
-typedef struct Ellipse {
-} Ellipse;
+	typedef struct Circle {
+		/*
+		A circle defined on the euclidian plane.
+		*/
+
+		// vars
+		double r = 1.0;	   // radius
+		Point origin;	   // center
+
+		// constructors
+		Circle() {};
+		Circle(double r): r(r) {};
+		Circle(Point origin): origin(origin) {};
+		Circle(double r, Point origin): r(r), origin(origin) {};
+	} Circle;
+
+	typedef struct Ellipse {
+	} Ellipse;
+}	 // namespace geometry

@@ -6,7 +6,8 @@ Tests and profiling for /shapes.
 #include <iostream>
 #include <stdlib.h>
 // src
-#include "../../src/geometry.hpp"
+#include "geometry.hpp"
+using namespace geometry;
 // test
 #include "./utils.hpp"
 

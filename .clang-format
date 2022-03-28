@@ -19,6 +19,7 @@ Cpp11BracedListStyle: true
 EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: Always
 ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: false
 IncludeBlocks: Preserve
 IndentAccessModifiers: false
 IndentCaseBlocks: false
@@ -35,7 +36,7 @@ JavaScriptWrapImports: true
 KeepEmptyLinesAtTheStartOfBlocks: true
 LambdaBodyIndentation: Signature
 MaxEmptyLinesToKeep: 1
-NamespaceIndentation: Inner
+NamespaceIndentation: All
 PPIndentWidth: 4
 PointerAlignment: Left
 ReferenceAlignment: Pointer

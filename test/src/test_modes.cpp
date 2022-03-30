@@ -3,7 +3,8 @@ Tests and profiling for /modes.
 */
 
 // core
-#include <iostream>
+#include <iostream>	   // cout
+#include <stdlib.h>	   // rand, RAND_MAX
 #include <vector>
 // src
 #include "geometry.hpp"
@@ -27,11 +28,19 @@ void testModes() {
 	std::cout << "\nEfficiency for " << efficiency << " modes...\n";
 	{
 		Timer timer("	besselJ");
-		besselJ(10, 10.2);
+		for (unsigned int i = 0; i < floor(sqrt(efficiency)); i++) {
+			for (unsigned int j = 0; j < floor(sqrt(efficiency)); j++) {
+				besselJ(i, j);
+			}
+		}
 	}
 	{
 		Timer timer("	besselJZero");
-		besselJZero(10, 10);
+		for (unsigned int i = 0; i < floor(sqrt(efficiency)); i++) {
+			for (unsigned int j = 0; j < floor(sqrt(efficiency)); j++) {
+				besselJZero(i, j);
+			}
+		}
 	}
 	{
 		Timer timer("	calculateCircularModes");
@@ -50,6 +59,16 @@ void testModes() {
 	{
 		Timer timer("	calculateLinearSeries");
 		calculateLinearSeries(efficiency);
+	}
+	{
+		Timer timer("	calculateRectangularModes");
+		calculateRectangularModes(
+			440.0, floor(sqrt(efficiency)), floor(sqrt(efficiency)));
+	}
+	{
+		Timer timer("	calculateRectangularSeries");
+		calculateRectangularSeries(
+			floor(sqrt(efficiency)), floor(sqrt(efficiency)));
 	}
 	std::cout << "\n";
 }

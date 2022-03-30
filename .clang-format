@@ -12,7 +12,7 @@ AllowShortBlocksOnASingleLine: Always
 AllowShortLoopsOnASingleLine: true
 BinPackArguments: false
 BinPackParameters: false
-BreakBeforeBinaryOperators: All
+BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeTernaryOperators: true
 CompactNamespaces: true
 Cpp11BracedListStyle: true

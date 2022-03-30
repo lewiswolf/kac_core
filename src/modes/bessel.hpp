@@ -5,6 +5,8 @@ Functions for calculating the bessel functions and their zero crossings.
 #pragma once
 
 // core
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <vector>
 
 namespace geometry {

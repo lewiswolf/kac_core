@@ -35,7 +35,7 @@ namespace geometry {
 		for (unsigned int n = 0; n < N; n++) {
 			for (unsigned int m = 0; m < M; m++) {
 				series[n][m] =
-					sqrt(pow((m + 1) / epsilon, 2) + pow((n + 1), 2));
+					sqrt(pow((m + 1) / epsilon, 2) + pow((n + 1) * epsilon, 2));
 			}
 		}
 		return series;

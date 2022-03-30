@@ -13,34 +13,45 @@ wave equation.
 namespace geometry {
 
 	std::vector<std::vector<double>>
-	calculateCircularModes(const double& f0, const int& N, const int& M) {
+	calculateCircularModes(const double& f_0, const int& N, const int& M) {
 		/*
 		Calculate the eigenfrequencies of a circle relative to a given
-		fundmental. params: f_0 = fundamental frequency N = number of modes
+		fundmental.
+		params:
+			f_0 = fundamental frequency
+			N = number of modal order
+			M = number of modes per order
+		output:
+			F = { (f_0 * z_nm) ∈ ℝ | J_n(z_nm) = 0, n < N, m < M }
 		*/
 
-		std::vector<std::vector<double>> modes(N, std::vector<double>(M, 0));
+		std::vector<std::vector<double>> F(N, std::vector<double>(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			for (unsigned int m = 0; m < M; m++) {
-				modes[n][m] = f0 * besselJZero(n, m + 1);
+				F[n][m] = f_0 * besselJZero(n, m + 1);
 			}
 		}
-		return modes;
+		return F;
 	}
 
 	std::vector<std::vector<double>>
 	calculateCircularSeries(const int& N, const int& M) {
 		/*
 		Calculate the eigenmodes of a circle.
+		params:
+			N = number of modal orders
+			M = number of modes per order
+		output:
+			S = { z_nm ∈ ℝ | J_n(z_nm) = 0, n < N, m < M }
 		*/
 
-		std::vector<std::vector<double>> series(N, std::vector<double>(M, 0));
+		std::vector<std::vector<double>> S(N, std::vector<double>(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			for (unsigned int m = 0; m < M; m++) {
-				series[n][m] = besselJZero(n, m + 1);
+				S[n][m] = besselJZero(n, m + 1);
 			}
 		}
-		return series;
+		return S;
 	}
 
 }

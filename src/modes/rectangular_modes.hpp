@@ -19,37 +19,55 @@ namespace geometry {
 		const int& M,
 		const double& epsilon = 1.0) {
 		/*
-		Calculate the amplitudes of the eigenmodes relative to rectangular
-		strike location.
+		Calculate the amplitudes of the rectangular eigenmodes relative to a
+		cartesian strike location.
+		input:
+			( x , y ) = cartesian product
+			N = number of modal orders
+			M = number of modes per order
+			epsilon = aspect ratio of the rectangle
+		output:
+			A = {
+				(sin(nyπ / (epsilon ** 0.5) sin(mxπ / (epsilon ** 0.5))
+				| 1 < n <= N, 1 < m <= M
+			}
 		*/
 
 		double x_hat = x * M_PI / sqrt(epsilon);
 		double y_hat = y * M_PI / sqrt(epsilon);
-		std::vector<std::vector<double>> amplitudes(
-			N, std::vector<double>(M, 0));
+		std::vector<std::vector<double>> A(N, std::vector<double>(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double n_hat = sin((n + 1) * y_hat);
 			for (unsigned int m = 0; m < M; m++) {
-				amplitudes[n][m] = sin((m + 1) * x_hat) * n_hat;
+				A[n][m] = sin((m + 1) * x_hat) * n_hat;
 			}
 		}
-		return amplitudes;
+		return A;
 	};
 
 	std::vector<std::vector<double>> calculateRectangularSeries(
 		const int& N, const int& M, const double& epsilon = 1.0) {
 		/*
 		Calculate the eigenmodes of a rectangle.
+		params:
+			N = number of modal orders
+			M = number of modes per order
+			epsilon = aspect ratio of the rectangle
+		output:
+			S = {
+				((m / epsilon)^2 + (n * epsilon)^2) ** 0.5
+				| 1 < n <= N, 1 < m <= M
+			}
 		*/
 
-		std::vector<std::vector<double>> series(N, std::vector<double>(M, 0));
+		std::vector<std::vector<double>> S(N, std::vector<double>(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double n_hat = pow((n + 1) * epsilon, 2);
 			for (unsigned int m = 0; m < M; m++) {
-				series[n][m] = sqrt(pow((m + 1) / epsilon, 2) + n_hat);
+				S[n][m] = sqrt(pow((m + 1) / epsilon, 2) + n_hat);
 			}
 		}
-		return series;
+		return S;
 	};
 
 }

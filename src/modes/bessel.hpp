@@ -13,10 +13,14 @@ namespace geometry {
 
 	double besselJ(const int& n, const double& x) {
 		/*
-		Calculates the bessel function of the first kind J_n(x)
+		Calculates the bessel function of the first kind J_n(x).
 		Adapted from void bess()
-		http://www.falstad.com/circosc-java/CircOsc.java params: n = bessel
-		order x = x coordinate output: y = J_n(x)
+		http://www.falstad.com/circosc-java/CircOsc.java
+		params:
+			n = bessel order
+			x = x coordinate
+		output:
+			y = J_n(x)
 		*/
 
 		// calculate J_k(x) for all k < n
@@ -38,8 +42,8 @@ namespace geometry {
 
 	double besselJZero(const int& n, const int& m) {
 		/*
-		Calculates the mth zero crossing of bessel functions of the first kind
-		Adapted from `double zeroj()`, see =>
+		Calculates the mth zero crossing of the bessel functions of the first
+		kind. Adapted from `double zeroj()`, see =>
 		http://www.falstad.com/circosc-java/CircOsc.java
 		params:
 			n = bessel order

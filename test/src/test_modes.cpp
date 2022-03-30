@@ -61,9 +61,9 @@ void testModes() {
 		calculateLinearSeries(efficiency);
 	}
 	{
-		Timer timer("	calculateRectangularModes");
-		calculateRectangularModes(
-			440.0, floor(sqrt(efficiency)), floor(sqrt(efficiency)));
+		Timer timer("	calculateRectangularAmplitudes");
+		calculateRectangularAmplitudes(
+			0.5, 0.5, floor(sqrt(efficiency)), floor(sqrt(efficiency)));
 	}
 	{
 		Timer timer("	calculateRectangularSeries");

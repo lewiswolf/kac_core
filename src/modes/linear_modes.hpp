@@ -19,7 +19,7 @@ namespace geometry {
 		*/
 
 		std::vector<double> modes(N);
-		for (unsigned int i = 0; i < N; i++) { modes[i] = f_0 * (i + 1); };
+		for (unsigned int n = 0; n < N; n++) { modes[n] = f_0 * (n + 1); };
 		return modes;
 	}
 
@@ -31,7 +31,7 @@ namespace geometry {
 		*/
 
 		std::vector<double> series(N);
-		for (unsigned int i = 0; i < N; i++) { series[i] = i + 1; };
+		for (unsigned int n = 0; n < N; n++) { series[n] = n + 1; };
 		return series;
 	}
 

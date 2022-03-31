@@ -10,15 +10,20 @@
 
 namespace geometry {
 
-	Vertices generateConvexPolygon(const int& N) {
+	Vertices generateConvexPolygon(const int& N, time_t seed = time(NULL)) {
 		/*
 		Generate convex shapes according to Pavel Valtr's 1995 algorithm.
 		Adapted from Sander Verdonschot's Java version, found here:
 		https://cglab.ca/~sander/misc/ConvexGeneration/ValtrAlgorithm.java
+		input:
+			N = the number of vertices
+			seed? = the seed for the random number generators
+		output:
+			V = a polygon of N random vertices
 		*/
 
 		// initialise variables
-		Vertices v;
+		Vertices V;
 		std::vector<double> X(N);
 		std::vector<double> Y(N);
 		std::vector<double> X_rand(N);
@@ -26,6 +31,7 @@ namespace geometry {
 		unsigned int last_true = 0;
 		unsigned int last_false = 0;
 		// initialise and sort random coordinates
+		srand(seed);
 		std::generate(X_rand.begin(), X_rand.end(), []() {
 			return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
 		});
@@ -54,11 +60,10 @@ namespace geometry {
 			}
 		}
 		// randomly combine x and y
-		std::shuffle(
-			Y.begin(), Y.end(), std::default_random_engine(time(NULL)));
-		for (unsigned int i = 0; i < N; i++) { v.push_back(Point(X[i], Y[i])); }
+		shuffle(Y.begin(), Y.end(), std::default_random_engine(seed));
+		for (unsigned int i = 0; i < N; i++) { V.push_back(Point(X[i], Y[i])); }
 		// sort by polar angle
-		std::sort(v.begin(), v.end(), [](Point& p1, Point& p2) {
+		sort(V.begin(), V.end(), [](Point& p1, Point& p2) {
 			return p1.theta() < p2.theta();
 		});
 		// arrange points end to end to form a polygon
@@ -67,20 +72,20 @@ namespace geometry {
 		double y = 0.0;
 		for (unsigned int i = 0; i < N; i++) {
 			Point p = Point(x, y);
-			x += v[i].x;
-			y += v[i].y;
-			v[i] = p;
-			x_min = std::min(v[i].x, x_min);
-			x_max = std::max(v[i].x, x_max);
-			y_min = std::min(v[i].y, y_min);
-			y_max = std::max(v[i].y, y_max);
+			x += V[i].x;
+			y += V[i].y;
+			V[i] = p;
+			x_min = std::min(V[i].x, x_min);
+			x_max = std::max(V[i].x, x_max);
+			y_min = std::min(V[i].y, y_min);
+			y_max = std::max(V[i].y, y_max);
 		}
 		// center around origin
 		for (unsigned int i = 0; i < N; i++) {
-			v[i].x += ((x_max - x_min) / 2.0) - x_max;
-			v[i].y += ((y_max - y_min) / 2.0) - y_max;
+			V[i].x += ((x_max - x_min) / 2.0) - x_max;
+			V[i].y += ((y_max - y_min) / 2.0) - y_max;
 		}
-		return v;
+		return V;
 	}
 
 }

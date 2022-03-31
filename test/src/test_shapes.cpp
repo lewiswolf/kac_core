@@ -15,14 +15,39 @@ void testShapes() {
 	// tests
 	int N = 10;
 	Vertices v = generateConvexPolygon(N);
-	std::cout << "Test if generatedConvexPolygon produces n vertices... ";
+
+	std::cout << "generatedConvexPolygon produces n vertices... ";
 	booleanTest(v.size() == N);
-	std::cout << "Test if generatedConvexPolygon is convex... ";
+
+	std::cout << "generatedConvexPolygon is convex... ";
 	booleanTest(isConvex(v));
-	std::cout << "Test that generatedConvexPolygon does not produce colinear "
-				 "points... ";
+
+	std::cout << "generatedConvexPolygon does not produce colinear points... ";
 	batchBooleanTest(N, [&N, &v](unsigned int i) {
 		return !isColinear(v[i > 0 ? i - 1 : N - 1], v[i], v[(i + 1) % N]);
+	});
+
+	std::cout << "generatedConvexPolygon can be correctly controlled "
+				 "using the seed parameter... ";
+	Vertices seed_test = generateConvexPolygon(10, 1);
+	Vertices seed_expected(10);
+	Matrix_2D seed_m = {
+		{0.288255, 0.411634},
+		{-0.244504, 0.0358297},
+		{-0.467343, -0.251818},
+		{-0.466911, -0.411634},
+		{-0.22722, -0.392744},
+		{0.0281766, -0.36587},
+		{0.115598, -0.35249},
+		{0.335813, -0.0359161},
+		{0.382849, 0.100085},
+		{0.467343, 0.40135}};
+	for (unsigned int i = 0; i < 10; i++) {
+		seed_expected[i] = Point(seed_m[i][0], seed_m[i][1]);
+	}
+	batchBooleanTest(10, [&seed_test, &seed_expected](unsigned int i) {
+		return abs(seed_test[i].x - seed_expected[i].x) < 0.01
+			&& abs(seed_test[i].y - seed_expected[i].y) < 0.01;
 	});
 
 	// efficiency

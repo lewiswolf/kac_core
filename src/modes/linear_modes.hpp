@@ -7,34 +7,53 @@ equation.
 
 // core
 #include <vector>
+// src
+#include "../types.hpp"
 
 namespace geometry {
 
-	std::vector<double> calculateLinearModes(const double& f_0, const int& N) {
+	Matrix_1D calculateLinearAmplitudes(const double& x, const int& N) {
+		/*
+		Calculate the amplitudes of the 1D eigenmodes relative to a strike
+		location.
+		input:
+			x = strike location
+			N = number of modes
+		output:
+			A = { sin(nxπ) | 0 < n <= N, 0 < m <= M }
+		*/
+
+		Matrix_1D A(N);
+		double x_pi = x * M_PI;
+		for (unsigned int n = 0; n < N; n++) { A[n] = sin((n + 1) * x_pi); };
+		return A;
+	}
+
+	Matrix_1D calculateLinearModes(const double& f_0, const int& N) {
 		/*
 		Calculate the harmonic series of a given fundmental.
-		params:
+		input:
 			f_0 = fundamental frequency
 			N = number of modes
 		output:
-			F = { (f_0 * n) | n < N }
+			F = { (f_0 * n) | 0 < n <= N }
 		*/
 
-		std::vector<double> F(N);
+		Matrix_1D F(N);
 		for (unsigned int n = 0; n < N; n++) { F[n] = f_0 * (n + 1); };
 		return F;
 	}
 
-	std::vector<double> calculateLinearSeries(const int& N) {
+	Matrix_1D calculateLinearSeries(const int& N) {
 		/*
-		Calculate the relationship between the modes of the harmonic series.
-		params:
+		Calculate the the harmonic series.
+		input:
 			N = number of modes
 		output:
-			S = { n | n < N }
+			S = { n | 0 < n <= N }
 		*/
 
-		std::vector<double> S(N);
+		Matrix_1D S(N);
 		for (unsigned int n = 0; n < N; n++) { S[n] = n + 1; };
 		return S;
 	}

@@ -53,6 +53,12 @@ void testModes() {
 			floor(sqrt(efficiency)), floor(sqrt(efficiency)));
 	}
 	{
+		Timer timer("	calculateLinearAmplitudes");
+		calculateLinearAmplitudes(
+			static_cast<double>(rand()) / static_cast<double>(RAND_MAX),
+			efficiency);
+	}
+	{
 		Timer timer("	calculateLinearModes");
 		calculateLinearModes(440.0, efficiency);
 	}

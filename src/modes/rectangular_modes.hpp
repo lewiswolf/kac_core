@@ -9,10 +9,12 @@ rectangular wave equation.
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <vector>
+// src
+#include "../types.hpp"
 
 namespace geometry {
 
-	std::vector<std::vector<double>> calculateRectangularAmplitudes(
+	Matrix_2D calculateRectangularAmplitudes(
 		const double& x,
 		const double& y,
 		const int& N,
@@ -29,13 +31,13 @@ namespace geometry {
 		output:
 			A = {
 				(sin(nyπ / (epsilon ** 0.5) sin(mxπ / (epsilon ** 0.5))
-				| 1 < n <= N, 1 < m <= M
+				| 0 < n <= N, 0 < m <= M
 			}
 		*/
 
 		double x_hat = x * M_PI / sqrt(epsilon);
 		double y_hat = y * M_PI / sqrt(epsilon);
-		std::vector<std::vector<double>> A(N, std::vector<double>(M, 0));
+		Matrix_2D A(N, Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double n_hat = sin((n + 1) * y_hat);
 			for (unsigned int m = 0; m < M; m++) {
@@ -45,22 +47,22 @@ namespace geometry {
 		return A;
 	};
 
-	std::vector<std::vector<double>> calculateRectangularSeries(
+	Matrix_2D calculateRectangularSeries(
 		const int& N, const int& M, const double& epsilon = 1.0) {
 		/*
 		Calculate the eigenmodes of a rectangle.
-		params:
+		input:
 			N = number of modal orders
 			M = number of modes per order
 			epsilon = aspect ratio of the rectangle
 		output:
 			S = {
 				((m / epsilon)^2 + (n * epsilon)^2) ** 0.5
-				| 1 < n <= N, 1 < m <= M
+				| 0 < n <= N, 0 < m <= M
 			}
 		*/
 
-		std::vector<std::vector<double>> S(N, std::vector<double>(M, 0));
+		Matrix_2D S(N, Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double n_hat = pow((n + 1) * epsilon, 2);
 			for (unsigned int m = 0; m < M; m++) {

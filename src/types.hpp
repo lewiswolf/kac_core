@@ -9,6 +9,7 @@
 #include <vector>
 
 namespace geometry {
+
 	typedef struct Point {
 		/*
 		A point on the Euclidian plane.
@@ -17,7 +18,7 @@ namespace geometry {
 		// vars
 		double x = 0.0;
 		double y = 0.0;
-		double r() { return pow(pow(x, 2) + pow(y, 2), 0.5); }
+		double r() { return sqrt(pow(x, 2) + pow(y, 2)); }
 		double theta() { return atan2(y, x); }
 
 		// constructors
@@ -70,4 +71,9 @@ namespace geometry {
 
 	typedef struct Ellipse {
 	} Ellipse;
-}	 // namespace geometry
+
+	// Matrices
+	typedef std::vector<double> Matrix_1D;
+	typedef std::vector<std::vector<double>> Matrix_2D;
+
+}

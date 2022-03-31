@@ -20,7 +20,7 @@ namespace geometry {
 			x = strike location
 			N = number of modes
 		output:
-			A = { sin(nxπ) | 0 < n <= N, 0 < m <= M }
+			A = { sin(nxπ) | a ∈ ℝ, 0 < n <= N, 0 < m <= M }
 		*/
 
 		Matrix_1D A(N);
@@ -36,7 +36,7 @@ namespace geometry {
 			f_0 = fundamental frequency
 			N = number of modes
 		output:
-			F = { (f_0 * n) | 0 < n <= N }
+			F = { (f_0 * n) | f ∈ ℝ, 0 < n <= N }
 		*/
 
 		Matrix_1D F(N);
@@ -50,7 +50,7 @@ namespace geometry {
 		input:
 			N = number of modes
 		output:
-			S = { n | 0 < n <= N }
+			S = { n | s ∈ ℕ, 0 < n <= N }
 		*/
 
 		Matrix_1D S(N);

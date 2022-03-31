@@ -16,11 +16,11 @@ namespace geometry {
 		Calculates the bessel function of the first kind J_n(x).
 		Adapted from void bess()
 		http://www.falstad.com/circosc-java/CircOsc.java
-		params:
-			n = bessel order
+		input:
+			n = order of the bessel function
 			x = x coordinate
 		output:
-			y = J_n(x)
+			y = J_n(x) | y ∈ ℝ
 		*/
 
 		// calculate J_k(x) for all k < n
@@ -45,11 +45,11 @@ namespace geometry {
 		Calculates the mth zero crossing of the bessel functions of the first
 		kind. Adapted from `double zeroj()`, see =>
 		http://www.falstad.com/circosc-java/CircOsc.java
-		params:
-			n = bessel order
+		input:
+			n = order of the bessel function
 			m = mth zero
 		output:
-			z_nm = mth zero crossing of J_n()
+			z_nm = mth zero crossing of J_n() | z_mn ∈ ℝ
 		*/
 
 		// asymptotic expansions found in Theory of Bessel Functions p.506

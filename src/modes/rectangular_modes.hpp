@@ -31,7 +31,7 @@ namespace geometry {
 		output:
 			A = {
 				(sin(nyπ / (epsilon ** 0.5) sin(mxπ / (epsilon ** 0.5))
-				| 0 < n <= N, 0 < m <= M
+				| a ∈ ℝ, 0 < n <= N, 0 < m <= M
 			}
 		*/
 
@@ -58,7 +58,7 @@ namespace geometry {
 		output:
 			S = {
 				((m / epsilon)^2 + (n * epsilon)^2) ** 0.5
-				| 0 < n <= N, 0 < m <= M
+				| s ∈ ℝ, 0 < n <= N, 0 < m <= M
 			}
 		*/
 

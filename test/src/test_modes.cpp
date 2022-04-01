@@ -17,7 +17,8 @@ void testModes() {
 	std::cout << "besselJ is accurate... ";
 	booleanTest(
 		std::abs(besselJ(0, 4.2) - -0.37655) < 0.01
-		&& std::abs(besselJ(1, 1.2) - 0.498289) < 0.01);
+		&& std::abs(besselJ(1, 1.2) - 0.498289) < 0.01
+	);
 	std::cout << "the 0th mode from calculateLinearModes is f_0... ";
 	booleanTest(calculateLinearModes(440.0, 10)[0] == 440.0);
 	std::cout << "the 0th element from calculateLinearSeries is 1... ";
@@ -45,18 +46,21 @@ void testModes() {
 	{
 		Timer timer("	calculateCircularModes");
 		calculateCircularModes(
-			440.0, floor(sqrt(efficiency)), floor(sqrt(efficiency)));
+			440.0, floor(sqrt(efficiency)), floor(sqrt(efficiency))
+		);
 	}
 	{
 		Timer timer("	calculateCircularSeries");
 		calculateCircularSeries(
-			floor(sqrt(efficiency)), floor(sqrt(efficiency)));
+			floor(sqrt(efficiency)), floor(sqrt(efficiency))
+		);
 	}
 	{
 		Timer timer("	calculateLinearAmplitudes");
 		calculateLinearAmplitudes(
 			static_cast<double>(rand()) / static_cast<double>(RAND_MAX),
-			efficiency);
+			efficiency
+		);
 	}
 	{
 		Timer timer("	calculateLinearModes");
@@ -69,12 +73,14 @@ void testModes() {
 	{
 		Timer timer("	calculateRectangularAmplitudes");
 		calculateRectangularAmplitudes(
-			0.5, 0.5, floor(sqrt(efficiency)), floor(sqrt(efficiency)));
+			0.5, 0.5, floor(sqrt(efficiency)), floor(sqrt(efficiency))
+		);
 	}
 	{
 		Timer timer("	calculateRectangularSeries");
 		calculateRectangularSeries(
-			floor(sqrt(efficiency)), floor(sqrt(efficiency)));
+			floor(sqrt(efficiency)), floor(sqrt(efficiency))
+		);
 	}
 	std::cout << "\n";
 }

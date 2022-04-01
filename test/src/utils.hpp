@@ -28,14 +28,14 @@ struct Timer {
 	// denstructors
 	~Timer() {
 		auto end_tp = std::chrono::high_resolution_clock::now();
-		auto start
-			= std::chrono::time_point_cast<std::chrono::microseconds>(start_tp)
-				  .time_since_epoch()
-				  .count();
-		auto end
-			= std::chrono::time_point_cast<std::chrono::microseconds>(end_tp)
-				  .time_since_epoch()
-				  .count();
+		auto start =
+			std::chrono::time_point_cast<std::chrono::microseconds>(start_tp)
+				.time_since_epoch()
+				.count();
+		auto end =
+			std::chrono::time_point_cast<std::chrono::microseconds>(end_tp)
+				.time_since_epoch()
+				.count();
 		std::cout << (name != "" ? name + ": " : "") << end - start << "us\n";
 	};
 };
@@ -49,7 +49,8 @@ void booleanTest(const bool& b) {
 }
 
 void batchBooleanTest(
-	const int& I, const std::function<bool(unsigned int)>& lambda) {
+	const int& I, const std::function<bool(unsigned int)>& lambda
+) {
 	/*
 	Runs boolean test on a batch of functions.
 	*/

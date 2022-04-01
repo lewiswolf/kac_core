@@ -19,7 +19,8 @@ namespace geometry {
 		const double& y,
 		const int& N,
 		const int& M,
-		const double& epsilon = 1.0) {
+		const double& epsilon = 1.0
+	) {
 		/*
 		Calculate the amplitudes of the rectangular eigenmodes relative to a
 		cartesian strike location.
@@ -48,7 +49,8 @@ namespace geometry {
 	};
 
 	Matrix_2D calculateRectangularSeries(
-		const int& N, const int& M, const double& epsilon = 1.0) {
+		const int& N, const int& M, const double& epsilon = 1.0
+	) {
 		/*
 		Calculate the eigenmodes of a rectangle.
 		input:

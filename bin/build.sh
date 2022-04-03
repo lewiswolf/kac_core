@@ -1,6 +1,6 @@
 build() {
-	cmake -S ../ -B .
-	make
+	cmake -S test -B test/build
+	make --directory test/build
 }
 
 # loop over args and check for -d
@@ -16,11 +16,9 @@ do
 done
 
 # build tests and run if in dev mode 
-cd "test/build"
-	if [ "$DEV" == "true" ] && build; then
-		echo
-		./geometry_test
-	else
-		build
-	fi
-cd ../../
+if [ "$DEV" == "true" ] && build; then
+	echo
+	./test/build/geometry_test
+else
+	build
+fi

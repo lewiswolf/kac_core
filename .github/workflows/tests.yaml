@@ -22,10 +22,9 @@ jobs:
             #       source: '.'
             #       extensions: 'hpp'
             #       clangFormatVersion: 14
-            - uses: lukka/get-cmake@latest
 
             - name: cmake & make
-              run: cmake -S test -B test/build && make --directory test/build
+              run: cmake -S ${{github.workspace}}/test -B ${{github.workspace}}/test/build && cmake --build ${{github.workspace}}/test/build
 
             - name: Run unit tests
               run: ./test/build/geometry_test

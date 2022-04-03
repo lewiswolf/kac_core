@@ -17,11 +17,11 @@ jobs:
             - uses: actions/checkout@master
               with:
                   submodules: recursive
-            - uses: DoozyX/clang-format-lint-action@v0.13
-              with:
-                  source: '.'
-                  extensions: 'hpp'
-                  clangFormatVersion: 14
+            # - uses: DoozyX/clang-format-lint-action@v0.13
+            #   with:
+            #       source: '.'
+            #       extensions: 'hpp'
+            #       clangFormatVersion: 14
             - uses: lukka/get-cmake@latest
 
             - name: cmake & make

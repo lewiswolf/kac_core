@@ -11,12 +11,12 @@ jobs:
         strategy:
             matrix:
                 include:
-                  - os: macos-latest
-                    build: /test/build/geometry_test
-                  - os: ubuntu-latest
-                    build: /test/build/geometry_test
-                  - os: windows-latest
-                    build: \test\build\geometry_test
+                    - os: macos-latest
+                      build: /test/build/geometry_test
+                    - os: ubuntu-latest
+                      build: /test/build/geometry_test
+                    - os: windows-latest
+                      build: \test\build\geometry_test.exe
 
         runs-on: ${{ matrix.os }}
         steps:
@@ -30,7 +30,9 @@ jobs:
             #       clangFormatVersion: 14
 
             - name: cmake & make
-              run: cmake -S ${{ github.workspace }}/test -B ${{ github.workspace }}/test/build && cmake --build ${{ github.workspace }}/test/build
+              run: |
+                  cmake -S ${{ github.workspace }}/test -B ${{ github.workspace }}/test/build -DCMAKE_BUILD_TYPE=Release
+                  cmake --build ${{ github.workspace }}/test/build --config Release
 
             - name: Run unit tests
               run: ${{ github.workspace }}${{ matrix.build }}

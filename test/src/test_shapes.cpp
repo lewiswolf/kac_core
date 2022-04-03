@@ -50,6 +50,17 @@ void testShapes() {
 			&& abs(seed_test[i].y - seed_expected[i].y) < 0.01;
 	});
 
+	Vertices p1(4);
+	Vertices p2(4);
+	p1[0], p2[0] = Point(0.0, 0.0);
+	p1[1], p2[3] = Point(0.0, 1.0);
+	p1[2], p2[2] = Point(1.0, 1.0);
+	p1[3], p2[1] = Point(1.0, 0.0);
+	std::cout << "isConvex works for counter-clockwise ordered polygons... ";
+	booleanTest(isConvex(p1));
+	std::cout << "isConvex works for clockwise ordered polygons... ";
+	booleanTest(isConvex(p2));
+
 	// efficiency
 	const int efficiency = 1000;
 	Vertices test_v;

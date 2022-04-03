@@ -5,6 +5,7 @@ Utility functions for testing.
 #pragma once
 // core
 #include <chrono>
+#include <functional>
 #include <iostream>
 #include <string>
 

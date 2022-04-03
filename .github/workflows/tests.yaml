@@ -16,7 +16,7 @@ jobs:
                     - os: ubuntu-latest
                       build: /test/build/geometry_test
                     - os: windows-latest
-                      build: \test\build\geometry_test.exe
+                      build: \test\build\Release\geometry_test.exe
 
         runs-on: ${{ matrix.os }}
         steps:

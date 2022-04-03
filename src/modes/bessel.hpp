@@ -6,7 +6,7 @@ Functions for calculating the bessel functions and their zero crossings.
 
 // core
 #define _USE_MATH_DEFINES
-#include <cmath>
+#include <math.h>
 #include <vector>
 
 namespace geometry {

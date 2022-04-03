@@ -1,6 +1,6 @@
 build() {
 	cmake -S test -B test/build
-	make --directory test/build
+	cmake --build test/build
 }
 
 # loop over args and check for -d

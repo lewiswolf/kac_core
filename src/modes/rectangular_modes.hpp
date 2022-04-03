@@ -7,7 +7,7 @@ rectangular wave equation.
 
 // core
 #define _USE_MATH_DEFINES
-#include <cmath>
+#include <math.h>
 #include <vector>
 // src
 #include "../types.hpp"

@@ -6,6 +6,8 @@ equation.
 #pragma once
 
 // core
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <vector>
 // src
 #include "../types.hpp"

@@ -22,7 +22,7 @@ namespace geometry {
 			x = strike location
 			N = number of modes
 		output:
-			A = { sin(nxπ) | a ∈ ℝ, 0 < n <= N, 0 < m <= M }
+			A = { sin(nxπ) | a ∈ ℝ, 0 < n <= N }
 		*/
 
 		Matrix_1D A(N);

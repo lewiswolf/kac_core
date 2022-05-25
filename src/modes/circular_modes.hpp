@@ -17,7 +17,7 @@ namespace geometry {
 	calculateCircularModes(const double& f_0, const int& N, const int& M) {
 		/*
 		Calculate the eigenfrequencies of a circle relative to a given
-		fundmental.
+		fundamental.
 		input:
 			f_0 = fundamental frequency
 			N = number of modal order

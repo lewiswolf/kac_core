@@ -14,7 +14,7 @@ namespace geometry {
 		Determines whether or not a given set of three vertices are colinear.
 		*/
 
-		return ((c.y - b.y) * (b.x - a.x) == (b.y - a.y) * (c.x - b.x));
+		return (c.y - b.y) * (b.x - a.x) == (b.y - a.y) * (c.x - b.x);
 	}
 
 	bool isConvex(const Vertices& v) {

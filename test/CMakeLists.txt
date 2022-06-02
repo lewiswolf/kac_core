@@ -1,15 +1,12 @@
-cmake_minimum_required(VERSION 3.22)
-set(CMAKE_CXX_STANDARD 11)
+# tests need to be added as executables first
+add_executable(test_modes src/test_modes.cpp)
+add_executable(test_shapes src/test_shapes.cpp)
 
-project(geometry_test)
+# should be linked to the main library
+target_link_libraries(test_modes PRIVATE kac_core)
+target_link_libraries(test_shapes PRIVATE kac_core)
 
-# include the test src dir
-include_directories(
-	"${CMAKE_CURRENT_SOURCE_DIR}/../src"
-)
-# include geometry.hpp
-file(GLOB_RECURSE GEOMETRY
-	"${CMAKE_CURRENT_SOURCE_DIR}/../src/geometry.hpp"
-)
-
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/test.cpp)
+# If you register a test, then ctest and make test will run it.
+# You can also run examples and check the output, as well.
+add_test(NAME test_modes COMMAND test_modes)
+add_test(NAME test_shapes COMMAND test_shapes)

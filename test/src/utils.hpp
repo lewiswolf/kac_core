@@ -7,6 +7,7 @@ Utility functions for testing.
 #include <chrono>
 #include <functional>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 struct Timer {
@@ -26,7 +27,7 @@ struct Timer {
 		start_tp = std::chrono::high_resolution_clock::now();
 	}
 
-	// denstructors
+	// destructors
 	~Timer() {
 		auto end_tp = std::chrono::high_resolution_clock::now();
 		auto start =
@@ -41,26 +42,30 @@ struct Timer {
 	};
 };
 
-void booleanTest(const bool& b) {
+void booleanTest(const std::string& test_name, const bool& b) {
 	/*
-	Prints a tick or a cross to the console.
+	Prints a warning to the console if the test fails.
 	*/
-
-	b ? std::cout << "✅\n" : std::cout << "❌\n";
+	if (!b) {
+		std::cout << test_name;
+		throw;
+	}
 }
 
 void batchBooleanTest(
-	const int& I, const std::function<bool(unsigned int)>& lambda
+	const std::string& test_name,
+	const int& N,
+	const std::function<bool(unsigned int)>& lambda
 ) {
 	/*
-	Runs boolean test on a batch of functions.
+	Runs booleanTest N times on the input function.
 	*/
 
-	for (unsigned int i = 0; i < I; i++) {
+	for (unsigned int i = 0; i < N; i++) {
 		if (!lambda(i)) {
-			booleanTest(false);
+			booleanTest(test_name, false);
 			return;
 		}
 	}
-	booleanTest(true);
+	booleanTest(test_name, true);
 }

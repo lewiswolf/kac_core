@@ -4,10 +4,8 @@ Functions for calculating the bessel functions and their zero crossings.
 
 #pragma once
 
-// core
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <vector>
+// dependencies
+#include <boost/math/special_functions/bessel.hpp>
 
 namespace geometry {
 
@@ -22,25 +20,10 @@ namespace geometry {
 		output:
 			y = J_n(x) | y ∈ ℝ
 		*/
-
-		// calculate J_k(x) for all k < n
-		int n_top = 2 * ((int)((fmax(n, (int)x) + 15) / 2 + 1));
-		double epsilon = 1e-16;
-		// vector to store recursion values
-		std::vector<double> j(n_top + 2);
-		j[n_top + 1] = 0.0;
-		j[n_top] = 1.0;
-		// downwards recursion
-		for (unsigned int i = n_top - 1; i > 0; i--) {
-			j[i] = 2 * i / (x + epsilon) * j[i + 1] - j[i + 2];
-		}
-		// sum together predicted values
-		double norm = j[1];
-		for (unsigned int i = 2; i <= n_top; i += 2) { norm += 2 * j[i + 1]; }
-		return j[n + 1] / norm;
+		return boost::math::cyl_bessel_j(n, x);
 	}
 
-	double besselJZero(const int& n, const int& m) {
+	double besselJZero(const double& n, const int& m) {
 		/*
 		Calculates the mth zero crossing of the bessel functions of the first
 		kind. Adapted from `double zeroj()`, see =>
@@ -51,41 +34,7 @@ namespace geometry {
 		output:
 			z_nm = mth zero crossing of J_n() | z_mn ∈ ℝ
 		*/
-
-		// asymptotic expansions found in Theory of Bessel Functions p.506
-		double beta = (m + 0.5 * n - 0.25) * M_PI;
-		double beta8 = beta * 8;
-		double mu = 4 * n * n;
-		double z_nm = beta - (mu - 1) / beta8;
-		z_nm -= 4 * (mu - 1) * (7 * mu - 31) / (3 * pow(beta8, 3));
-		z_nm -= 32 * (mu - 1) * (83 * pow(mu, 2) - 982 * mu + 3779)
-			/ (15 * pow(beta8, 5));
-		z_nm -= 64 * (mu - 1)
-			* (6949 * pow(mu, 3) - 153855 * pow(mu, 2) + 1585743 * mu - 6277237)
-			/ (105 * pow(beta8, 7));
-		// Newton's method for approximating roots
-		for (unsigned int i = 1; i <= 5; i++) {
-			// calculate J_k(x) for all k < n
-			int n_top = 2 * ((int)((fmax(n, (int)z_nm) + 15) / 2 + 1));
-			double epsilon = 1e-16;
-			// vector to store recursion values
-			std::vector<double> j(n_top + 2);
-			j[n_top + 1] = 0.0;
-			j[n_top] = 1.0;
-			// downwards recursion
-			for (unsigned int i = n_top - 1; i > 0; i--) {
-				j[i] = 2 * i / (z_nm + epsilon) * j[i + 1] - j[i + 2];
-			}
-			// normalise
-			double norm = j[1];
-			for (unsigned int i = 2; i <= n_top; i += 2) {
-				norm += 2 * j[i + 1];
-			}
-			for (unsigned int i = 1; i < n_top + 2; i++) { j[i] = j[i] / norm; }
-			// use the recursion relation to evaluate derivative
-			z_nm -= j[n + 1] / (-j[n + 2] + n / z_nm * j[n + 1]);
-		}
-		return z_nm;
+		return boost::math::cyl_bessel_j_zero(n, m);
 	}
 
 }

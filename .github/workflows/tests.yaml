@@ -10,31 +10,12 @@ jobs:
     all-tests:
         strategy:
             matrix:
-                include:
-                    - os: macos-latest
-                      build: /test/build/geometry_test
-                    - os: ubuntu-latest
-                      build: /test/build/geometry_test
-                    - os: windows-latest
-                      build: \test\build\Release\geometry_test.exe
-
+                os: [macos-latest, ubuntu-latest, windows-latest]
         runs-on: ${{ matrix.os }}
         steps:
             - uses: actions/checkout@master
-              with:
-                  submodules: recursive
-            # - uses: DoozyX/clang-format-lint-action@v0.13
-            #   with:
-            #       source: '.'
-            #       extensions: 'hpp'
-            #       clangFormatVersion: 14
-
-            - name: cmake & make
-              run: |
-                  cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-                  cmake --build build --config Release
-
             - name: Run unit tests
               run: |
+                  cmake -S . -B build
                   cmake --build build
                   cmake -E env CTEST_OUTPUT_ON_FAILURE=1 cmake --build build --target test

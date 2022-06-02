@@ -29,6 +29,7 @@ target_link_libraries(${PROJECT_NAME} INTERFACE boost_math)
 # if this is project root, run tests
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	include(CTest)
+	enable_testing()
 	set(CMAKE_CXX_STANDARD 11)
 	add_subdirectory(test)
 endif()

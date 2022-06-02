@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 project(
 	kac_core
 	VERSION 0.0.2
-	DESCRIPTION ""
+	DESCRIPTION "Core C++ library for working with arbitrarily shaped drums."
 	LANGUAGES CXX
 )
 

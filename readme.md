@@ -1,12 +1,9 @@
-# Multi-Purpose Geometry Library
+# kac_core
 
-## Build
-```bash
-$ sh ./bin/build.sh
-```
+Core C++ library for working with arbitrarily shaped drums.
 
-## Dev
+## Test
 
 ```bash
-$ sh ./bin/dev.sh
+$ sh ./bin/test.sh
 ```

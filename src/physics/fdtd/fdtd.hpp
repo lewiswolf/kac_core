@@ -20,7 +20,7 @@ namespace kac_core { namespace physics {
 		const double& c_1,
 		const double& d,
 		const int& T,
-		Point w
+		std::array<int, 2> w
 	) {
 		/*
 		Generates a waveform using a 2 dimensional FDTD scheme.
@@ -49,8 +49,8 @@ namespace kac_core { namespace physics {
 		}
 		// initialise output
 		std::vector<double> waveform(T);
-		waveform[0] = u_0[w.x][w.y];
-		waveform[1] = u_1[w.x][w.y];
+		waveform[0] = u_0[w[0]][w[1]];
+		waveform[1] = u_1[w[0]][w[1]];
 		// for efficiency, calculate the loop range relative to dirichlet
 		// boundary conditions
 		std::array<unsigned int, 2> x_range = {(unsigned int)B.size(), 0};
@@ -96,10 +96,10 @@ namespace kac_core { namespace physics {
 			// matrices need to be in memory at one time
 			if ((t % 2) == 0) {
 				FDTDUpdate2D(u_0, u_1);
-				waveform[t] = u_0[w.x][w.y];
+				waveform[t] = u_0[w[0]][w[1]];
 			} else {
 				FDTDUpdate2D(u_1, u_0);
-				waveform[t] = u_1[w.x][w.y];
+				waveform[t] = u_1[w[0]][w[1]];
 			}
 		}
 		return waveform;

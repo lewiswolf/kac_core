@@ -9,10 +9,12 @@ rectangular wave equation.
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include <vector>
-// src
-#include "../types.hpp"
 
-namespace geometry {
+// src
+#include "../../types.hpp"
+using namespace kac_core::types;
+
+namespace kac_core { namespace physics {
 
 	Matrix_2D calculateRectangularAmplitudes(
 		const double& x,
@@ -74,4 +76,4 @@ namespace geometry {
 		return S;
 	};
 
-}
+}}

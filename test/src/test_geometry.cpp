@@ -1,30 +1,33 @@
 /*
-Tests for /shapes.
+Tests for /geometry.
 */
 
 // src
 #include <kac_core.hpp>
-using namespace geometry;
+namespace T = kac_core::types;		 // types
+namespace g = kac_core::geometry;	 // geometry
 
 // test
 #include "./utils.hpp"
 
 int main() {
 	int N = 10;
-	Vertices v = generateConvexPolygon(N);
+	T::Vertices v = g::generateConvexPolygon(N);
 	booleanTest("generatedConvexPolygon produces n vertices", v.size() == N);
-	booleanTest("generatedConvexPolygon is convex", isConvex(v));
+	booleanTest("generatedConvexPolygon is convex", g::isConvex(v));
 	batchBooleanTest(
 		"generatedConvexPolygon does not produce colinear points",
 		N,
 		[&N, &v](unsigned int i) {
-			return !isColinear(v[i > 0 ? i - 1 : N - 1], v[i], v[(i + 1) % N]);
+			return !g::isColinear(
+				v[i > 0 ? i - 1 : N - 1], v[i], v[(i + 1) % N]
+			);
 		}
 	);
 
-	Vertices seed_test = generateConvexPolygon(10, 1);
-	Vertices seed_expected(10);
-	Matrix_2D seed_m = {
+	T::Vertices seed_test = g::generateConvexPolygon(10, 1);
+	T::Vertices seed_expected(10);
+	T::Matrix_2D seed_m = {
 		{0.288255, 0.411634},
 		{-0.244504, 0.0358297},
 		{-0.467343, -0.251818},
@@ -36,7 +39,7 @@ int main() {
 		{0.382849, 0.100085},
 		{0.467343, 0.40135}};
 	for (unsigned int i = 0; i < 10; i++) {
-		seed_expected[i] = Point(seed_m[i][0], seed_m[i][1]);
+		seed_expected[i] = T::Point(seed_m[i][0], seed_m[i][1]);
 	}
 	batchBooleanTest(
 		"generatedConvexPolygon can be correctly controlled using the seed "
@@ -48,16 +51,18 @@ int main() {
 		}
 	);
 
-	Vertices p1(4);
-	Vertices p2(4);
-	p1[0], p2[0] = Point(0.0, 0.0);
-	p1[1], p2[3] = Point(0.0, 1.0);
-	p1[2], p2[2] = Point(1.0, 1.0);
-	p1[3], p2[1] = Point(1.0, 0.0);
+	T::Vertices p1(4);
+	T::Vertices p2(4);
+	p1[0], p2[0] = T::Point(0.0, 0.0);
+	p1[1], p2[3] = T::Point(0.0, 1.0);
+	p1[2], p2[2] = T::Point(1.0, 1.0);
+	p1[3], p2[1] = T::Point(1.0, 0.0);
 	booleanTest(
-		"isConvex works for counter-clockwise ordered polygons", isConvex(p1)
+		"isConvex works for counter-clockwise ordered polygons", g::isConvex(p1)
 	);
-	booleanTest("isConvex works for clockwise ordered polygons", isConvex(p2));
+	booleanTest(
+		"isConvex works for clockwise ordered polygons", g::isConvex(p2)
+	);
 
 	return 0;
 }

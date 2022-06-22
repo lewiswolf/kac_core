@@ -7,11 +7,40 @@ wave equation.
 
 // core
 #include <vector>
-// src
-#include "../types.hpp"
-#include "bessel.hpp"
 
-namespace geometry {
+// dependencies
+#include <boost/math/special_functions/bessel.hpp>
+
+// src
+#include "../../types.hpp"
+using namespace kac_core::types;
+
+namespace kac_core { namespace physics {
+
+	double besselJ(const int& n, const double& x) {
+		/*
+		Calculates the bessel function of the first kind J_n(x).
+		input:
+			n = order of the bessel function
+			x = x coordinate
+		output:
+			y = J_n(x) | y ∈ ℝ
+		*/
+		return boost::math::cyl_bessel_j(n, x);
+	}
+
+	double besselJZero(const double& n, const int& m) {
+		/*
+		Calculates the mth zero crossing of the bessel functions of the first
+		kind.
+		input:
+			n = order of the bessel function
+			m = mth zero
+		output:
+			z_nm = mth zero crossing of J_n() | z_mn ∈ ℝ
+		*/
+		return boost::math::cyl_bessel_j_zero(n, m);
+	}
 
 	Matrix_2D
 	calculateCircularModes(const double& f_0, const int& N, const int& M) {
@@ -54,4 +83,4 @@ namespace geometry {
 		return S;
 	}
 
-}
+}}

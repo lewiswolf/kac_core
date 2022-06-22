@@ -5,10 +5,12 @@
 #include <random>		// default_random_engine
 #include <stdlib.h>		// rand, RAND_MAX
 #include <time.h>		// time
+
 // src
 #include "../types.hpp"
+using namespace kac_core::types;
 
-namespace geometry {
+namespace kac_core { namespace geometry {
 
 	Vertices generateConvexPolygon(const int& N, time_t seed = time(NULL)) {
 		/*
@@ -88,4 +90,4 @@ namespace geometry {
 		return V;
 	}
 
-}
+}}

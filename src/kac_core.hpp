@@ -1,6 +1,7 @@
 #pragma once
 
 // src
-#include "modes/__index__.hpp"
-#include "shapes/__index__.hpp"
+#include "geometry/__index__.hpp"
+#include "physics/fdtd/__index__.hpp"
+#include "physics/modes/__index__.hpp"
 #include "types.hpp"

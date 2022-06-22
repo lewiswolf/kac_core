@@ -8,7 +8,7 @@
 #include <math.h>
 #include <vector>
 
-namespace geometry {
+namespace kac_core { namespace types {
 
 	typedef struct Point {
 		/*
@@ -76,4 +76,4 @@ namespace geometry {
 	typedef std::vector<double> Matrix_1D;
 	typedef std::vector<std::vector<double>> Matrix_2D;
 
-}
+}}

@@ -15,7 +15,7 @@ namespace kac_core { namespace physics {
 	Matrix_1D FDTDWaveform2D(
 		Matrix_2D u_0,
 		Matrix_2D u_1,
-		const std::vector<std::vector<char>>& B,
+		const std::vector<std::vector<int>>& B,
 		const double& c_0,
 		const double& c_1,
 		const double& d,
@@ -56,8 +56,8 @@ namespace kac_core { namespace physics {
 		std::array<unsigned int, 2> x_range = {(unsigned int)B.size(), 0};
 		std::array<unsigned int, 2> y_range = {(unsigned int)B[0].size(), 0};
 		// forward loop to find the first ones
-		for (unsigned int x = 0; x < B.size(); x++) {
-			for (unsigned int y = 0; y < B[0].size(); y++) {
+		for (unsigned int x = 1; x < B.size() - 1; x++) {
+			for (unsigned int y = 1; y < B[0].size() - 1; y++) {
 				if (B[x][y] == 1) {
 					x_range[0] = x_range[0] > x ? x : x_range[0];
 					y_range[0] = y_range[0] > y ? y : y_range[0];
@@ -66,8 +66,8 @@ namespace kac_core { namespace physics {
 			}
 		}
 		// backwards loop to find the last ones
-		for (unsigned int x = B.size() - 1; x >= 0; x--) {
-			for (unsigned int y = B[0].size() - 1; y >= 0; y--) {
+		for (unsigned int x = B.size() - 2; x > 0; x--) {
+			for (unsigned int y = B[0].size() - 2; y > 0; y--) {
 				if (B[x][y] == 1) {
 					x_range[1] = x_range[1] < x ? x : x_range[1];
 					y_range[1] = y_range[1] < y ? y : y_range[1];

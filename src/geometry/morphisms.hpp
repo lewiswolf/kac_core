@@ -13,6 +13,7 @@ Functions for producing group theoretic transformations.
 
 // src
 #include "../types.hpp"
+#include "./polygon_properties.hpp"
 using namespace kac_core::types;
 
 namespace kac_core { namespace geometry {

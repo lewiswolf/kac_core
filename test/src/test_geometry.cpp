@@ -64,5 +64,10 @@ int main() {
 		"isConvex works for clockwise ordered polygons", g::isConvex(p2)
 	);
 
+	booleanTest(
+		"convexNormalisation produces a polygon on the unit interval.",
+		g::largestVector(g::convexNormalisation(v)).first == 1.
+	);
+
 	return 0;
 }

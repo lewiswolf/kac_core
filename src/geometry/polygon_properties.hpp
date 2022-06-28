@@ -4,11 +4,56 @@ Utility functions for working with polygons.
 
 #pragma once
 
+// core
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include <utility>
+
 // src
 #include "../types.hpp"
 using namespace kac_core::types;
 
 namespace kac_core { namespace geometry {
+
+	Point centroid(const Vertices& V, const double& area) {
+		/*
+		 This algorithm is used to calculate the geometric centroid of a 2D
+		 polygon. See http://paulbourke.net/geometry/polygonmesh/ 'Calculating
+		 the area and centroid of a polygon'.
+
+		 output:
+			for N == 3 ->
+			(x, y) = (
+				(x_0 + x_1 + x_2) / 3,
+				(y_0 + y_1 + y_2) / 3,
+			)
+			for N > 3 ->
+			(x, y) = (
+				1/6A * Σ (x_n + x_n+1)(x_n * y_n+1 - x_n+1 * y_n),
+				1/6A * Σ (y_n + y_n+1)(x_n * y_n+1 - x_n+1 * y_n),
+			)
+		 */
+
+		const unsigned long N = V.size();
+		double out_x = 0.;
+		double out_y = 0.;
+		if (N == 3) {
+			// Triangles have a much simpler formula, and so these are
+			// calculated separately.
+			for (unsigned long n = 0; n < 3; n++) {
+				out_x += V[n].x;
+				out_y += V[n].y;
+			}
+			return Point(out_x / 3., out_y / 3.);
+		}
+		for (unsigned long n = 0; n < N; n++) {
+			double out =
+				(V[n].x * V[(n + 1) % N].y - V[(n + 1) % N].x * V[n].y);
+			out_x += (V[n].x + V[(n + 1) % N].x) * out;
+			out_y += (V[n].y + V[(n + 1) % N].y) * out;
+		}
+		return Point(abs(out_x) / (6 * area), abs(out_y) / (6 * area));
+	}
 
 	bool isColinear(const Point& a, const Point& b, const Point& c) {
 		/*
@@ -47,6 +92,46 @@ namespace kac_core { namespace geometry {
 			}
 		}
 		return true;
+	}
+
+	std::pair<double, std::pair<int, int>> largestVector(const Vertices& V) {
+		/*
+		This function tests each pair of vertices in a given polygon to find
+		the largest vector, and returns the length of the vector and its
+		indices.
+		*/
+
+		const unsigned long N = V.size();
+		double vec_max = 0.;
+		long index_i = 0;
+		long index_j = 0;
+		for (unsigned long i = 0; i < N; i++) {
+			for (unsigned long j = i + 1; j < N; j++) {
+				double vec =
+					sqrt(pow(V[i].x - V[j].x, 2) + pow(V[i].y - V[j].y, 2));
+				if (vec > vec_max) {
+					vec_max = vec;
+					index_i = i;
+					index_j = j;
+				}
+			}
+		}
+		return std::make_pair(vec_max, std::make_pair(index_i, index_j));
+	}
+
+	double polygonArea(const Vertices& V) {
+		/*
+		An implementation of the shoelace algorithm, first described by Albrecht
+		Ludwig Friedrich Meister, which is used to calculate the area of a
+		polygon.
+		*/
+
+		const unsigned long N = V.size();
+		double out = 0.;
+		for (unsigned long n = 0; n < N; n++) {
+			out += V[n].x * V[(n + 1) % N].y - V[n].y * V[(n + 1) % N].x;
+		}
+		return abs(out) / 2.;
 	}
 
 }}

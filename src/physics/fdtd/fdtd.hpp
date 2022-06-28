@@ -75,13 +75,13 @@ namespace kac_core { namespace physics {
 				}
 			}
 		}
-
 		// update lambda
 		auto FDTDUpdate2D = [=](Matrix_2D& u_a, Matrix_2D& u_b) {
 			for (unsigned int x = x_range[0]; x < x_range[1]; x++) {
 				for (unsigned int y = y_range[0]; y < y_range[1]; y++) {
 					// dirichlet boundary conditions
 					if (B[x][y] != 0) {
+						// update in place
 						u_a[x][y] = (u_b[x][y + 1] + u_b[x + 1][y]
 									 + u_b[x][y - 1] + u_b[x - 1][y])
 								* c_0

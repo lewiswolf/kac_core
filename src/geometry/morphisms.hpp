@@ -8,6 +8,7 @@ Functions for producing group theoretic transformations.
 #define _USE_MATH_DEFINES
 #include <algorithm>
 #include <array>
+#include <iterator>
 #include <math.h>
 #include <utility>
 
@@ -144,7 +145,7 @@ namespace kac_core { namespace geometry {
 				quadAreas[quad_a] += triangleArea(a, c);
 				quadAreas[quad_b] += triangleArea(c, b);
 			} else if (((quad_b + 4) - quad_a) % 4 == 2) {
-				// if the points lie across two quadrants, update the two
+				// if the points lie across three quadrants, update the two
 				// quadrants as well as the one in between.
 				Point c = Point(0, a.y - (b.y - a.y) / (b.x - a.x) * a.x);
 				Point d = Point(a.x - (b.x - a.x) / (b.y - a.y) * a.y, 0);

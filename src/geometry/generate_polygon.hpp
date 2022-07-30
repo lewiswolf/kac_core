@@ -10,7 +10,7 @@
 #include "../types.hpp"
 using namespace kac_core::types;
 
-namespace kac_core { namespace geometry {
+namespace kac_core::geometry {
 
 	Vertices generateConvexPolygon(const int& N, time_t seed = time(NULL)) {
 		/*
@@ -90,4 +90,4 @@ namespace kac_core { namespace geometry {
 		return V;
 	}
 
-}}
+}

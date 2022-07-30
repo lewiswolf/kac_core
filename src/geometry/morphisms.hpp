@@ -17,7 +17,7 @@ Functions for producing group theoretic transformations.
 #include "./polygon_properties.hpp"
 using namespace kac_core::types;
 
-namespace kac_core { namespace geometry {
+namespace kac_core::geometry {
 
 	Vertices normalisePolygon(Vertices V) {
 		/*
@@ -90,7 +90,7 @@ namespace kac_core { namespace geometry {
 			V[n].x -= x_shift;
 			V[n].y -= y_shift;
 		}
-		// rotate around midpoint such that largest_vec is vertical
+		// rotate around midpoint such that largest_vec is horizontal
 		double theta = V[LV.second.first].theta();
 		double cos_theta = cos(theta);
 		double sin_theta = sin(theta);
@@ -146,7 +146,7 @@ namespace kac_core { namespace geometry {
 				quadAreas[quad_b] += triangleArea(c, b);
 			} else if (((quad_b + 4) - quad_a) % 4 == 2) {
 				// if the points lie across three quadrants, update the two
-				// quadrants as well as the one in between.
+				// quadrants containing the points in question.
 				Point c = Point(0, a.y - (b.y - a.y) / (b.x - a.x) * a.x);
 				Point d = Point(a.x - (b.x - a.x) / (b.y - a.y) * a.y, 0);
 				if (sqrt(pow(a.x - c.x, 2) + pow(a.y - c.y, 2))
@@ -196,4 +196,4 @@ namespace kac_core { namespace geometry {
 		return V;
 	}
 
-}}
+}

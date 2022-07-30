@@ -15,7 +15,7 @@ wave equation.
 #include "../../types.hpp"
 using namespace kac_core::types;
 
-namespace kac_core { namespace physics {
+namespace kac_core::physics {
 
 	double besselJ(const int& n, const double& x) {
 		/*
@@ -83,4 +83,4 @@ namespace kac_core { namespace physics {
 		return S;
 	}
 
-}}
+}

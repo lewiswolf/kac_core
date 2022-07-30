@@ -8,7 +8,7 @@ project(
 
 # create library
 add_library(${PROJECT_NAME} INTERFACE)
-target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_11)
+target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_20)
 
 # link /src
 target_include_directories(${PROJECT_NAME} INTERFACE src)
@@ -30,6 +30,6 @@ target_link_libraries(${PROJECT_NAME} INTERFACE boost_math)
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 	include(CTest)
 	enable_testing()
-	set(CMAKE_CXX_STANDARD 11)
+	set(CMAKE_CXX_STANDARD 20)
 	add_subdirectory(test)
 endif()

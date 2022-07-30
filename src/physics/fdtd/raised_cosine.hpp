@@ -9,7 +9,7 @@
 #include "../../types.hpp"
 using namespace kac_core::types;
 
-namespace kac_core { namespace physics {
+namespace kac_core::physics {
 
 	Matrix_1D
 	raisedCosine1D(const int& size, const int& mu, const double& sigma) {
@@ -66,4 +66,4 @@ namespace kac_core { namespace physics {
 		return raised_cosine;
 	}
 
-}}
+}

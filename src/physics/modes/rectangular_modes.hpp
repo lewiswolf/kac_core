@@ -14,7 +14,7 @@ rectangular wave equation.
 #include "../../types.hpp"
 using namespace kac_core::types;
 
-namespace kac_core { namespace physics {
+namespace kac_core::physics {
 
 	Matrix_2D calculateRectangularAmplitudes(
 		const double& x,
@@ -76,4 +76,4 @@ namespace kac_core { namespace physics {
 		return S;
 	};
 
-}}
+}

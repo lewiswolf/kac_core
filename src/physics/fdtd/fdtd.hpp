@@ -10,7 +10,7 @@
 #include "../../types.hpp"
 using namespace kac_core::types;
 
-namespace kac_core { namespace physics {
+namespace kac_core::physics {
 
 	Matrix_1D FDTDWaveform2D(
 		Matrix_2D u_0,
@@ -104,4 +104,4 @@ namespace kac_core { namespace physics {
 		}
 		return waveform;
 	}
-}}
+}

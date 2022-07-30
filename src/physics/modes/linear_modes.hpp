@@ -14,7 +14,7 @@ equation.
 #include "../../types.hpp"
 using namespace kac_core::types;
 
-namespace kac_core { namespace physics {
+namespace kac_core::physics {
 
 	Matrix_1D calculateLinearAmplitudes(const double& x, const int& N) {
 		/*
@@ -62,4 +62,4 @@ namespace kac_core { namespace physics {
 		return S;
 	}
 
-}}
+}

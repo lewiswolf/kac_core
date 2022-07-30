@@ -13,7 +13,7 @@ Utility functions for working with polygons.
 #include "../types.hpp"
 using namespace kac_core::types;
 
-namespace kac_core { namespace geometry {
+namespace kac_core::geometry {
 
 	Point centroid(const Vertices& V, const double& area) {
 		/*
@@ -134,4 +134,4 @@ namespace kac_core { namespace geometry {
 		return abs(out) / 2.;
 	}
 
-}}
+}

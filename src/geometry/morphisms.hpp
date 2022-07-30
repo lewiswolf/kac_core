@@ -152,11 +152,11 @@ namespace kac_core { namespace geometry {
 				if (sqrt(pow(a.x - c.x, 2) + pow(a.y - c.y, 2))
 					< sqrt(pow(a.x - d.x, 2) + pow(a.y - d.y, 2))) {
 					quadAreas[quad_a] += triangleArea(a, c);
-					quadAreas[quad_a + 1] += triangleArea(c, d);
+					quadAreas[quad_a + 1 % 4] += triangleArea(c, d);
 					quadAreas[quad_b] += triangleArea(d, b);
 				} else {
 					quadAreas[quad_a] += triangleArea(a, d);
-					quadAreas[quad_a + 1] += triangleArea(d, c);
+					quadAreas[quad_a + 1 % 4] += triangleArea(d, c);
 					quadAreas[quad_b] += triangleArea(c, b);
 				}
 			}

@@ -192,24 +192,7 @@ namespace kac_core { namespace geometry {
 			}
 		}
 		std::rotate(V.begin(), V.begin() + n_shift, V.end());
-
 		return V;
 	}
-
-	// Point squareToCircle(const Point& p) {
-	// 	/*
-	// 	Project a point from the Euclidean plane onto a circular
-	// lattice. This 	projection is neither equiareal nor conformal,
-	// but is a compromise 	between the two.
-
-	// 	See here:
-	// 		Fong, C. (2014). Analytical methods for squaring the disc.
-	// 		http://arxiv.org/abs/1509.06344
-	// 	*/
-
-	// 	return Point(
-	// 		p.x * sqrt(1 - p.y * p.y / 2), p.y * sqrt(1 - p.x * p.x / 2)
-	// 	);
-	// }
 
 }}

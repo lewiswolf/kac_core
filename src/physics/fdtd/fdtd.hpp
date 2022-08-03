@@ -18,7 +18,7 @@ namespace kac_core::physics {
 		const std::vector<std::vector<int>>& B,
 		const double& c_0,
 		const double& c_1,
-		const double& d,
+		const double& c_2,
 		const int& T,
 		std::array<int, 2> w
 	) {
@@ -28,16 +28,17 @@ namespace kac_core::physics {
 			u_0 = initial fdtd grid at t = 0.
 			u_1 = initial fdtd grid at t = 1.
 			B = boundary conditions.
-			c_0 = first fdtd coefficient related to the courant number.
-			c_1 = second fdtd coefficient related to the courant number.
-			d = decay coefficient.
+			c_0 = first fdtd coefficient related to the decay term and the
+				courant number.
+			c_1 = second fdtd coefficient related to the decay term and the
+				courant number.
+			c_2 = third fdtd coefficient related to the decay term.
 			T = length of simulation in samples.
 			w = the coordinate at which the waveform is sampled.
 		output:
-			waveform = W[n] ∈
-				(λ ** 2)(
-					u_n_x+1_y + u_n_x-1_y + u_n_x_y+1 + u_n_x_y-1
-				) + 2(1 - 2(λ ** 2))u_n_x_y - d(u_n-1_x_y) ∀ u ∈ R^2
+			waveform = W[n] ∈ (λ ** 2)(
+				u_n_x+1_y + u_n_x-1_y + u_n_x_y+1 + u_n_x_y-1
+			) + 2(1 - 2(λ ** 2))u_n_x_y - d(u_n-1_x_y) ∀ u ∈ R^2
 		*/
 
 		// handle errors
@@ -48,7 +49,7 @@ namespace kac_core::physics {
 			throw std::invalid_argument("u_0 and B differ in size.");
 		}
 		// initialise output
-		std::vector<double> waveform(T);
+		Matrix_1D waveform(T);
 		waveform[0] = u_0[w[0]][w[1]];
 		waveform[1] = u_1[w[0]][w[1]];
 		// for efficiency, calculate the loop range relative to dirichlet
@@ -85,7 +86,7 @@ namespace kac_core::physics {
 						u_a[x][y] = (u_b[x][y + 1] + u_b[x + 1][y]
 									 + u_b[x][y - 1] + u_b[x - 1][y])
 								* c_0
-							+ c_1 * u_b[x][y] - d * u_a[x][y];
+							+ c_1 * u_b[x][y] - c_2 * u_a[x][y];
 					}
 				};
 			}

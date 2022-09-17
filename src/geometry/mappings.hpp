@@ -16,7 +16,7 @@ namespace kac_core::geometry {
 
 	Point simpleElliptic_Circle2Square(const Point& p) {
 		/*
-			Map a point using a non-conformal map from circle to circle.
+			Map a point using a non-conformal map from circle to square.
 			Fong, C. (2014). Analytical methods for squaring the disc. 27th
 			International Congress of Mathematics (ICM). p.5
 		*/

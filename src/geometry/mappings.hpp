@@ -14,7 +14,7 @@ using namespace kac_core::types;
 
 namespace kac_core::geometry {
 
-	Point SimpleElliptic_Circle2Square(const Point& p) {
+	Point simpleElliptic_Circle2Square(const Point& p) {
 		/*
 			Map a point using a non-conformal map from circle to circle.
 			Fong, C. (2014). Analytical methods for squaring the disc. 27th
@@ -33,7 +33,7 @@ namespace kac_core::geometry {
 		);
 	}
 
-	Point SimpleElliptic_Square2Circle(const Point& p) {
+	Point simpleElliptic_Square2Circle(const Point& p) {
 		/*
 			Map a point using a non-conformal map from square to circle.
 			Fong, C. (2014). Analytical methods for squaring the disc. 27th

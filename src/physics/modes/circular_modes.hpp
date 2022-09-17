@@ -6,6 +6,8 @@ wave equation.
 #pragma once
 
 // core
+#define _USE_MATH_DEFINES
+#include <cmath>
 #include <vector>
 
 // dependencies
@@ -42,26 +44,32 @@ namespace kac_core::physics {
 		return boost::math::cyl_bessel_j_zero(n, m);
 	}
 
-	Matrix_2D
-	calculateCircularModes(const double& f_0, const int& N, const int& M) {
+	Matrix_2D calculateCircularAmplitudes(
+		const double& r, const double& theta, const Matrix_2D& S
+	) {
 		/*
-		Calculate the eigenfrequencies of a circle relative to a given
-		fundamental.
+		Calculate the amplitudes of the circular eigenmodes relative to a polar
+		strike location.
 		input:
-			f_0 = fundamental frequency
-			N = number of modal order
-			M = number of modes per order
+			(r, θ) = polar strike location
+			S = { z_nm | s ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M }
 		output:
-			F = { (f_0 * z_nm) | f ∈ ℝ, J_n(z_nm) = 0, n < N, 0 < m <= M }
+			A = {
+				J_n(z_nm * r) * (2 ** 0.5) * sin(nθπ/4)
+				| a ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M
+			}
 		*/
 
-		Matrix_2D F(N, Matrix_1D(M, 0));
+		unsigned int N = S.size();
+		unsigned int M = S[0].size();
+		Matrix_2D A(N, Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
+			double angular = n != 0 ? M_SQRT2 * sin(n * theta + M_PI_4) : 1.0;
 			for (unsigned int m = 0; m < M; m++) {
-				F[n][m] = f_0 * besselJZero(n, m + 1);
-			}
+				A[n][m] = besselJ(n, S[n][m] * r) * angular;
+			};
 		}
-		return F;
+		return A;
 	}
 
 	Matrix_2D calculateCircularSeries(const int& N, const int& M) {
@@ -71,7 +79,7 @@ namespace kac_core::physics {
 			N = number of modal orders
 			M = number of modes per order
 		output:
-			S = { z_nm | s ∈ ℝ, J_n(z_nm) = 0, n < N, 0 < m <= M }
+			S = { z_nm | s ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M }
 		*/
 
 		Matrix_2D S(N, Matrix_1D(M, 0));

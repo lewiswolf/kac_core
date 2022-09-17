@@ -34,7 +34,7 @@ namespace kac_core::physics {
 		output:
 			A = {
 				sin(nyπ / (epsilon ** 0.5)) sin(mxπ / (epsilon ** 0.5))
-				| a ∈ ℝ, 0 < n <= N, 1 < m <= M
+				| a ∈ ℝ, 0 < n <= N, 0 < m <= M
 			}
 		*/
 

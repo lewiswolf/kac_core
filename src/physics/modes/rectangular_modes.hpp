@@ -33,13 +33,13 @@ namespace kac_core::physics {
 			epsilon = aspect ratio of the rectangle
 		output:
 			A = {
-				sin(nyπ / (epsilon ** 0.5)) sin(mxπ / (epsilon ** 0.5))
+				sin(mxπ / (epsilon ** 0.5)) sin(nyπ (epsilon ** 0.5))
 				| a ∈ ℝ, 0 < n <= N, 0 < m <= M
 			}
 		*/
 
 		double x_hat = x * M_PI / sqrt(epsilon);
-		double y_hat = y * M_PI / sqrt(epsilon);
+		double y_hat = y * M_PI * sqrt(epsilon);
 		Matrix_2D A(N, Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double n_hat = sin((n + 1) * y_hat);
@@ -61,16 +61,16 @@ namespace kac_core::physics {
 			epsilon = aspect ratio of the rectangle
 		output:
 			S = {
-				((m / epsilon)^2 + (n * epsilon)^2) ** 0.5
+				((m^2 / epsilon) + (n^2 * epsilon)) ** 0.5
 				| s ∈ ℝ, 0 < n <= N, 0 < m <= M
 			}
 		*/
 
 		Matrix_2D S(N, Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
-			double n_hat = pow((n + 1) * epsilon, 2);
+			double n_hat = pow((n + 1), 2) * epsilon;
 			for (unsigned int m = 0; m < M; m++) {
-				S[n][m] = sqrt(pow((m + 1) / epsilon, 2) + n_hat);
+				S[n][m] = sqrt(pow((m + 1), 2) / epsilon + n_hat);
 			}
 		}
 		return S;

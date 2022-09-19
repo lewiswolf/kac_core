@@ -10,11 +10,11 @@ Functions for mappings from one domain ℝ^2 to another.
 
 // src
 #include "../types.hpp"
-using namespace kac_core::types;
+namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	Point simpleElliptic_Circle2Square(const Point& p) {
+	T::Point simpleElliptic_Circle2Square(const T::Point& p) {
 		/*
 			Map a point using a non-conformal map from circle to square.
 			Fong, C. (2014). Analytical methods for squaring the disc. 27th
@@ -25,7 +25,7 @@ namespace kac_core::geometry {
 		double v_2 = pow(p.y, 2);
 		double u_prime = 2 * M_SQRT2 * p.x;
 		double v_prime = 2 * M_SQRT2 * p.y;
-		return Point(
+		return T::Point(
 			(0.5 * sqrt(2 + u_2 - v_2 + u_prime))
 				- (0.5 * sqrt(2 + u_2 - v_2 - u_prime)),
 			(0.5 * sqrt(2 - u_2 + v_2 + v_prime))
@@ -33,14 +33,14 @@ namespace kac_core::geometry {
 		);
 	}
 
-	Point simpleElliptic_Square2Circle(const Point& p) {
+	T::Point simpleElliptic_Square2Circle(const T::Point& p) {
 		/*
 			Map a point using a non-conformal map from square to circle.
 			Fong, C. (2014). Analytical methods for squaring the disc. 27th
 			International Congress of Mathematics (ICM). p.5
 		*/
 
-		return Point(
+		return T::Point(
 			p.x * sqrt(1 - (pow(p.y, 2) / 2)), p.y * sqrt(1 - (pow(p.x, 2) / 2))
 		);
 	}

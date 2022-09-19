@@ -15,19 +15,19 @@ Functions for producing group theoretic transformations.
 // src
 #include "../types.hpp"
 #include "./polygon_properties.hpp"
-using namespace kac_core::types;
+namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	Vertices normalisePolygon(Vertices V) {
+	T::Vertices normalisePolygon(T::Vertices V) {
 		/*
 		This function takes a polygon, centers it across the x and y axis, then
 		normalises the vertices to the unit interval ℝ^2.
 		*/
 
 		// first find minmax in both x & y
-		Matrix_1D X;
-		Matrix_1D Y;
+		T::Matrix_1D X;
+		T::Matrix_1D Y;
 		for (unsigned long n = 0; n < V.size(); n++) {
 			X.push_back(V[n].x);
 			Y.push_back(V[n].y);
@@ -59,7 +59,7 @@ namespace kac_core::geometry {
 		return V;
 	}
 
-	Vertices convexNormalisation(Vertices V) {
+	T::Vertices convexNormalisation(T::Vertices V) {
 		/*
 		This algorithm produces an identity polygon for each unique polygon
 		given as input. This method normalises an input polygon to the unit
@@ -95,7 +95,7 @@ namespace kac_core::geometry {
 		double cos_theta = cos(theta);
 		double sin_theta = sin(theta);
 		for (unsigned long n = 0; n < V.size(); n++) {
-			V[n] = Point(
+			V[n] = T::Point(
 				V[n].x * cos_theta + V[n].y * sin_theta,
 				-V[n].x * sin_theta + V[n].y * cos_theta
 			);
@@ -104,7 +104,7 @@ namespace kac_core::geometry {
 		// the positive x and y to remove isometric transformations.
 		std::array<double, 4> quadAreas = {0., 0., 0., 0.};
 		// determine which quadrant each point is in
-		auto whichQuad = [](const Point& p) {
+		auto whichQuad = [](const T::Point& p) {
 			if (p.x >= 0. && p.y > 0.) {
 				return 0;
 			} else if (p.x > 0. && p.y <= 0.) {
@@ -116,13 +116,13 @@ namespace kac_core::geometry {
 			}
 		};
 		// area of a triangle, simplified due to point c = [0., 0.]
-		auto triangleArea = [](const Point& a, const Point& b) {
+		auto triangleArea = [](const T::Point& a, const T::Point& b) {
 			return fabs(b.y * a.x - b.x * a.y) / 2;
 		};
 		// loop over points and sum quadrant areas
 		for (unsigned long n = 0; n < V.size(); n++) {
-			Point a = V[n];
-			Point b = V[(n + 1) % V.size()];
+			T::Point a = V[n];
+			T::Point b = V[(n + 1) % V.size()];
 			int quad_a = whichQuad(a);
 			int quad_b = whichQuad(b);
 			if (quad_a == quad_b) {
@@ -132,7 +132,7 @@ namespace kac_core::geometry {
 			} else if (((quad_b + 4) - quad_a) % 4 == 1) {
 				// if the points are in neighbouring quadrants, find the axis
 				// intersection between them and update both quadrants.
-				Point c;
+				T::Point c;
 				if ((a.x * b.x) < 0) {
 					// crosses y axis
 					c.x = 0;
@@ -147,8 +147,8 @@ namespace kac_core::geometry {
 			} else if (((quad_b + 4) - quad_a) % 4 == 2) {
 				// if the points lie across three quadrants, update the two
 				// quadrants containing the points in question.
-				Point c = Point(0, a.y - (b.y - a.y) / (b.x - a.x) * a.x);
-				Point d = Point(a.x - (b.x - a.x) / (b.y - a.y) * a.y, 0);
+				T::Point c = T::Point(0, a.y - (b.y - a.y) / (b.x - a.x) * a.x);
+				T::Point d = T::Point(a.x - (b.x - a.x) / (b.y - a.y) * a.y, 0);
 				if (sqrt(pow(a.x - c.x, 2) + pow(a.y - c.y, 2))
 					< sqrt(pow(a.x - d.x, 2) + pow(a.y - d.y, 2))) {
 					quadAreas[quad_a] += triangleArea(a, c);
@@ -174,7 +174,7 @@ namespace kac_core::geometry {
 				break;
 			case 2:
 				for (unsigned long n = 0; n < V.size(); n++) {
-					V[n] = Point(V[n].x *= -1., V[n].y *= -1.);
+					V[n] = T::Point(V[n].x *= -1., V[n].y *= -1.);
 				}
 				break;
 			case 3:

@@ -15,7 +15,7 @@ wave equation.
 
 // src
 #include "../../types.hpp"
-using namespace kac_core::types;
+namespace T = kac_core::types;
 
 namespace kac_core::physics {
 
@@ -44,8 +44,8 @@ namespace kac_core::physics {
 		return boost::math::cyl_bessel_j_zero(n, m);
 	}
 
-	Matrix_2D calculateCircularAmplitudes(
-		const double& r, const double& theta, const Matrix_2D& S
+	T::Matrix_2D calculateCircularAmplitudes(
+		const double& r, const double& theta, const T::Matrix_2D& S
 	) {
 		/*
 		Calculate the amplitudes of the circular eigenmodes relative to a polar
@@ -62,7 +62,7 @@ namespace kac_core::physics {
 
 		unsigned int N = S.size();
 		unsigned int M = S[0].size();
-		Matrix_2D A(N, Matrix_1D(M, 0));
+		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double angular = n != 0 ? M_SQRT2 * sin(n * theta + M_PI_4) : 1.0;
 			for (unsigned int m = 0; m < M; m++) {
@@ -72,7 +72,7 @@ namespace kac_core::physics {
 		return A;
 	}
 
-	Matrix_2D calculateCircularSeries(const int& N, const int& M) {
+	T::Matrix_2D calculateCircularSeries(const int& N, const int& M) {
 		/*
 		Calculate the eigenmodes of a circle.
 		input:
@@ -82,7 +82,7 @@ namespace kac_core::physics {
 			S = { z_nm | s ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M }
 		*/
 
-		Matrix_2D S(N, Matrix_1D(M, 0));
+		T::Matrix_2D S(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			for (unsigned int m = 0; m < M; m++) {
 				S[n][m] = besselJZero(n, m + 1);

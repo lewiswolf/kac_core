@@ -8,11 +8,11 @@
 
 // src
 #include "../types.hpp"
-using namespace kac_core::types;
+namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	Vertices generateConvexPolygon(const int& N, time_t seed = time(NULL)) {
+	T::Vertices generateConvexPolygon(const int& N, time_t seed = time(NULL)) {
 		/*
 		Generate convex shapes according to Pavel Valtr's 1995 algorithm.
 		Adapted from Sander Verdonschot's Java version, found here:
@@ -25,7 +25,7 @@ namespace kac_core::geometry {
 		*/
 
 		// initialise variables
-		Vertices V;
+		T::Vertices V;
 		std::vector<double> X(N);
 		std::vector<double> Y(N);
 		std::vector<double> X_rand(N);
@@ -63,9 +63,11 @@ namespace kac_core::geometry {
 		}
 		// randomly combine x and y
 		shuffle(Y.begin(), Y.end(), std::default_random_engine(seed));
-		for (unsigned int i = 0; i < N; i++) { V.push_back(Point(X[i], Y[i])); }
+		for (unsigned int i = 0; i < N; i++) {
+			V.push_back(T::Point(X[i], Y[i]));
+		}
 		// sort by polar angle
-		sort(V.begin(), V.end(), [](Point& p1, Point& p2) {
+		sort(V.begin(), V.end(), [](T::Point& p1, T::Point& p2) {
 			return p1.theta() < p2.theta();
 		});
 		// arrange points end to end to form a polygon
@@ -73,7 +75,7 @@ namespace kac_core::geometry {
 		double x = 0.0;
 		double y = 0.0;
 		for (unsigned int i = 0; i < N; i++) {
-			Point p = Point(x, y);
+			T::Point p = T::Point(x, y);
 			x += V[i].x;
 			y += V[i].y;
 			V[i] = p;

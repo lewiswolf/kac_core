@@ -12,11 +12,11 @@ equation.
 
 // src
 #include "../../types.hpp"
-using namespace kac_core::types;
+namespace T = kac_core::types;
 
 namespace kac_core::physics {
 
-	Matrix_1D calculateLinearAmplitudes(const double& x, const int& N) {
+	T::Matrix_1D calculateLinearAmplitudes(const double& x, const int& N) {
 		/*
 		Calculate the amplitudes of the 1D eigenmodes relative to a strike
 		location.
@@ -27,13 +27,13 @@ namespace kac_core::physics {
 			A = { sin(nxπ) | a ∈ ℝ, 0 < n <= N }
 		*/
 
-		Matrix_1D A(N);
+		T::Matrix_1D A(N);
 		double x_pi = x * M_PI;
 		for (unsigned int n = 0; n < N; n++) { A[n] = sin((n + 1) * x_pi); };
 		return A;
 	}
 
-	Matrix_1D calculateLinearModes(const double& f_0, const int& N) {
+	T::Matrix_1D calculateLinearModes(const double& f_0, const int& N) {
 		/*
 		Calculate the harmonic series of a given fundmental.
 		input:
@@ -43,12 +43,12 @@ namespace kac_core::physics {
 			F = { (f_0 * n) | f ∈ ℝ, 0 < n <= N }
 		*/
 
-		Matrix_1D F(N);
+		T::Matrix_1D F(N);
 		for (unsigned int n = 0; n < N; n++) { F[n] = f_0 * (n + 1); };
 		return F;
 	}
 
-	Matrix_1D calculateLinearSeries(const int& N) {
+	T::Matrix_1D calculateLinearSeries(const int& N) {
 		/*
 		Calculate the the harmonic series.
 		input:
@@ -57,7 +57,7 @@ namespace kac_core::physics {
 			S = { n | s ∈ ℕ, 0 < n <= N }
 		*/
 
-		Matrix_1D S(N);
+		T::Matrix_1D S(N);
 		for (unsigned int n = 0; n < N; n++) { S[n] = n + 1; };
 		return S;
 	}

@@ -11,11 +11,11 @@ Utility functions for working with polygons.
 
 // src
 #include "../types.hpp"
-using namespace kac_core::types;
+namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	Point centroid(const Vertices& V, const double& area) {
+	T::Point centroid(const T::Vertices& V, const double& area) {
 		/*
 		 This algorithm is used to calculate the geometric centroid of a 2D
 		 polygon. See http://paulbourke.net/geometry/polygonmesh/ 'Calculating
@@ -44,7 +44,7 @@ namespace kac_core::geometry {
 				out_x += V[n].x;
 				out_y += V[n].y;
 			}
-			return Point(out_x / 3., out_y / 3.);
+			return T::Point(out_x / 3., out_y / 3.);
 		}
 		for (unsigned long n = 0; n < N; n++) {
 			double out =
@@ -52,10 +52,10 @@ namespace kac_core::geometry {
 			out_x += (V[n].x + V[(n + 1) % N].x) * out;
 			out_y += (V[n].y + V[(n + 1) % N].y) * out;
 		}
-		return Point(abs(out_x) / (6 * area), abs(out_y) / (6 * area));
+		return T::Point(abs(out_x) / (6 * area), abs(out_y) / (6 * area));
 	}
 
-	bool isColinear(const Point& a, const Point& b, const Point& c) {
+	bool isColinear(const T::Point& a, const T::Point& b, const T::Point& c) {
 		/*
 		Determines whether or not a given set of three vertices are
 		colinear.
@@ -64,7 +64,7 @@ namespace kac_core::geometry {
 		return (c.y - b.y) * (b.x - a.x) == (b.y - a.y) * (c.x - b.x);
 	}
 
-	bool isConvex(const Vertices& v) {
+	bool isConvex(const T::Vertices& v) {
 		/*
 		Tests whether or not a given array of vertices forms a convex
 		polygon. This is achieved using the resultant sign of the cross
@@ -77,7 +77,7 @@ namespace kac_core::geometry {
 
 		// cross product - z component only, see np.cross =>
 		// https://numpy.org/doc/stable/reference/generated/numpy.cross.html
-		auto crossProductZ = [](Point p, Point p_plus, Point p_minus) {
+		auto crossProductZ = [](T::Point p, T::Point p_plus, T::Point p_minus) {
 			return (p.x - p_minus.x) * (p_plus.y - p.y)
 				- (p_plus.x - p.x) * (p.y - p_minus.y);
 		};
@@ -94,7 +94,7 @@ namespace kac_core::geometry {
 		return true;
 	}
 
-	std::pair<double, std::pair<int, int>> largestVector(const Vertices& V) {
+	std::pair<double, std::pair<int, int>> largestVector(const T::Vertices& V) {
 		/*
 		This function tests each pair of vertices in a given polygon to find
 		the largest vector, and returns the length of the vector and its
@@ -119,7 +119,7 @@ namespace kac_core::geometry {
 		return std::make_pair(vec_max, std::make_pair(index_i, index_j));
 	}
 
-	double polygonArea(const Vertices& V) {
+	double polygonArea(const T::Vertices& V) {
 		/*
 		An implementation of the shoelace algorithm, first described by Albrecht
 		Ludwig Friedrich Meister, which is used to calculate the area of a

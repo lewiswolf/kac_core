@@ -12,11 +12,11 @@ rectangular wave equation.
 
 // src
 #include "../../types.hpp"
-using namespace kac_core::types;
+namespace T = kac_core::types;
 
 namespace kac_core::physics {
 
-	Matrix_2D calculateRectangularAmplitudes(
+	T::Matrix_2D calculateRectangularAmplitudes(
 		const double& x,
 		const double& y,
 		const int& N,
@@ -40,7 +40,7 @@ namespace kac_core::physics {
 
 		double x_hat = x * M_PI / sqrt(epsilon);
 		double y_hat = y * M_PI * sqrt(epsilon);
-		Matrix_2D A(N, Matrix_1D(M, 0));
+		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double n_hat = sin((n + 1) * y_hat);
 			for (unsigned int m = 0; m < M; m++) {
@@ -50,7 +50,7 @@ namespace kac_core::physics {
 		return A;
 	};
 
-	Matrix_2D calculateRectangularSeries(
+	T::Matrix_2D calculateRectangularSeries(
 		const int& N, const int& M, const double& epsilon = 1.0
 	) {
 		/*
@@ -66,7 +66,7 @@ namespace kac_core::physics {
 			}
 		*/
 
-		Matrix_2D S(N, Matrix_1D(M, 0));
+		T::Matrix_2D S(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double n_hat = pow((n + 1), 2) * epsilon;
 			for (unsigned int m = 0; m < M; m++) {

@@ -21,7 +21,7 @@ namespace kac_core::physics {
 		const double& y,
 		const int& N,
 		const int& M,
-		const double& epsilon = 1.0
+		const double& epsilon
 	) {
 		/*
 		Calculate the amplitudes of the rectangular eigenmodes relative to a
@@ -51,7 +51,7 @@ namespace kac_core::physics {
 	};
 
 	T::Matrix_2D calculateRectangularSeries(
-		const int& N, const int& M, const double& epsilon = 1.0
+		const int& N, const int& M, const double& epsilon
 	) {
 		/*
 		Calculate the eigenmodes of a rectangle.

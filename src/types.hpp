@@ -51,7 +51,7 @@ namespace kac_core::types {
 	} Line;
 
 	// A polygon defined on the euclidian plane.
-	typedef std::vector<Point> Vertices;
+	typedef std::vector<Point> Polygon;
 
 	typedef struct Circle {
 		/*

@@ -12,19 +12,19 @@ namespace g = kac_core::geometry;	 // geometry
 
 int main() {
 	int N = 10;
-	T::Vertices v = g::generateConvexPolygon(N);
-	booleanTest("generatedConvexPolygon produces n vertices", v.size() == N);
-	booleanTest("generatedConvexPolygon is convex", g::isConvex(v));
+	T::Polygon p = g::generateConvexPolygon(N);
+	booleanTest("generatedConvexPolygon produces n vertices", p.size() == N);
+	booleanTest("generatedConvexPolygon is convex", g::isConvex(p));
 	batchBooleanTest(
 		"generatedConvexPolygon does not produce colinear points",
 		N,
-		[&N, &v](unsigned int i) {
-			return !g::isColinear(v[i > 0 ? i - 1 : N - 1], v[i], v[(i + 1) % N]);
+		[&N, &p](unsigned int i) {
+			return !g::isColinear(p[i > 0 ? i - 1 : N - 1], p[i], p[(i + 1) % N]);
 		}
 	);
 
-	T::Vertices seed_test = g::generateConvexPolygon(10, 1);
-	T::Vertices seed_expected(10);
+	T::Polygon seed_test = g::generateConvexPolygon(10, 1);
+	T::Polygon seed_expected(10);
 	T::Matrix_2D seed_m = {
 		{0.288255, 0.411634},
 		{-0.244504, 0.0358297},
@@ -49,8 +49,8 @@ int main() {
 		}
 	);
 
-	T::Vertices p1(4);
-	T::Vertices p2(4);
+	T::Polygon p1(4);
+	T::Polygon p2(4);
 	p1[0], p2[0] = T::Point(0.0, 0.0);
 	p1[1], p2[3] = T::Point(0.0, 1.0);
 	p1[2], p2[2] = T::Point(1.0, 1.0);
@@ -60,7 +60,7 @@ int main() {
 
 	booleanTest(
 		"convexNormalisation produces a polygon on the unit interval.",
-		g::largestVector(g::convexNormalisation(v)).first == 1.
+		g::largestVector(g::convexNormalisation(p)).first == 1.
 	);
 
 	return 0;

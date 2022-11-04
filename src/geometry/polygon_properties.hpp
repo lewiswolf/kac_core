@@ -15,7 +15,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	T::Point centroid(const T::Vertices& V, const double& area) {
+	T::Point centroid(const T::Polygon& P, const double& area) {
 		/*
 		This algorithm is used to calculate the geometric centroid of a 2D
 		polygon. See http://paulbourke.net/geometry/polygonmesh/ 'Calculating
@@ -34,22 +34,22 @@ namespace kac_core::geometry {
 			)
 		 */
 
-		const unsigned long N = V.size();
+		const unsigned long N = P.size();
 		double out_x = 0.;
 		double out_y = 0.;
 		if (N == 3) {
 			// Triangles have a much simpler formula, and so these are
 			// calculated separately.
 			for (unsigned long n = 0; n < 3; n++) {
-				out_x += V[n].x;
-				out_y += V[n].y;
+				out_x += P[n].x;
+				out_y += P[n].y;
 			}
 			return T::Point(out_x / 3., out_y / 3.);
 		}
 		for (unsigned long n = 0; n < N; n++) {
-			double out = (V[n].x * V[(n + 1) % N].y - V[(n + 1) % N].x * V[n].y);
-			out_x += (V[n].x + V[(n + 1) % N].x) * out;
-			out_y += (V[n].y + V[(n + 1) % N].y) * out;
+			double out = (P[n].x * P[(n + 1) % N].y - P[(n + 1) % N].x * P[n].y);
+			out_x += (P[n].x + P[(n + 1) % N].x) * out;
+			out_y += (P[n].y + P[(n + 1) % N].y) * out;
 		}
 		return T::Point(abs(out_x) / (6 * area), abs(out_y) / (6 * area));
 	}
@@ -62,7 +62,7 @@ namespace kac_core::geometry {
 		return (c.y - b.y) * (b.x - a.x) == (b.y - a.y) * (c.x - b.x);
 	}
 
-	bool isConvex(const T::Vertices& v) {
+	bool isConvex(const T::Polygon& P) {
 		/*
 		Tests whether or not a given array of vertices forms a convex polygon.
 		This is achieved using the resultant sign of the cross product for each
@@ -79,29 +79,30 @@ namespace kac_core::geometry {
 			return (p.x - p_minus.x) * (p_plus.y - p.y) - (p_plus.x - p.x) * (p.y - p_minus.y);
 		};
 		// determine the direction of the initial point using the cross product
-		bool clockwise = crossProductZ(v[0], v[1], v[v.size() - 1]) < 0;
+		const unsigned long N = P.size();
+		bool clockwise = crossProductZ(P[0], P[1], P[N - 1]) < 0;
 		// loop over remaining points
-		for (unsigned int i = 1; i < v.size(); i++) {
-			if (crossProductZ(v[i], v[(i + 1) % v.size()], v[i - 1]) < 0 != clockwise) {
+		for (unsigned int i = 1; i < N; i++) {
+			if (crossProductZ(P[i], P[(i + 1) % N], P[i - 1]) < 0 != clockwise) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	std::pair<double, std::pair<int, int>> largestVector(const T::Vertices& V) {
+	std::pair<double, std::pair<int, int>> largestVector(const T::Polygon& P) {
 		/*
 		This function tests each pair of vertices in a given polygon to find the
 		largest vector, and returns the length of the vector and its indices.
 		*/
 
-		const unsigned long N = V.size();
+		const unsigned long N = P.size();
 		double vec_max = 0.;
 		long index_i = 0;
 		long index_j = 0;
 		for (unsigned long i = 0; i < N; i++) {
 			for (unsigned long j = i + 1; j < N; j++) {
-				double vec = sqrt(pow(V[i].x - V[j].x, 2) + pow(V[i].y - V[j].y, 2));
+				double vec = sqrt(pow(P[i].x - P[j].x, 2) + pow(P[i].y - P[j].y, 2));
 				if (vec > vec_max) {
 					vec_max = vec;
 					index_i = i;
@@ -112,17 +113,17 @@ namespace kac_core::geometry {
 		return std::make_pair(vec_max, std::make_pair(index_i, index_j));
 	}
 
-	double polygonArea(const T::Vertices& V) {
+	double polygonArea(const T::Polygon& P) {
 		/*
 		An implementation of the shoelace algorithm, first described by Albrecht
 		Ludwig Friedrich Meister, which is used to calculate the area of a
 		polygon.
 		*/
 
-		const unsigned long N = V.size();
+		const unsigned long N = P.size();
 		double out = 0.;
 		for (unsigned long n = 0; n < N; n++) {
-			out += V[n].x * V[(n + 1) % N].y - V[n].y * V[(n + 1) % N].x;
+			out += P[n].x * P[(n + 1) % N].y - P[n].y * P[(n + 1) % N].x;
 		}
 		return abs(out) / 2.;
 	}

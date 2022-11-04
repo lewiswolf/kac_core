@@ -19,7 +19,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	T::Vertices normalisePolygon(T::Vertices V) {
+	T::Polygon normalisePolygon(T::Polygon P) {
 		/*
 		This function takes a polygon, centers it across the x and y axis, then
 		normalises the vertices to the unit interval ℝ^2.
@@ -28,18 +28,19 @@ namespace kac_core::geometry {
 		// first find minmax in both x & y
 		T::Matrix_1D X;
 		T::Matrix_1D Y;
-		for (unsigned long n = 0; n < V.size(); n++) {
-			X.push_back(V[n].x);
-			Y.push_back(V[n].y);
+		const unsigned long N = P.size();
+		for (unsigned long n = 0; n < N; n++) {
+			X.push_back(P[n].x);
+			Y.push_back(P[n].y);
 		}
 		auto x_min_max = std::minmax_element(begin(X), end(X));
 		auto y_min_max = std::minmax_element(begin(Y), end(Y));
 		// center along x and y axes
 		double x_shift = (*x_min_max.first + *x_min_max.second) / 2;
 		double y_shift = (*y_min_max.first + *y_min_max.second) / 2;
-		for (unsigned long n = 0; n < V.size(); n++) {
-			V[n].x -= x_shift;
-			V[n].y -= y_shift;
+		for (unsigned long n = 0; n < N; n++) {
+			P[n].x -= x_shift;
+			P[n].y -= y_shift;
 		}
 		*x_min_max.first -= x_shift;
 		*x_min_max.second -= x_shift;
@@ -50,14 +51,14 @@ namespace kac_core::geometry {
 		double v_d =
 			(*x_min_max.second > *y_min_max.second ? *x_min_max.second : *y_min_max.second) - v_min;
 		// normalise
-		for (unsigned long n = 0; n < V.size(); n++) {
-			V[n].x = (V[n].x - v_min) / v_d;
-			V[n].y = (V[n].y - v_min) / v_d;
+		for (unsigned long n = 0; n < N; n++) {
+			P[n].x = (P[n].x - v_min) / v_d;
+			P[n].y = (P[n].y - v_min) / v_d;
 		}
-		return V;
+		return P;
 	}
 
-	T::Vertices convexNormalisation(T::Vertices V) {
+	T::Polygon convexNormalisation(T::Polygon P) {
 		/*
 		This algorithm produces an identity polygon for each unique polygon
 		given as input. This method normalises an input polygon to the unit
@@ -68,31 +69,32 @@ namespace kac_core::geometry {
 		across the x-axis. Next, the polygon is split into quadrants, the
 		largest of whose area determines the rotation/reflection of the polygon.
 		Finally, the points are normalised, and ordered such that
-		V[0] = [0., y].
+		P[0] = [0., y].
 		*/
 
 		// enforce that each polygon is clockwise
 		// reverse the polygon if the vertices are anti-clockwise
-		if ((V[1].x - V[0].x) * (V[2].y - V[1].y) - (V[2].x - V[1].x) * (V[1].y - V[0].y) > 0) {
-			std::reverse(V.begin(), V.end());
+		if ((P[1].x - P[0].x) * (P[2].y - P[1].y) - (P[2].x - P[1].x) * (P[1].y - P[0].y) > 0) {
+			std::reverse(P.begin(), P.end());
 		}
 		// orient largest vector across x-axis
 		// determine largest vector
-		std::pair<double, std::pair<int, int>> LV = largestVector(V);
+		std::pair<double, std::pair<int, int>> LV = largestVector(P);
 		// shift midpoint of the largest vector to origin
-		double x_shift = (V[LV.second.first].x + V[LV.second.second].x) / 2;
-		double y_shift = (V[LV.second.first].y + V[LV.second.second].y) / 2;
-		for (unsigned long n = 0; n < V.size(); n++) {
-			V[n].x -= x_shift;
-			V[n].y -= y_shift;
+		double x_shift = (P[LV.second.first].x + P[LV.second.second].x) / 2;
+		double y_shift = (P[LV.second.first].y + P[LV.second.second].y) / 2;
+		const unsigned long N = P.size();
+		for (unsigned long n = 0; n < N; n++) {
+			P[n].x -= x_shift;
+			P[n].y -= y_shift;
 		}
 		// rotate around midpoint such that largest_vec is horizontal
-		double theta = V[LV.second.first].theta();
+		double theta = P[LV.second.first].theta();
 		double cos_theta = cos(theta);
 		double sin_theta = sin(theta);
-		for (unsigned long n = 0; n < V.size(); n++) {
-			V[n] = T::Point(
-				V[n].x * cos_theta + V[n].y * sin_theta, -V[n].x * sin_theta + V[n].y * cos_theta
+		for (unsigned long n = 0; n < N; n++) {
+			P[n] = T::Point(
+				P[n].x * cos_theta + P[n].y * sin_theta, -P[n].x * sin_theta + P[n].y * cos_theta
 			);
 		}
 		// find area of each cartesian quadrant and position the largest in
@@ -115,9 +117,9 @@ namespace kac_core::geometry {
 			return fabs(b.y * a.x - b.x * a.y) / 2;
 		};
 		// loop over points and sum quadrant areas
-		for (unsigned long n = 0; n < V.size(); n++) {
-			T::Point a = V[n];
-			T::Point b = V[(n + 1) % V.size()];
+		for (unsigned long n = 0; n < N; n++) {
+			T::Point a = P[n];
+			T::Point b = P[(n + 1) % N];
 			int quad_a = whichQuad(a);
 			int quad_b = whichQuad(b);
 			if (quad_a == quad_b) {
@@ -163,31 +165,31 @@ namespace kac_core::geometry {
 			case 0:
 				break;
 			case 1:
-				for (unsigned long n = 0; n < V.size(); n++) { V[n].y *= -1.; }
-				std::reverse(V.begin(), V.end());
+				for (unsigned long n = 0; n < N; n++) { P[n].y *= -1.; }
+				std::reverse(P.begin(), P.end());
 				break;
 			case 2:
-				for (unsigned long n = 0; n < V.size(); n++) {
-					V[n] = T::Point(V[n].x *= -1., V[n].y *= -1.);
+				for (unsigned long n = 0; n < N; n++) {
+					P[n] = T::Point(P[n].x *= -1., P[n].y *= -1.);
 				}
 				break;
 			case 3:
-				for (unsigned long n = 0; n < V.size(); n++) { V[n].x *= -1.; }
-				std::reverse(V.begin(), V.end());
+				for (unsigned long n = 0; n < N; n++) { P[n].x *= -1.; }
+				std::reverse(P.begin(), P.end());
 				break;
 		}
 		// normalise
-		V = normalisePolygon(V);
-		// position x = 0. at V[0]
+		P = normalisePolygon(P);
+		// position x = 0. at P[0]
 		unsigned long n_shift = 0;
-		for (unsigned long n = 0; n < V.size(); n++) {
-			if (V[n].x == 0.) {
+		for (unsigned long n = 0; n < N; n++) {
+			if (P[n].x == 0.) {
 				n_shift = n;
 				break;
 			}
 		}
-		std::rotate(V.begin(), V.begin() + n_shift, V.end());
-		return V;
+		std::rotate(P.begin(), P.begin() + n_shift, P.end());
+		return P;
 	}
 
 }

@@ -1,3 +1,8 @@
+/*
+Functions for producing a raised cosine transform for different
+dimensionalities.
+*/
+
 #pragma once
 
 // core
@@ -11,13 +16,15 @@ using namespace kac_core::types;
 
 namespace kac_core::physics {
 
-	Matrix_1D
-	raisedCosine1D(const int& size, const int& mu, const double& sigma) {
+	Matrix_1D raisedCosine1D(const int& size, const int& mu, const double& sigma) {
 		/*
-		Calculate a two dimensional raised cosine transform. See Bilbao, S.
-		- Numerical Sound Synthesis p.121. input: μ = a cartesian point
-		representing the maxima of the cosine. size = the size of the
-		matrix. σ = variance output:
+		Calculate a two dimensional raised cosine transform.
+		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
+		input:
+			size = the size of the matrix.
+			μ = a cartesian point representing the maxima of the cosine.
+			σ = variance.
+		output:
 			{
 				(1 + cos(π(x - μ) / σ)) / 2,	|x - μ| ≤ σ
 				0,								|x - μ| > σ
@@ -35,18 +42,17 @@ namespace kac_core::physics {
 	}
 
 	Matrix_2D raisedCosine2D(
-		const int& size_X,
-		const int& size_Y,
-		const int& mu_x,
-		const int& mu_y,
-		const double& sigma
+		const int& size_X, const int& size_Y, const int& mu_x, const int& mu_y, const double& sigma
 	) {
 		/*
-		Calculate a two dimensional raised cosine transform. See Bilbao, S.
-		- Numerical Sound Synthesis p.306. input: μ = a cartesian point
-		representing the maxima of the cosine. size = the size of the
-		matrix. σ = variance output: l2_norm = ((x - mu_x)^2 + (y -
-		mu_y)^2)^0.5
+		Calculate a two dimensional raised cosine transform.
+		See Bilbao, S. (2009) Numerical Sound Synthesis p.306.
+		input:
+			size = the size of the matrix.
+			μ = a cartesian point representing the maxima of the cosine.
+			σ = variance.
+		output:
+			l2_norm = ((x - mu_x)^2 + (y - mu_y)^2)^0.5
 			{
 				(1 + cos(π(l2_norm) / σ)) / 2,	|l2_norm| ≤ σ
 				0,								|l2_norm| > σ
@@ -58,8 +64,7 @@ namespace kac_core::physics {
 			for (unsigned int y = 0; y < size_Y; y++) {
 				double l2_norm = sqrt(pow((x - mu_x), 2) + pow((y - mu_y), 2));
 				if (l2_norm <= sigma) {
-					raised_cosine[x][y] =
-						0.5 * (1 + cos(M_PI * l2_norm / sigma));
+					raised_cosine[x][y] = 0.5 * (1 + cos(M_PI * l2_norm / sigma));
 				}
 			}
 		}

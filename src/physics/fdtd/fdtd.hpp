@@ -1,3 +1,8 @@
+/*
+Functions for calculating an audio waveform using a finite difference time
+domain method.
+*/
+
 #pragma once
 
 // core
@@ -83,9 +88,8 @@ namespace kac_core::physics {
 					// dirichlet boundary conditions
 					if (B[x][y] != 0) {
 						// update in place
-						u_a[x][y] = (u_b[x][y + 1] + u_b[x + 1][y]
-									 + u_b[x][y - 1] + u_b[x - 1][y])
-								* c_0
+						u_a[x][y] =
+							(u_b[x][y + 1] + u_b[x + 1][y] + u_b[x][y - 1] + u_b[x - 1][y]) * c_0
 							+ c_1 * u_b[x][y] - c_2 * u_a[x][y];
 					}
 				};

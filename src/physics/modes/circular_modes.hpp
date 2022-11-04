@@ -44,9 +44,8 @@ namespace kac_core::physics {
 		return boost::math::cyl_bessel_j_zero(n, m);
 	}
 
-	T::Matrix_2D calculateCircularAmplitudes(
-		const double& r, const double& theta, const T::Matrix_2D& S
-	) {
+	T::Matrix_2D
+	calculateCircularAmplitudes(const double& r, const double& theta, const T::Matrix_2D& S) {
 		/*
 		Calculate the amplitudes of the circular eigenmodes relative to a polar
 		strike location.
@@ -65,9 +64,7 @@ namespace kac_core::physics {
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double angular = n != 0 ? M_SQRT2 * sin(n * theta + M_PI_4) : 1.0;
-			for (unsigned int m = 0; m < M; m++) {
-				A[n][m] = besselJ(n, S[n][m] * r) * angular;
-			};
+			for (unsigned int m = 0; m < M; m++) { A[n][m] = besselJ(n, S[n][m] * r) * angular; };
 		}
 		return A;
 	}
@@ -84,9 +81,7 @@ namespace kac_core::physics {
 
 		T::Matrix_2D S(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
-			for (unsigned int m = 0; m < M; m++) {
-				S[n][m] = besselJZero(n, m + 1);
-			}
+			for (unsigned int m = 0; m < M; m++) { S[n][m] = besselJZero(n, m + 1); }
 		}
 		return S;
 	}

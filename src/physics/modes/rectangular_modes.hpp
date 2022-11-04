@@ -17,11 +17,7 @@ namespace T = kac_core::types;
 namespace kac_core::physics {
 
 	T::Matrix_2D calculateRectangularAmplitudes(
-		const double& x,
-		const double& y,
-		const int& N,
-		const int& M,
-		const double& epsilon
+		const double& x, const double& y, const int& N, const int& M, const double& epsilon
 	) {
 		/*
 		Calculate the amplitudes of the rectangular eigenmodes relative to a
@@ -43,16 +39,12 @@ namespace kac_core::physics {
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double n_hat = sin((n + 1) * y_hat);
-			for (unsigned int m = 0; m < M; m++) {
-				A[n][m] = sin((m + 1) * x_hat) * n_hat;
-			}
+			for (unsigned int m = 0; m < M; m++) { A[n][m] = sin((m + 1) * x_hat) * n_hat; }
 		}
 		return A;
 	};
 
-	T::Matrix_2D calculateRectangularSeries(
-		const int& N, const int& M, const double& epsilon
-	) {
+	T::Matrix_2D calculateRectangularSeries(const int& N, const int& M, const double& epsilon) {
 		/*
 		Calculate the eigenmodes of a rectangle.
 		input:

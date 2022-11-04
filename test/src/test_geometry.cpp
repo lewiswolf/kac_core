@@ -19,9 +19,7 @@ int main() {
 		"generatedConvexPolygon does not produce colinear points",
 		N,
 		[&N, &v](unsigned int i) {
-			return !g::isColinear(
-				v[i > 0 ? i - 1 : N - 1], v[i], v[(i + 1) % N]
-			);
+			return !g::isColinear(v[i > 0 ? i - 1 : N - 1], v[i], v[(i + 1) % N]);
 		}
 	);
 
@@ -57,12 +55,8 @@ int main() {
 	p1[1], p2[3] = T::Point(0.0, 1.0);
 	p1[2], p2[2] = T::Point(1.0, 1.0);
 	p1[3], p2[1] = T::Point(1.0, 0.0);
-	booleanTest(
-		"isConvex works for counter-clockwise ordered polygons", g::isConvex(p1)
-	);
-	booleanTest(
-		"isConvex works for clockwise ordered polygons", g::isConvex(p2)
-	);
+	booleanTest("isConvex works for counter-clockwise ordered polygons", g::isConvex(p1));
+	booleanTest("isConvex works for clockwise ordered polygons", g::isConvex(p2));
 
 	booleanTest(
 		"convexNormalisation produces a polygon on the unit interval.",

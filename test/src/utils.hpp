@@ -30,14 +30,12 @@ struct Timer {
 	// destructors
 	~Timer() {
 		auto end_tp = std::chrono::high_resolution_clock::now();
-		auto start =
-			std::chrono::time_point_cast<std::chrono::microseconds>(start_tp)
-				.time_since_epoch()
-				.count();
-		auto end =
-			std::chrono::time_point_cast<std::chrono::microseconds>(end_tp)
-				.time_since_epoch()
-				.count();
+		auto start = std::chrono::time_point_cast<std::chrono::microseconds>(start_tp)
+						 .time_since_epoch()
+						 .count();
+		auto end = std::chrono::time_point_cast<std::chrono::microseconds>(end_tp)
+					   .time_since_epoch()
+					   .count();
 		std::cout << (name != "" ? name + ": " : "") << end - start << "us\n";
 	};
 };
@@ -53,9 +51,7 @@ void booleanTest(const std::string& test_name, const bool& b) {
 }
 
 void batchBooleanTest(
-	const std::string& test_name,
-	const int& N,
-	const std::function<bool(unsigned int)>& lambda
+	const std::string& test_name, const int& N, const std::function<bool(unsigned int)>& lambda
 ) {
 	/*
 	Runs booleanTest N times on the input function.

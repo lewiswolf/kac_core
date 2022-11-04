@@ -26,10 +26,8 @@ namespace kac_core::geometry {
 		double u_prime = 2 * M_SQRT2 * p.x;
 		double v_prime = 2 * M_SQRT2 * p.y;
 		return T::Point(
-			(0.5 * sqrt(2 + u_2 - v_2 + u_prime))
-				- (0.5 * sqrt(2 + u_2 - v_2 - u_prime)),
-			(0.5 * sqrt(2 - u_2 + v_2 + v_prime))
-				- (0.5 * sqrt(2 - u_2 + v_2 - v_prime))
+			(0.5 * sqrt(2 + u_2 - v_2 + u_prime)) - (0.5 * sqrt(2 + u_2 - v_2 - u_prime)),
+			(0.5 * sqrt(2 - u_2 + v_2 + v_prime)) - (0.5 * sqrt(2 - u_2 + v_2 - v_prime))
 		);
 	}
 
@@ -40,9 +38,7 @@ namespace kac_core::geometry {
 			International Congress of Mathematics (ICM). p.5
 		*/
 
-		return T::Point(
-			p.x * sqrt(1 - (pow(p.y, 2) / 2)), p.y * sqrt(1 - (pow(p.x, 2) / 2))
-		);
+		return T::Point(p.x * sqrt(1 - (pow(p.y, 2) / 2)), p.y * sqrt(1 - (pow(p.x, 2) / 2)));
 	}
 
 }

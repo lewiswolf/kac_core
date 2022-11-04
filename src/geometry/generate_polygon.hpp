@@ -1,3 +1,7 @@
+/*
+Functions for generating polygons.
+*/
+
 #pragma once
 
 // core
@@ -63,9 +67,7 @@ namespace kac_core::geometry {
 		}
 		// randomly combine x and y
 		shuffle(Y.begin(), Y.end(), std::default_random_engine(seed));
-		for (unsigned int i = 0; i < N; i++) {
-			V.push_back(T::Point(X[i], Y[i]));
-		}
+		for (unsigned int i = 0; i < N; i++) { V.push_back(T::Point(X[i], Y[i])); }
 		// sort by polar angle
 		sort(V.begin(), V.end(), [](T::Point& p1, T::Point& p2) {
 			return p1.theta() < p2.theta();

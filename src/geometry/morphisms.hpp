@@ -46,11 +46,9 @@ namespace kac_core::geometry {
 		*y_min_max.first -= y_shift;
 		*y_min_max.second -= y_shift;
 		// find v_min and v_d (v_d = v_max - v_min)
-		double v_min = *x_min_max.first < *y_min_max.first ? *x_min_max.first
-														   : *y_min_max.first;
-		double v_d = (*x_min_max.second > *y_min_max.second ? *x_min_max.second
-															: *y_min_max.second)
-			- v_min;
+		double v_min = *x_min_max.first < *y_min_max.first ? *x_min_max.first : *y_min_max.first;
+		double v_d =
+			(*x_min_max.second > *y_min_max.second ? *x_min_max.second : *y_min_max.second) - v_min;
 		// normalise
 		for (unsigned long n = 0; n < V.size(); n++) {
 			V[n].x = (V[n].x - v_min) / v_d;
@@ -75,9 +73,7 @@ namespace kac_core::geometry {
 
 		// enforce that each polygon is clockwise
 		// reverse the polygon if the vertices are anti-clockwise
-		if ((V[1].x - V[0].x) * (V[2].y - V[1].y)
-				- (V[2].x - V[1].x) * (V[1].y - V[0].y)
-			> 0) {
+		if ((V[1].x - V[0].x) * (V[2].y - V[1].y) - (V[2].x - V[1].x) * (V[1].y - V[0].y) > 0) {
 			std::reverse(V.begin(), V.end());
 		}
 		// orient largest vector across x-axis
@@ -96,8 +92,7 @@ namespace kac_core::geometry {
 		double sin_theta = sin(theta);
 		for (unsigned long n = 0; n < V.size(); n++) {
 			V[n] = T::Point(
-				V[n].x * cos_theta + V[n].y * sin_theta,
-				-V[n].x * sin_theta + V[n].y * cos_theta
+				V[n].x * cos_theta + V[n].y * sin_theta, -V[n].x * sin_theta + V[n].y * cos_theta
 			);
 		}
 		// find area of each cartesian quadrant and position the largest in
@@ -162,10 +157,9 @@ namespace kac_core::geometry {
 			}
 		}
 		// reflect initial polygon given the largest quadrant
-		switch (static_cast<int>(std::distance(
-			quadAreas.begin(),
-			std::max_element(quadAreas.begin(), quadAreas.end())
-		))) {
+		switch (static_cast<int>(
+			std::distance(quadAreas.begin(), std::max_element(quadAreas.begin(), quadAreas.end()))
+		)) {
 			case 0:
 				break;
 			case 1:

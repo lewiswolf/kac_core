@@ -54,7 +54,7 @@ namespace kac_core::physics {
 			S = { z_nm | s ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M }
 		output:
 			A = {
-				J_n(z_nm * r) * (2 ** 0.5) * sin(nθπ/4)
+				J_n(z_nm * r) * (2 ** 0.5) * sin(nθ + π/4)
 				| a ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M
 			}
 		*/

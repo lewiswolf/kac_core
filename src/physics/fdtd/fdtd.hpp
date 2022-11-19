@@ -82,9 +82,9 @@ namespace kac_core::physics {
 			}
 		}
 		// update lambda
-		auto FDTDUpdate2D = [=](Matrix_2D& u_a, Matrix_2D& u_b) {
-			for (unsigned int x = x_range[0]; x < x_range[1]; x++) {
-				for (unsigned int y = y_range[0]; y < y_range[1]; y++) {
+		auto FDTDUpdate2D = [=](Matrix_2D& u_a, const Matrix_2D& u_b) {
+			for (unsigned int x = x_range[0]; x <= x_range[1]; x++) {
+				for (unsigned int y = y_range[0]; y <= y_range[1]; y++) {
 					// dirichlet boundary conditions
 					if (B[x][y] != 0) {
 						// update in place
@@ -109,4 +109,46 @@ namespace kac_core::physics {
 		}
 		return waveform;
 	}
+
+	Matrix_2D FDTDUpdate2D(
+		const Matrix_2D& u_0,
+		Matrix_2D& u_1,
+		const Matrix_2D& B,
+		const float& c_0,
+		const float& c_1,
+		const float& c_2,
+		const std::array<unsigned int, 2>& x_range,
+		const std::array<unsigned int, 2>& y_range
+	) {
+		/*
+		2-dimensional FDTD update equation.
+		input:
+			u_0 = initial fdtd grid at t = 0.
+			u_1 = initial fdtd grid at t = 1.
+			B = B conditions.
+			c_0 = first fdtd coefficient related to the decay term and the courant number.
+			c_1 = second fdtd coefficient related to the decay term and the courant number.
+			c_2 = third fdtd coefficient related to the decay term.
+			x_range = range across the x-axis of the boundary condition (for optimisation).
+			y_range = range across the y-axis of the boundary condition (for optimisation).
+		output:
+			u = c_0 * (
+				u_x+1_y + u_0_x-1_y + u_0_x_y+1 + u_0_x_y-1
+			) + c_1 * u_0_x_y - c_2 * (u_1_x_y)
+		*/
+
+		for (unsigned int x = x_range[0]; x <= x_range[1]; x++) {
+			for (unsigned int y = y_range[0]; y <= y_range[1]; y++) {
+				// dirichlet boundary conditions
+				if (B[x][y] != 0) {
+					// update in place
+					u_1[x][y] =
+						(u_0[x][y + 1] + u_0[x + 1][y] + u_0[x][y - 1] + u_0[x - 1][y]) * c_0
+						+ c_1 * u_0[x][y] - c_2 * u_1[x][y];
+				}
+			};
+		}
+		return u_1;
+	}
+
 }

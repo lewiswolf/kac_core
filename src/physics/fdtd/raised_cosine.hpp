@@ -32,8 +32,8 @@ namespace kac_core::physics {
 		*/
 
 		Matrix_1D raised_cosine(size);
-		for (unsigned int x = 0; x < size; x++) {
-			double x_diff = x - mu;
+		for (int x = 0; x < size; x++) {
+			double x_diff = fabs(x - mu);
 			if (x_diff <= sigma) {
 				raised_cosine[x] = 0.5 * (1 + cos(M_PI * x_diff / sigma));
 			}
@@ -60,8 +60,8 @@ namespace kac_core::physics {
 		*/
 
 		Matrix_2D raised_cosine(size_X, Matrix_1D(size_Y, 0));
-		for (unsigned int x = 0; x < size_X; x++) {
-			for (unsigned int y = 0; y < size_Y; y++) {
+		for (int x = 0; x < size_X; x++) {
+			for (int y = 0; y < size_Y; y++) {
 				double l2_norm = sqrt(pow((x - mu_x), 2) + pow((y - mu_y), 2));
 				if (l2_norm <= sigma) {
 					raised_cosine[x][y] = 0.5 * (1 + cos(M_PI * l2_norm / sigma));

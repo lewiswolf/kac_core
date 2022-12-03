@@ -1,6 +1,5 @@
 /*
-Functions for producing a raised cosine transform for different
-dimensionalities.
+Functions for producing a raised cosine transform for different dimensionalities.
 */
 
 #pragma once
@@ -18,7 +17,7 @@ namespace kac_core::physics {
 
 	Matrix_1D raisedCosine1D(const int& size, const int& mu, const double& sigma) {
 		/*
-		Calculate a two dimensional raised cosine transform.
+		Calculate a one dimensional raised cosine distribution.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
 		input:
 			size = the size of the matrix.
@@ -45,7 +44,7 @@ namespace kac_core::physics {
 		const int& size_X, const int& size_Y, const int& mu_x, const int& mu_y, const double& sigma
 	) {
 		/*
-		Calculate a two dimensional raised cosine transform.
+		Calculate a two dimensional raised cosine distribution.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.306.
 		input:
 			size = the size of the matrix.
@@ -69,6 +68,37 @@ namespace kac_core::physics {
 			}
 		}
 		return raised_cosine;
+	}
+
+	Matrix_1D raisedTriangle1D(const int& size, const int& mu, const int& a, const int& b) {
+		/*
+		Calculate a one dimensional triangular distribution.
+		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
+		input:
+			size = the size of the matrix.
+			μ = a cartesian point representing the maxima of the triangle.
+			a = minimum x value for the distribution.
+			b = maximum x value for the distribution.
+		output:
+			{
+				0,								x < a
+				(x - a) / (μ - a),				a ≤ x ≤ μ
+				1. - (x - μ) / (b - μ),			μ < x ≤ b
+				0,								x > a
+			}
+		*/
+
+		Matrix_1D triangle(size);
+		for (int x = 0; x < size; x++) {
+			if (a <= x && x <= mu) {
+				triangle[x] = double(x - a) / double(mu - a);
+			} else if (mu < x && x <= b) {
+				triangle[x] = 1.0 - double(x - mu) / double(b - mu);
+			} else {
+				triangle[x] = 0.0;
+			}
+		}
+		return triangle;
 	}
 
 }

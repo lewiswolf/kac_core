@@ -63,7 +63,7 @@ namespace kac_core::physics {
 			for (int y = 0; y < size_Y; y++) {
 				double l2_norm = sqrt(pow((x - mu_x), 2) + pow((y - mu_y), 2));
 				if (l2_norm <= sigma) {
-					raised_cosine[x][y] = 0.5 * (1 + cos(M_PI * l2_norm / sigma));
+					raised_cosine[y][x] = 0.5 * (1 + cos(M_PI * l2_norm / sigma));
 				}
 			}
 		}

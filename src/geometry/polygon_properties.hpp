@@ -82,12 +82,33 @@ namespace kac_core::geometry {
 		const unsigned long N = P.size();
 		bool clockwise = crossProductZ(P[0], P[1], P[N - 1]) < 0;
 		// loop over remaining points
-		for (unsigned int i = 1; i < N; i++) {
-			if (crossProductZ(P[i], P[(i + 1) % N], P[i - 1]) < 0 != clockwise) {
+		for (unsigned long n = 1; n < N; n++) {
+			if (crossProductZ(P[n], P[(n + 1) % N], P[n - 1]) < 0 != clockwise) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	bool isPointInsidePolygon(const T::Point& p, const T::Polygon& P) {
+		/*
+		Determines whether or not a cartesian pair is within a polygon.
+		Adapted from collidePointPoly() => https://github.com/bmoren/p5.collide2D
+		*/
+
+		bool collision = false;
+		const unsigned long N = P.size();
+		// go through each of the vertices, plus the next vertex in the list
+		for (unsigned long n = 0; n < N; n++) {
+			T::Point a = P[n];
+			T::Point b = P[(n + 1) % N];
+			// compare position, flip 'collision' variable back and forth
+			if (((a.y >= p.y && b.y < p.y) || (a.y < p.y && b.y >= p.y))
+				&& p.x < ((b.x - a.x) * (p.y - a.y)) / (b.y - a.y) + a.x) {
+				collision = !collision;
+			}
+		}
+		return collision;
 	}
 
 	std::pair<double, std::pair<int, int>> largestVector(const T::Polygon& P) {

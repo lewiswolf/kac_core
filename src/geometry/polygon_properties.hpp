@@ -6,6 +6,7 @@ Utility functions for working with polygons.
 
 // core
 #define _USE_MATH_DEFINES
+#include <algorithm>
 #include <math.h>
 #include <utility>
 
@@ -90,23 +91,40 @@ namespace kac_core::geometry {
 		return true;
 	}
 
-	bool isPointInsidePolygon(const T::Point& p, const T::Polygon& P) {
+	bool isPointInsidePolygon(const T::Point& p, T::Polygon P) {
 		/*
-		Determines whether or not a cartesian pair is within a polygon.
-		Adapted from collidePointPoly() => https://github.com/bmoren/p5.collide2D
+		Determines whether or not a cartesian pair is within a polygon, including boundaries.
+		https://stackoverflow.com/questions/11716268/point-in-polygon-algorithm
 		*/
 
 		bool collision = false;
 		const unsigned long N = P.size();
+		double x_min = P[0].x;
+		double y_min = P[0].y;
+		// enforce that each polygon is clockwise
+		// reverse the polygon if the vertices are anti-clockwise
+		if ((P[1].x - P[0].x) * (P[2].y - P[1].y) - (P[2].x - P[1].x) * (P[1].y - P[0].y) > 0) {
+			std::reverse(P.begin(), P.end());
+		}
 		// go through each of the vertices, plus the next vertex in the list
 		for (unsigned long n = 0; n < N; n++) {
-			T::Point a = P[n];
-			T::Point b = P[(n + 1) % N];
-			// compare position, flip 'collision' variable back and forth
-			if (((a.y >= p.y && b.y < p.y) || (a.y < p.y && b.y >= p.y))
-				&& p.x < ((b.x - a.x) * (p.y - a.y)) / (b.y - a.y) + a.x) {
+			const T::Point a = P[n];
+			const T::Point b = P[(n + 1) % N];
+			x_min = std::min(a.x, x_min);
+			y_min = std::min(a.y, y_min);
+			// special case if point is equal to a vertex
+			if (a.x == p.x && a.y == p.y) {
+				return true;
+			}
+			// check for intersections and flip collision
+			if (((a.y >= p.y) != (b.y >= p.y))
+				&& (p.x <= (b.x - a.x) * (p.y - a.y) / (b.y - a.y) + a.x)) {
 				collision = !collision;
 			}
+		}
+		if (!collision && (p.x == x_min || p.y == y_min)) {
+			// this accounts for a bug where the minimum x or y is not counted as a collision
+			return true;
 		}
 		return collision;
 	}

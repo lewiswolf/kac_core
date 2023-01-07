@@ -14,6 +14,10 @@ int main() {
 	int N = 10;
 	T::Polygon p = g::generateConvexPolygon(N);
 	booleanTest("generatedConvexPolygon produces n vertices", p.size() == N);
+	booleanTest(
+		"convexNormalisation produces a polygon on the unit interval.",
+		g::largestVector(g::convexNormalisation(p)).first == 1.
+	);
 	booleanTest("generatedConvexPolygon is convex", g::isConvex(p));
 	batchBooleanTest(
 		"generatedConvexPolygon does not produce colinear points",
@@ -49,19 +53,14 @@ int main() {
 		}
 	);
 
-	T::Polygon p1(4);
-	T::Polygon p2(4);
-	p1[0], p2[0] = T::Point(0.0, 0.0);
-	p1[1], p2[3] = T::Point(0.0, 1.0);
-	p1[2], p2[2] = T::Point(1.0, 1.0);
-	p1[3], p2[1] = T::Point(1.0, 0.0);
-	booleanTest("isConvex works for counter-clockwise ordered polygons", g::isConvex(p1));
-	booleanTest("isConvex works for clockwise ordered polygons", g::isConvex(p2));
-
-	booleanTest(
-		"convexNormalisation produces a polygon on the unit interval.",
-		g::largestVector(g::convexNormalisation(p)).first == 1.
-	);
+	T::Polygon square_clockwise(4);
+	T::Polygon square_anti(4);
+	square_clockwise[0], square_anti[0] = T::Point(0.0, 0.0);
+	square_clockwise[1], square_anti[3] = T::Point(0.0, 1.0);
+	square_clockwise[2], square_anti[2] = T::Point(1.0, 1.0);
+	square_clockwise[3], square_anti[1] = T::Point(1.0, 0.0);
+	booleanTest("isConvex works for counter-clockwise ordered polygons", g::isConvex(square_anti));
+	booleanTest("isConvex works for clockwise ordered polygons", g::isConvex(square_clockwise));
 
 	return 0;
 }

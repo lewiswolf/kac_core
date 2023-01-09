@@ -29,7 +29,7 @@ namespace kac_core::physics {
 			epsilon = aspect ratio of the rectangle
 		output:
 			A = {
-				sin(mxπ / (Є ** 0.5)) sin(nyπ (Є ** 0.5))
+				sin(mxπ / (Є ** 0.5)) sin(nyπ * (Є ** 0.5))
 				| a ∈ ℝ, 0 < n <= N, 0 < m <= M
 			}
 		*/

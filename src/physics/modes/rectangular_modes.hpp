@@ -53,7 +53,7 @@ namespace kac_core::physics {
 			epsilon = aspect ratio of the rectangle
 		output:
 			S = {
-				((m^2 / Є) + (Єn^2)) ** 0.5
+				((m ** 2 / Є) + (Єn ** 2)) ** 0.5
 				| s ∈ ℝ, 0 < n <= N, 0 < m <= M
 			}
 		*/

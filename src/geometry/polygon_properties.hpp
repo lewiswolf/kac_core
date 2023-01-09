@@ -68,7 +68,7 @@ namespace kac_core::geometry {
 		Tests whether or not a given array of vertices forms a convex polygon.
 		This is achieved using the resultant sign of the cross product for each
 		vertex:
-			[(x_i - x_i-1), (y_i - y_i-1)] x [(x_i+1 - x_i), (y_i+1 - y_i)]
+			[(x_i - x_i-1), (y_i - y_i-1)] × [(x_i+1 - x_i), (y_i+1 - y_i)]
 		See => http://paulbourke.net/geometry/polygonmesh/ 'Determining whether
 		or not a polygon (2D) has its vertices ordered clockwise or
 		counter-clockwise'.

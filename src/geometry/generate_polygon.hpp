@@ -14,9 +14,11 @@ Functions for generating polygons.
 #include "../types.hpp"
 namespace T = kac_core::types;
 
+std::default_random_engine random_engine = std::default_random_engine(time(NULL));
+
 namespace kac_core::geometry {
 
-	T::Polygon generateConvexPolygon(const int& N, time_t seed = time(NULL)) {
+	T::Polygon generateConvexPolygon(const int& N, const time_t& seed = 0) {
 		/*
 		Generate convex shapes according to Pavel Valtr's 1995 algorithm.
 		Adapted from Sander Verdonschot's Java version, found here:
@@ -37,7 +39,10 @@ namespace kac_core::geometry {
 		unsigned int last_true = 0;
 		unsigned int last_false = 0;
 		// initialise and sort random coordinates
-		srand(seed);
+		if (seed != 0) {
+			random_engine = std::default_random_engine(seed);
+			srand(seed);
+		}
 		std::generate(X_rand.begin(), X_rand.end(), []() {
 			return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
 		});
@@ -66,7 +71,7 @@ namespace kac_core::geometry {
 			}
 		}
 		// randomly combine x and y
-		shuffle(Y.begin(), Y.end(), std::default_random_engine(seed));
+		shuffle(Y.begin(), Y.end(), random_engine);
 		for (unsigned int i = 0; i < N; i++) { P.push_back(T::Point(X[i], Y[i])); }
 		// sort by polar angle
 		sort(P.begin(), P.end(), [](T::Point& p1, T::Point& p2) {

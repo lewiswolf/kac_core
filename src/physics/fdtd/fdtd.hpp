@@ -20,7 +20,7 @@ namespace kac_core::physics {
 	Matrix_1D FDTDWaveform2D(
 		Matrix_2D u_0,
 		Matrix_2D u_1,
-		const std::vector<std::vector<int>>& B,
+		const BooleanImage& B,
 		const double& c_0,
 		const double& c_1,
 		const double& c_2,
@@ -113,7 +113,7 @@ namespace kac_core::physics {
 	Matrix_2D FDTDUpdate2D(
 		const Matrix_2D& u_0,
 		Matrix_2D& u_1,
-		const Matrix_2D& B,
+		const BooleanImage& B,
 		const float& c_0,
 		const float& c_1,
 		const float& c_2,

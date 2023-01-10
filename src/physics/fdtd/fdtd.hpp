@@ -41,7 +41,7 @@ namespace kac_core::physics {
 			T = length of simulation in samples.
 			w = the coordinate at which the waveform is sampled.
 		output:
-			waveform = W[n] ∈ (λ ** 2)(
+			waveform = W[n + 1] ∈ (λ ** 2)(
 				u_n_x+1_y + u_n_x-1_y + u_n_x_y+1 + u_n_x_y-1
 			) + 2(1 - 2(λ ** 2))u_n_x_y - d(u_n-1_x_y) ∀ u ∈ R^2
 		*/
@@ -111,8 +111,8 @@ namespace kac_core::physics {
 	}
 
 	Matrix_2D FDTDUpdate2D(
-		const Matrix_2D& u_0,
-		Matrix_2D& u_1,
+		Matrix_2D& u_0,
+		const Matrix_2D& u_1,
 		const BooleanImage& B,
 		const float& c_0,
 		const float& c_1,
@@ -123,8 +123,8 @@ namespace kac_core::physics {
 		/*
 		2-dimensional FDTD update equation.
 		input:
-			u_0 = initial fdtd grid at t = 0.
-			u_1 = initial fdtd grid at t = 1.
+			u_0 = initial fdtd grid at t = -1.
+			u_1 = initial fdtd grid at t = 0.
 			B = B conditions.
 			c_0 = first fdtd coefficient related to the decay term and the courant number.
 			c_1 = second fdtd coefficient related to the decay term and the courant number.
@@ -133,8 +133,8 @@ namespace kac_core::physics {
 			y_range = range across the y-axis of the boundary condition (for optimisation).
 		output:
 			u = c_0 * (
-				u_x+1_y + u_0_x-1_y + u_0_x_y+1 + u_0_x_y-1
-			) + c_1 * u_0_x_y - c_2 * (u_1_x_y)
+				u_1_x+1_y + u_1_x-1_y + u_1_x_y+1 + u_1_x_y-1
+			) + c_1 * u_1_x_y - c_2 * (u_0_x_y)
 		*/
 
 		for (unsigned int x = x_range[0]; x <= x_range[1]; x++) {
@@ -142,13 +142,13 @@ namespace kac_core::physics {
 				// dirichlet boundary conditions
 				if (B[x][y] != 0) {
 					// update in place
-					u_1[x][y] =
-						(u_0[x][y + 1] + u_0[x + 1][y] + u_0[x][y - 1] + u_0[x - 1][y]) * c_0
-						+ c_1 * u_0[x][y] - c_2 * u_1[x][y];
+					u_0[x][y] =
+						(u_1[x][y + 1] + u_1[x + 1][y] + u_1[x][y - 1] + u_1[x - 1][y]) * c_0
+						+ c_1 * u_1[x][y] - c_2 * u_0[x][y];
 				}
 			};
 		}
-		return u_1;
+		return u_0;
 	}
 
 }

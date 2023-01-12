@@ -138,15 +138,14 @@ namespace kac_core::geometry {
 
 	double polygonArea(const T::Polygon& P) {
 		/*
-		An implementation of the shoelace algorithm, first described by Albrecht
-		Ludwig Friedrich Meister, which is used to calculate the area of a
-		polygon.
+		An implementation of the polygon area algorithm derived using Green's Theorem.
+		https://math.blogoverflow.com/2014/06/04/greens-theorem-and-area-of-polygons/
 		*/
 
 		const unsigned long N = P.size();
 		double out = 0.;
 		for (unsigned long n = 0; n < N; n++) {
-			out += P[n].x * P[(n + 1) % N].y - P[n].y * P[(n + 1) % N].x;
+			out += (P[(n + 1) % N].x + P[n].x) * (P[(n + 1) % N].y - P[n].y);
 		}
 		return abs(out) / 2.;
 	}

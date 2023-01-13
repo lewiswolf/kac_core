@@ -52,6 +52,7 @@ namespace kac_core::physics {
 			for (unsigned int n = 0; n < N; n++) {
 				for (unsigned int m = 0; m < M; m++) {
 					// 2009 - Bilbao, pp.65-66
+					// 2016 - Chaigne & Kergomard, p.154
 					sum += A[n][m] * d_t * sin(t * F[n][m]) / (N * M * A_max);
 				}
 			}

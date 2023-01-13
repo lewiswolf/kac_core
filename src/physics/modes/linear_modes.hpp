@@ -24,12 +24,12 @@ namespace kac_core::physics {
 			x = strike location
 			N = number of modes
 		output:
-			A = { sin(nxπ) | a ∈ ℝ, 0 < n <= N }
+			A = { abs(sin(nxπ)) | a ∈ ℝ, 0 < n <= N }
 		*/
 
 		T::Matrix_1D A(N);
 		double x_pi = x * M_PI;
-		for (unsigned int n = 0; n < N; n++) { A[n] = sin((n + 1) * x_pi); };
+		for (unsigned int n = 0; n < N; n++) { A[n] = abs(sin((n + 1) * x_pi)); };
 		return A;
 	}
 

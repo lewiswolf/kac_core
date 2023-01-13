@@ -54,7 +54,7 @@ namespace kac_core::physics {
 			S = { z_nm | s ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M }
 		output:
 			A = {
-				J_n(z_nm * r) * (2 ** 0.5) * sin(nθ + π/4)
+				abs(J_n(z_nm * r) * (2 ** 0.5) * sin(nθ + π/4))
 				| a ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M
 			}
 		*/
@@ -64,7 +64,9 @@ namespace kac_core::physics {
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double angular = n != 0 ? M_SQRT2 * sin(n * theta + M_PI_4) : 1.0;
-			for (unsigned int m = 0; m < M; m++) { A[n][m] = besselJ(n, S[n][m] * r) * angular; };
+			for (unsigned int m = 0; m < M; m++) {
+				A[n][m] = abs(besselJ(n, S[n][m] * r) * angular);
+			};
 		}
 		return A;
 	}

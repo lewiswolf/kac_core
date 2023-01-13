@@ -29,7 +29,7 @@ namespace kac_core::physics {
 			epsilon = aspect ratio of the rectangle
 		output:
 			A = {
-				sin(mxπ / (Є ** 0.5)) sin(nyπ * (Є ** 0.5))
+				abs(sin(mxπ / (Є ** 0.5)) sin(nyπ * (Є ** 0.5)))
 				| a ∈ ℝ, 0 < n <= N, 0 < m <= M
 			}
 		*/
@@ -39,7 +39,7 @@ namespace kac_core::physics {
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double n_hat = sin((n + 1) * y_hat);
-			for (unsigned int m = 0; m < M; m++) { A[n][m] = sin((m + 1) * x_hat) * n_hat; }
+			for (unsigned int m = 0; m < M; m++) { A[n][m] = abs(sin((m + 1) * x_hat) * n_hat); }
 		}
 		return A;
 	};

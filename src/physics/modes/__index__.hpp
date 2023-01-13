@@ -7,3 +7,4 @@ Central import for all files in /modes.
 #include "circular_modes.hpp"
 #include "linear_modes.hpp"
 #include "rectangular_modes.hpp"
+#include "wave_equation.hpp"

@@ -24,7 +24,7 @@ namespace kac_core::physics {
 		const double& c_0,
 		const double& c_1,
 		const double& c_2,
-		const int& T,
+		const unsigned int& T,
 		std::array<int, 2> w
 	) {
 		/*

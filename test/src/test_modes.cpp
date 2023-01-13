@@ -16,12 +16,7 @@ int main() {
 			&& std::abs(p::besselJ(1, 1.2) - 0.498289) < 0.01
 	);
 	booleanTest(
-		"the 0th mode from calculateLinearModes is f_0",
-		p::calculateLinearModes(440.0, 10)[0] == 440.0
-	);
-	booleanTest(
-		"the 0th element from calculateLinearSeries is 1",
-		p::calculateLinearSeries(10)[0] == 1
+		"the 0th element from calculateLinearSeries is 1", p::calculateLinearSeries(10)[0] == 1
 	);
 	return 0;
 }

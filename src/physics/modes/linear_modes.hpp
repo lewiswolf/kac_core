@@ -33,21 +33,6 @@ namespace kac_core::physics {
 		return A;
 	}
 
-	T::Matrix_1D calculateLinearModes(const double& f_0, const int& N) {
-		/*
-		Calculate the harmonic series of a given fundmental.
-		input:
-			f_0 = fundamental frequency
-			N = number of modes
-		output:
-			F = { (f_0 * n) | f ∈ ℝ, 0 < n <= N }
-		*/
-
-		T::Matrix_1D F(N);
-		for (unsigned int n = 0; n < N; n++) { F[n] = f_0 * (n + 1); };
-		return F;
-	}
-
 	T::Matrix_1D calculateLinearSeries(const int& N) {
 		/*
 		Calculate the the harmonic series.

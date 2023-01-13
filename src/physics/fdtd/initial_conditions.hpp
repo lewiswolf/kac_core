@@ -85,7 +85,7 @@ namespace kac_core::physics {
 			a = minimum x value for the distribution.
 			b = maximum x value for the distribution.
 		output:
-			{
+			Λ(x) = {
 				0,								x < a
 				(x - a) / (μ - a),				a ≤ x ≤ μ
 				1. - (x - μ) / (b - μ),			μ < x ≤ b
@@ -95,13 +95,42 @@ namespace kac_core::physics {
 
 		Matrix_1D triangle(size);
 		for (int x = 0; x < size; x++) {
-			if (a <= x && x <= mu) {
-				triangle[x] = double(x - a) / double(mu - a);
-			} else if (mu < x && x <= b) {
-				triangle[x] = 1.0 - double(x - mu) / double(b - mu);
-			} else {
-				triangle[x] = 0.0;
-			}
+			triangle[x] = a <= x && x <= mu ? double(x - a) / double(mu - a)
+						: mu < x && x <= b	? 1.0 - double(x - mu) / double(b - mu)
+											: 0.0;
+		}
+		return triangle;
+	}
+
+	Matrix_2D raisedTriangle2D(
+		const int& size_X,
+		const int& size_Y,
+		const double& mu_x,
+		const double& mu_y,
+		const double& x_a,
+		const double& x_b,
+		const double& y_a,
+		const double& y_b
+	) {
+		/*
+		Calculate a two dimensional triangular distribution.
+		See https://reference.wolfram.com/language/ref/UnitTriangle.html
+		input:
+			size = the size of the matrix.
+			μ = a cartesian point representing the maxima of the triangle.
+			x_ab = minimum and maximum x value for the distribution.
+			y_ab = minimum and maximum y value for the distribution.
+		output:
+			Λ(x, y) = Λ(x) * Λ(y)
+		*/
+
+		Matrix_1D y_t = raisedTriangle1D(size_Y, mu_y, y_a, y_b);
+		Matrix_2D triangle(size_X, Matrix_1D(size_Y, 0));
+		for (int x = 0; x < size_X; x++) {
+			double x_t = x_a <= x && x <= mu_x ? double(x - x_a) / double(mu_x - x_a)
+					   : mu_x < x && x <= x_b  ? 1.0 - double(x - mu_x) / double(x_b - mu_x)
+											   : 0.0;
+			for (int y = 0; y < size_Y; y++) { triangle[x][y] = x_t * y_t[y]; }
 		}
 		return triangle;
 	}

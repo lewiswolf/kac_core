@@ -39,7 +39,7 @@ namespace kac_core::physics {
 		double z_hat = z * M_PI;
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
-			double n_hat = abs(sin((n + 1) * y_hat));
+			double n_hat = abs(sin((n + 1) * x_hat) * sin((n + 1) * y_hat) * sin((n + 1) * z_hat));
 			for (unsigned int m = 0; m < M; m++) { A[n][m] = n_hat; }
 		}
 		return A;

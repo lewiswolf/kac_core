@@ -1,5 +1,5 @@
 /*
-Functions for calculating the linear approximation of the 2-Dimensional circular
+Functions for calculating the linear approximation of the 2-dimensional circular
 wave equation.
 */
 
@@ -44,8 +44,7 @@ namespace kac_core::physics {
 		return boost::math::cyl_bessel_j_zero(n, m);
 	}
 
-	T::Matrix_2D
-	calculateCircularAmplitudes(const double& r, const double& theta, const T::Matrix_2D& S) {
+	T::Matrix_2D circularAmplitudes(const double& r, const double& theta, const T::Matrix_2D& S) {
 		/*
 		Calculate the amplitudes of the circular eigenmodes relative to a polar
 		strike location.
@@ -71,7 +70,7 @@ namespace kac_core::physics {
 		return A;
 	}
 
-	T::Matrix_2D calculateCircularSeries(const int& N, const int& M) {
+	T::Matrix_2D circularSeries(const int& N, const int& M) {
 		/*
 		Calculate the eigenmodes of a circle.
 		input:

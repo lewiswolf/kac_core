@@ -6,9 +6,10 @@ rectangular wave equation.
 #pragma once
 
 // core
-#define _USE_MATH_DEFINES
 #include <math.h>
+#include <numbers>
 #include <vector>
+using namespace std::numbers;
 
 // src
 #include "../../types.hpp"
@@ -34,9 +35,9 @@ namespace kac_core::physics {
 			}
 		*/
 
-		double x_hat = x * M_PI;
-		double y_hat = y * M_PI;
-		double z_hat = z * M_PI;
+		double x_hat = x * pi;
+		double y_hat = y * pi;
+		double z_hat = z * pi;
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
 			double n_hat = abs(sin((n + 1) * x_hat) * sin((n + 1) * y_hat) * sin((n + 1) * z_hat));

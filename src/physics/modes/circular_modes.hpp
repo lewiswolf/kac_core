@@ -6,9 +6,10 @@ wave equation.
 #pragma once
 
 // core
-#define _USE_MATH_DEFINES
 #include <math.h>
+#include <numbers>
 #include <vector>
+using namespace std::numbers;
 
 // dependencies
 #include <boost/math/special_functions/bessel.hpp>
@@ -60,9 +61,10 @@ namespace kac_core::physics {
 
 		unsigned int N = S.size();
 		unsigned int M = S[0].size();
+		const double pi_4 = pi / 4;
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned int n = 0; n < N; n++) {
-			double angular = n != 0 ? M_SQRT2 * sin(n * theta + M_PI_4) : 1.0;
+			double angular = n != 0 ? sqrt2 * sin(n * theta + pi_4) : 1.0;
 			for (unsigned int m = 0; m < M; m++) {
 				A[n][m] = abs(besselJ(n, S[n][m] * r) * angular);
 			};

@@ -5,7 +5,6 @@ Utility functions for working with polygons.
 #pragma once
 
 // core
-#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <math.h>
 #include <utility>

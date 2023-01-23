@@ -5,10 +5,11 @@ Functions relating to the wave equation.
 #pragma once
 
 // core
-#define _USE_MATH_DEFINES
 #include <algorithm>	// max
 #include <math.h>
+#include <numbers>
 #include <vector>
+using namespace std::numbers;
 
 // src
 #include "../../types.hpp"
@@ -43,12 +44,12 @@ namespace kac_core::physics {
 			for (unsigned int m = 0; m < M; m++) {
 				// calculate A_max and transform F into ω
 				A_max = std::max(A_max, A[n][m]);
-				F[n][m] *= 2 * M_PI * k;
+				F[n][m] *= 2 * pi * k;
 			}
 		}
 		for (unsigned int t = 0; t < T; t++) {
 			double sum = 0.0;
-			double d_t = pow(M_E, t * d);
+			double d_t = pow(e, t * d);
 			for (unsigned int n = 0; n < N; n++) {
 				for (unsigned int m = 0; m < M; m++) {
 					// 2009 - Bilbao, pp.65-66

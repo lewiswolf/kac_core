@@ -6,9 +6,10 @@ equation.
 #pragma once
 
 // core
-#define _USE_MATH_DEFINES
 #include <math.h>
+#include <numbers>
 #include <vector>
+using namespace std::numbers;
 
 // src
 #include "../../types.hpp"
@@ -28,7 +29,7 @@ namespace kac_core::physics {
 		*/
 
 		T::Matrix_1D A(N);
-		double x_pi = x * M_PI;
+		double x_pi = x * pi;
 		for (unsigned int n = 0; n < N; n++) { A[n] = abs(sin((n + 1) * x_pi)); };
 		return A;
 	}

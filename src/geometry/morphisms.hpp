@@ -5,7 +5,6 @@ Functions for producing group theoretic transformations.
 #pragma once
 
 // core
-#define _USE_MATH_DEFINES
 #include <algorithm>
 #include <array>
 #include <iterator>

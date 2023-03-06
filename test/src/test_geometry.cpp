@@ -2,6 +2,9 @@
 Tests for /geometry.
 */
 
+// core
+#include <random>
+
 // src
 #include <kac_core.hpp>
 namespace T = kac_core::types;		 // types
@@ -12,7 +15,8 @@ namespace g = kac_core::geometry;	 // geometry
 
 int main() {
 	int N = 10;
-	T::Polygon p = g::generateConvexPolygon(N);
+	std::default_random_engine random_engine = std::default_random_engine(0);
+	T::Polygon p = g::generateConvexPolygon(N, random_engine);
 	booleanTest("generatedConvexPolygon produces n vertices", p.size() == N);
 	booleanTest(
 		"convexNormalisation produces a polygon on the unit interval.",
@@ -27,7 +31,8 @@ int main() {
 		}
 	);
 
-	T::Polygon seed_test = g::generateConvexPolygon(10, 1);
+	random_engine = std::default_random_engine(1);
+	T::Polygon seed_test = g::generateConvexPolygon(10, random_engine, 1);
 	T::Polygon seed_expected(10);
 	T::Matrix_2D seed_m = {
 		{0.288255, 0.411634},

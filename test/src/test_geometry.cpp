@@ -2,9 +2,6 @@
 Tests for /geometry.
 */
 
-// core
-#include <random>
-
 // src
 #include <kac_core.hpp>
 namespace T = kac_core::types;		 // types
@@ -15,8 +12,7 @@ namespace g = kac_core::geometry;	 // geometry
 
 int main() {
 	int N = 10;
-	std::default_random_engine random_engine = std::default_random_engine(0);
-	T::Polygon p = g::generateConvexPolygon(N, random_engine);
+	T::Polygon p = g::generateConvexPolygon(N);
 	booleanTest("generatedConvexPolygon produces n vertices", p.size() == N);
 	booleanTest(
 		"convexNormalisation produces a polygon on the unit interval.",
@@ -31,20 +27,19 @@ int main() {
 		}
 	);
 
-	random_engine = std::default_random_engine(1);
-	T::Polygon seed_test = g::generateConvexPolygon(10, random_engine, 1);
+	T::Polygon seed_test = g::generateConvexPolygon(10, 1);
 	T::Polygon seed_expected(10);
 	T::Matrix_2D seed_m = {
-		{0.288255, 0.411634},
-		{-0.244504, 0.0358297},
-		{-0.467343, -0.251818},
-		{-0.466911, -0.411634},
-		{-0.22722, -0.392744},
-		{0.0281766, -0.36587},
-		{0.115598, -0.35249},
-		{0.335813, -0.0359161},
-		{0.382849, 0.100085},
-		{0.467343, 0.40135}};
+		{-0.0242766, 0.479745},
+		{-0.253068, 0.398843},
+		{-0.492156, -0.165661},
+		{-0.485196, -0.389891},
+		{-0.440517, -0.479745},
+		{-0.0642965, -0.465343},
+		{0.298542, -0.19452},
+		{0.365742, -0.0483391},
+		{0.492156, 0.41191},
+		{0.105256, 0.465276}};
 	for (unsigned int i = 0; i < 10; i++) {
 		seed_expected[i] = T::Point(seed_m[i][0], seed_m[i][1]);
 	}

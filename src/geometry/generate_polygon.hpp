@@ -13,11 +13,13 @@ Functions for generating polygons.
 #include "../types.hpp"
 namespace T = kac_core::types;
 
+const long rand_max = 2147483647;
+static std::default_random_engine random_engine = std::default_random_engine(0);
+static std::uniform_int_distribution<long> uniform_distribution(0, rand_max);
+
 namespace kac_core::geometry {
 
-	inline T::Polygon generateConvexPolygon(
-		const int& N, std::default_random_engine& random_engine, const time_t& seed = NULL
-	) {
+	inline T::Polygon generateConvexPolygon(const unsigned int& N, const time_t& seed = 0) {
 		/*
 		Generate convex shapes according to Pavel Valtr's 1995 algorithm.
 		Adapted from Sander Verdonschot's Java version, found here:
@@ -38,14 +40,16 @@ namespace kac_core::geometry {
 		unsigned int last_true = 0;
 		unsigned int last_false = 0;
 		// initialise and sort random coordinates
-		if (seed) {
-			srand(seed);
+		if (seed != 0) {
+			random_engine.seed(seed);
 		}
 		std::generate(X_rand.begin(), X_rand.end(), []() {
-			return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
+			return static_cast<double>(uniform_distribution(random_engine))
+				 / static_cast<double>(rand_max);
 		});
 		std::generate(Y_rand.begin(), Y_rand.end(), []() {
-			return static_cast<double>(rand()) / static_cast<double>(RAND_MAX);
+			return static_cast<double>(uniform_distribution(random_engine))
+				 / static_cast<double>(rand_max);
 		});
 		std::sort(X_rand.begin(), X_rand.end());
 		std::sort(Y_rand.begin(), Y_rand.end());

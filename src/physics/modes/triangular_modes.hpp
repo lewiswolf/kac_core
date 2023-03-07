@@ -17,7 +17,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::physics {
 
-	T::Matrix_2D equilateralTriangleAmplitudes(
+	inline T::Matrix_2D equilateralTriangleAmplitudes(
 		const double& x, const double& y, const double& z, const int& N, const int& M
 	) {
 		/*
@@ -46,7 +46,7 @@ namespace kac_core::physics {
 		return A;
 	};
 
-	T::Matrix_2D equilateralTriangleSeries(const int& N, const int& M) {
+	inline T::Matrix_2D equilateralTriangleSeries(const int& N, const int& M) {
 		/*
 		Calculate the eigenmodes of an equilateral triangle according to Lamé's formula.
 		Seth (1940) Transverse Vibrations of Triangular Membranes.

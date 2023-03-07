@@ -15,7 +15,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	T::Polygon generateConvexPolygon(
+	inline T::Polygon generateConvexPolygon(
 		const int& N, std::default_random_engine& random_engine, const time_t& seed = NULL
 	) {
 		/*

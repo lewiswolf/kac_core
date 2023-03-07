@@ -18,7 +18,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	T::Polygon normalisePolygon(T::Polygon P) {
+	inline T::Polygon normalisePolygon(T::Polygon P) {
 		/*
 		This function takes a polygon, centers it across the x and y axis, then
 		normalises the vertices to the unit interval ℝ^2.
@@ -57,7 +57,7 @@ namespace kac_core::geometry {
 		return P;
 	}
 
-	T::Polygon convexNormalisation(T::Polygon P) {
+	inline T::Polygon convexNormalisation(T::Polygon P) {
 		/*
 		This algorithm produces an identity polygon for each unique polygon
 		given as input. This method normalises an input polygon to the unit

@@ -16,7 +16,7 @@ using namespace kac_core::types;
 
 namespace kac_core::physics {
 
-	Matrix_1D raisedCosine1D(const int& size, const double& mu, const double& sigma) {
+	inline Matrix_1D raisedCosine1D(const int& size, const double& mu, const double& sigma) {
 		/*
 		Calculate a one dimensional raised cosine distribution.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
@@ -41,7 +41,7 @@ namespace kac_core::physics {
 		return raised_cosine;
 	}
 
-	Matrix_2D raisedCosine2D(
+	inline Matrix_2D raisedCosine2D(
 		const int& size_X,
 		const int& size_Y,
 		const double& mu_x,
@@ -75,7 +75,7 @@ namespace kac_core::physics {
 		return raised_cosine;
 	}
 
-	Matrix_1D
+	inline Matrix_1D
 	raisedTriangle1D(const int& size, const double& mu, const double& a, const double& b) {
 		/*
 		Calculate a one dimensional triangular distribution.
@@ -103,7 +103,7 @@ namespace kac_core::physics {
 		return triangle;
 	}
 
-	Matrix_2D raisedTriangle2D(
+	inline Matrix_2D raisedTriangle2D(
 		const int& size_X,
 		const int& size_Y,
 		const double& mu_x,

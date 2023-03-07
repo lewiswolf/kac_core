@@ -20,7 +20,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::physics {
 
-	double besselJ(const int& n, const double& x) {
+	inline double besselJ(const int& n, const double& x) {
 		/*
 		Calculates the bessel function of the first kind J_n(x).
 		input:
@@ -32,7 +32,7 @@ namespace kac_core::physics {
 		return boost::math::cyl_bessel_j(n, x);
 	}
 
-	double besselJZero(const double& n, const int& m) {
+	inline double besselJZero(const double& n, const int& m) {
 		/*
 		Calculates the mth zero crossing of the bessel functions of the first
 		kind.
@@ -45,7 +45,8 @@ namespace kac_core::physics {
 		return boost::math::cyl_bessel_j_zero(n, m);
 	}
 
-	T::Matrix_2D circularAmplitudes(const double& r, const double& theta, const T::Matrix_2D& S) {
+	inline T::Matrix_2D
+	circularAmplitudes(const double& r, const double& theta, const T::Matrix_2D& S) {
 		/*
 		Calculate the amplitudes of the circular eigenmodes relative to a polar
 		strike location.
@@ -72,7 +73,7 @@ namespace kac_core::physics {
 		return A;
 	}
 
-	T::Matrix_2D circularSeries(const int& N, const int& M) {
+	inline T::Matrix_2D circularSeries(const int& N, const int& M) {
 		/*
 		Calculate the eigenmodes of a circle.
 		input:

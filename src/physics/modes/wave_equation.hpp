@@ -17,7 +17,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::physics {
 
-	T::Matrix_1D WaveEquationWaveform2D(
+	inline T::Matrix_1D WaveEquationWaveform2D(
 		T::Matrix_2D F,
 		const T::Matrix_2D& A,
 		const double& d,

@@ -15,7 +15,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	T::Point centroid(const T::Polygon& P, const double& area) {
+	inline T::Point centroid(const T::Polygon& P, const double& area) {
 		/*
 		This algorithm is used to calculate the geometric centroid of a 2D
 		polygon. See http://paulbourke.net/geometry/polygonmesh/ 'Calculating
@@ -54,7 +54,7 @@ namespace kac_core::geometry {
 		return T::Point(abs(out_x) / (6 * area), abs(out_y) / (6 * area));
 	}
 
-	bool isColinear(const T::Point& a, const T::Point& b, const T::Point& c) {
+	inline bool isColinear(const T::Point& a, const T::Point& b, const T::Point& c) {
 		/*
 		Determines whether or not a given set of three vertices are colinear.
 		*/
@@ -62,7 +62,7 @@ namespace kac_core::geometry {
 		return (c.y - b.y) * (b.x - a.x) == (b.y - a.y) * (c.x - b.x);
 	}
 
-	bool isConvex(const T::Polygon& P) {
+	inline bool isConvex(const T::Polygon& P) {
 		/*
 		Tests whether or not a given array of vertices forms a convex polygon.
 		This is achieved using the resultant sign of the cross product for each
@@ -90,7 +90,7 @@ namespace kac_core::geometry {
 		return true;
 	}
 
-	bool isPointInsideConvexPolygon(const T::Point& p, T::Polygon P) {
+	inline bool isPointInsideConvexPolygon(const T::Point& p, T::Polygon P) {
 		/*
 		Determines whether or not a cartesian pair is within a polygon, including boundaries.
 		Solution 3 => http://paulbourke.net/geometry/polygonmesh/
@@ -112,7 +112,7 @@ namespace kac_core::geometry {
 		return true;
 	}
 
-	std::pair<double, std::pair<int, int>> largestVector(const T::Polygon& P) {
+	inline std::pair<double, std::pair<int, int>> largestVector(const T::Polygon& P) {
 		/*
 		This function tests each pair of vertices in a given polygon to find the
 		largest vector, and returns the length of the vector and its indices.
@@ -135,7 +135,7 @@ namespace kac_core::geometry {
 		return std::make_pair(vec_max, std::make_pair(index_i, index_j));
 	}
 
-	double polygonArea(const T::Polygon& P) {
+	inline double polygonArea(const T::Polygon& P) {
 		/*
 		An implementation of the polygon area algorithm derived using Green's Theorem.
 		https://math.blogoverflow.com/2014/06/04/greens-theorem-and-area-of-polygons/

@@ -17,7 +17,7 @@ using namespace kac_core::types;
 
 namespace kac_core::physics {
 
-	Matrix_1D FDTDWaveform2D(
+	inline Matrix_1D FDTDWaveform2D(
 		Matrix_2D u_0,
 		Matrix_2D u_1,
 		const BooleanImage& B,
@@ -110,7 +110,7 @@ namespace kac_core::physics {
 		return waveform;
 	}
 
-	Matrix_2D FDTDUpdate2D(
+	inline Matrix_2D FDTDUpdate2D(
 		Matrix_2D& u_0,
 		const Matrix_2D& u_1,
 		const BooleanImage& B,

@@ -17,7 +17,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::physics {
 
-	T::Matrix_1D linearAmplitudes(const double& x, const int& N) {
+	inline T::Matrix_1D linearAmplitudes(const double& x, const int& N) {
 		/*
 		Calculate the amplitudes of the 1D eigenmodes relative to a strike
 		location.
@@ -34,7 +34,7 @@ namespace kac_core::physics {
 		return A;
 	}
 
-	T::Matrix_1D linearSeries(const int& N) {
+	inline T::Matrix_1D linearSeries(const int& N) {
 		/*
 		Calculate the the harmonic series.
 		input:

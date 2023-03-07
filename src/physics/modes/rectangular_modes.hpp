@@ -17,7 +17,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::physics {
 
-	T::Matrix_2D rectangularAmplitudes(
+	inline T::Matrix_2D rectangularAmplitudes(
 		const double& x, const double& y, const int& N, const int& M, const double& epsilon
 	) {
 		/*
@@ -45,7 +45,7 @@ namespace kac_core::physics {
 		return A;
 	};
 
-	T::Matrix_2D rectangularSeries(const int& N, const int& M, const double& epsilon) {
+	inline T::Matrix_2D rectangularSeries(const int& N, const int& M, const double& epsilon) {
 		/*
 		Calculate the eigenmodes of a rectangle.
 		input:

@@ -2,8 +2,6 @@
 Tests for /geometry.
 */
 
-#include <iostream>
-
 // src
 #include <kac_core.hpp>
 namespace T = kac_core::types;		 // types

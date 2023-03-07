@@ -6,6 +6,7 @@ Functions for generating polygons.
 
 // core
 #include <algorithm>	// generate, min, max, shuffle, sort
+#include <limits>		// numeric_limits
 #include <random>		// default_random_engine
 #include <stdlib.h>		// rand, RAND_MAX
 
@@ -13,9 +14,9 @@ Functions for generating polygons.
 #include "../types.hpp"
 namespace T = kac_core::types;
 
-const long rand_max = 2147483647;
 static std::default_random_engine random_engine = std::default_random_engine(0);
-static std::uniform_int_distribution<long> uniform_distribution(0, rand_max);
+static std::uniform_int_distribution<long>
+	uniform_distribution(0, std::numeric_limits<long>::max());
 
 namespace kac_core::geometry {
 
@@ -45,11 +46,11 @@ namespace kac_core::geometry {
 		}
 		std::generate(X_rand.begin(), X_rand.end(), []() {
 			return static_cast<double>(uniform_distribution(random_engine))
-				 / static_cast<double>(rand_max);
+				 / static_cast<double>(std::numeric_limits<long>::max());
 		});
 		std::generate(Y_rand.begin(), Y_rand.end(), []() {
 			return static_cast<double>(uniform_distribution(random_engine))
-				 / static_cast<double>(rand_max);
+				 / static_cast<double>(std::numeric_limits<long>::max());
 		});
 		std::sort(X_rand.begin(), X_rand.end());
 		std::sort(Y_rand.begin(), Y_rand.end());

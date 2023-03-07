@@ -8,7 +8,6 @@ Functions for generating polygons.
 #include <algorithm>	// generate, min, max, shuffle, sort
 #include <limits>		// numeric_limits
 #include <random>		// default_random_engine
-#include <stdlib.h>		// rand, RAND_MAX
 
 // src
 #include "../types.hpp"

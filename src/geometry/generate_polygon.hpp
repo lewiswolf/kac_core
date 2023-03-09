@@ -8,14 +8,16 @@ Functions for generating polygons.
 #include <algorithm>	// generate, min, max, shuffle, sort
 #include <limits>		// numeric_limits
 #include <random>		// default_random_engine
+#include <time.h>		// time
 
 // src
 #include "../types.hpp"
 namespace T = kac_core::types;
 
-static std::default_random_engine random_engine = std::default_random_engine(0l);
+static std::default_random_engine random_engine = std::default_random_engine(time(0l));
 static std::uniform_int_distribution<long>
-	uniform_distribution(0, std::numeric_limits<long>::max());
+	uniform_distribution(std::numeric_limits<long>::min(), std::numeric_limits<long>::max());
+static const double rand_max = static_cast<double>(std::numeric_limits<long>::max());
 
 namespace kac_core::geometry {
 
@@ -28,7 +30,7 @@ namespace kac_core::geometry {
 			N = the number of vertices
 			seed? = the seed for the random number generators
 		output:
-			V = a polygon of N random vertices
+			V = a convex polygon of N random vertices
 		*/
 
 		// initialise variables
@@ -44,37 +46,35 @@ namespace kac_core::geometry {
 			random_engine.seed(seed);
 		}
 		std::generate(X_rand.begin(), X_rand.end(), []() {
-			return static_cast<double>(uniform_distribution(random_engine))
-				 / static_cast<double>(std::numeric_limits<long>::max());
+			return static_cast<double>(uniform_distribution(random_engine)) / rand_max;
 		});
 		std::generate(Y_rand.begin(), Y_rand.end(), []() {
-			return static_cast<double>(uniform_distribution(random_engine))
-				 / static_cast<double>(std::numeric_limits<long>::max());
+			return static_cast<double>(uniform_distribution(random_engine)) / rand_max;
 		});
 		std::sort(X_rand.begin(), X_rand.end());
 		std::sort(Y_rand.begin(), Y_rand.end());
 		// divide the interior points into two chains
-		for (unsigned int i = 1; i < N; i++) {
-			if (i != N - 1) {
+		for (unsigned int n = 1; n < N; n++) {
+			if (n != N - 1) {
 				if (rand() % 2 == 1) {
-					X[i] = X_rand[i] - X_rand[last_true];
-					Y[i] = Y_rand[i] - Y_rand[last_true];
-					last_true = i;
+					X[n] = X_rand[n] - X_rand[last_true];
+					Y[n] = Y_rand[n] - Y_rand[last_true];
+					last_true = n;
 				} else {
-					X[i] = X_rand[last_false] - X_rand[i];
-					Y[i] = Y_rand[last_false] - Y_rand[i];
-					last_false = i;
+					X[n] = X_rand[last_false] - X_rand[n];
+					Y[n] = Y_rand[last_false] - Y_rand[n];
+					last_false = n;
 				}
 			} else {
-				X[0] = X_rand[i] - X_rand[last_true];
-				Y[0] = Y_rand[i] - Y_rand[last_true];
-				X[i] = X_rand[last_false] - X_rand[i];
-				Y[i] = Y_rand[last_false] - Y_rand[i];
+				X[0] = X_rand[n] - X_rand[last_true];
+				Y[0] = Y_rand[n] - Y_rand[last_true];
+				X[n] = X_rand[last_false] - X_rand[n];
+				Y[n] = Y_rand[last_false] - Y_rand[n];
 			}
 		}
 		// randomly combine x and y
 		shuffle(Y.begin(), Y.end(), random_engine);
-		for (unsigned int i = 0; i < N; i++) { P.push_back(T::Point(X[i], Y[i])); }
+		for (unsigned int n = 0; n < N; n++) { P.push_back(T::Point(X[n], Y[n])); }
 		// sort by polar angle
 		sort(P.begin(), P.end(), [](T::Point& p1, T::Point& p2) {
 			return p1.theta() < p2.theta();
@@ -83,20 +83,20 @@ namespace kac_core::geometry {
 		double x_min, x_max, y_min, y_max = 0;
 		double x = 0.0;
 		double y = 0.0;
-		for (unsigned int i = 0; i < N; i++) {
+		for (unsigned int n = 0; n < N; n++) {
 			T::Point p = T::Point(x, y);
-			x += P[i].x;
-			y += P[i].y;
-			P[i] = p;
-			x_min = std::min(P[i].x, x_min);
-			x_max = std::max(P[i].x, x_max);
-			y_min = std::min(P[i].y, y_min);
-			y_max = std::max(P[i].y, y_max);
+			x += P[n].x;
+			y += P[n].y;
+			P[n] = p;
+			x_min = std::min(P[n].x, x_min);
+			x_max = std::max(P[n].x, x_max);
+			y_min = std::min(P[n].y, y_min);
+			y_max = std::max(P[n].y, y_max);
 		}
 		// center around origin
-		for (unsigned int i = 0; i < N; i++) {
-			P[i].x += ((x_max - x_min) / 2.0) - x_max;
-			P[i].y += ((y_max - y_min) / 2.0) - y_max;
+		for (unsigned int n = 0; n < N; n++) {
+			P[n].x += ((x_max - x_min) / 2.0) - x_max;
+			P[n].y += ((y_max - y_min) / 2.0) - y_max;
 		}
 		return P;
 	}

@@ -57,7 +57,7 @@ namespace kac_core::geometry {
 		return P;
 	}
 
-	inline T::Polygon convexNormalisation(T::Polygon P) {
+	inline T::Polygon normaliseConvexPolygon(T::Polygon P) {
 		/*
 		This algorithm produces an identity polygon for each unique polygon
 		given as input. This method normalises an input polygon to the unit

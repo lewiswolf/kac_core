@@ -21,7 +21,7 @@ static const double rand_max = static_cast<double>(std::numeric_limits<long>::ma
 
 namespace kac_core::geometry {
 
-	inline T::Polygon generateConvexPolygon(const unsigned int& N, const time_t& seed = 0l) {
+	inline T::Polygon generateConvexPolygon(const unsigned long& N, const time_t& seed = 0l) {
 		/*
 		Generate convex shapes according to Pavel Valtr's 1995 algorithm.
 		Adapted from Sander Verdonschot's Java version, found here:
@@ -30,7 +30,7 @@ namespace kac_core::geometry {
 			N = the number of vertices
 			seed? = the seed for the random number generators
 		output:
-			V = a convex polygon of N random vertices
+			P = a convex polygon of N random vertices
 		*/
 
 		// initialise variables
@@ -39,8 +39,8 @@ namespace kac_core::geometry {
 		std::vector<double> Y(N);
 		std::vector<double> X_rand(N);
 		std::vector<double> Y_rand(N);
-		unsigned int last_true = 0;
-		unsigned int last_false = 0;
+		unsigned long last_true = 0;
+		unsigned long last_false = 0;
 		// initialise and sort random coordinates
 		if (seed != 0l) {
 			random_engine.seed(seed);
@@ -54,7 +54,7 @@ namespace kac_core::geometry {
 		std::sort(X_rand.begin(), X_rand.end());
 		std::sort(Y_rand.begin(), Y_rand.end());
 		// divide the interior points into two chains
-		for (unsigned int n = 1; n < N; n++) {
+		for (unsigned long n = 1; n < N; n++) {
 			if (n != N - 1) {
 				if (rand() % 2 == 1) {
 					X[n] = X_rand[n] - X_rand[last_true];
@@ -74,7 +74,7 @@ namespace kac_core::geometry {
 		}
 		// randomly combine x and y
 		shuffle(Y.begin(), Y.end(), random_engine);
-		for (unsigned int n = 0; n < N; n++) { P.push_back(T::Point(X[n], Y[n])); }
+		for (unsigned long n = 0; n < N; n++) { P.push_back(T::Point(X[n], Y[n])); }
 		// sort by polar angle
 		sort(P.begin(), P.end(), [](T::Point& p1, T::Point& p2) {
 			return p1.theta() < p2.theta();
@@ -83,7 +83,7 @@ namespace kac_core::geometry {
 		double x_min, x_max, y_min, y_max = 0;
 		double x = 0.0;
 		double y = 0.0;
-		for (unsigned int n = 0; n < N; n++) {
+		for (unsigned long n = 0; n < N; n++) {
 			T::Point p = T::Point(x, y);
 			x += P[n].x;
 			y += P[n].y;
@@ -94,7 +94,7 @@ namespace kac_core::geometry {
 			y_max = std::max(P[n].y, y_max);
 		}
 		// center around origin
-		for (unsigned int n = 0; n < N; n++) {
+		for (unsigned long n = 0; n < N; n++) {
 			P[n].x += ((x_max - x_min) / 2.0) - x_max;
 			P[n].y += ((y_max - y_min) / 2.0) - y_max;
 		}

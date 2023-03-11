@@ -7,10 +7,12 @@ Utility functions for working with polygons.
 // core
 #include <algorithm>
 #include <math.h>
+#include <string>
 #include <utility>
 
 // src
 #include "../types.hpp"
+#include "./lines.hpp"
 namespace T = kac_core::types;
 
 namespace kac_core::geometry {
@@ -52,14 +54,6 @@ namespace kac_core::geometry {
 			out_y += (P[n].y + P[(n + 1) % N].y) * out;
 		}
 		return T::Point(abs(out_x) / (6 * area), abs(out_y) / (6 * area));
-	}
-
-	inline bool isColinear(const T::Point& a, const T::Point& b, const T::Point& c) {
-		/*
-		Determines whether or not a given set of three vertices are colinear.
-		*/
-
-		return (c.y - b.y) * (b.x - a.x) == (b.y - a.y) * (c.x - b.x);
 	}
 
 	inline bool isConvex(const T::Polygon& P) {
@@ -112,7 +106,26 @@ namespace kac_core::geometry {
 		return true;
 	}
 
-	inline std::pair<double, std::pair<int, int>> largestVector(const T::Polygon& P) {
+	inline bool isSimple(T::Polygon P) {
+		/*
+		Determine if a polygon is simple by checking for intersections.
+		*/
+		const unsigned long N = P.size();
+		for (unsigned long i = 0; i < N - 2; i++) {
+			for (unsigned long j = i + 1; j < N; j++) {
+				std::string intersection_type =
+					lineIntersection(T::Line(P[i], P[i + 1]), T::Line(P[j], P[(j + 1) % N])).first;
+				if (intersection_type == "none" || intersection_type == "vertex") {
+					continue;
+				} else {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	inline std::pair<double, std::pair<long, long>> largestVector(const T::Polygon& P) {
 		/*
 		This function tests each pair of vertices in a given polygon to find the
 		largest vector, and returns the length of the vector and its indices.

@@ -191,4 +191,49 @@ namespace kac_core::geometry {
 		return P;
 	}
 
+	inline T::Polygon normaliseSimplePolygon(T::Polygon P) {
+		/*
+		This algorithm performs general normalisation rotations to ensure uniqueness, however it is
+		not comprehensive for all simple geometric transformations.
+		*/
+
+		// enforce that each polygon is clockwise
+		// reverse the polygon if the vertices are anti-clockwise
+		if ((P[1].x - P[0].x) * (P[2].y - P[1].y) - (P[2].x - P[1].x) * (P[1].y - P[0].y) > 0) {
+			std::reverse(P.begin(), P.end());
+		}
+		// orient largest vector across x-axis
+		// determine largest vector
+		std::pair<double, std::pair<int, int>> LV = largestVector(P);
+		// shift midpoint of the largest vector to origin
+		double x_shift = (P[LV.second.first].x + P[LV.second.second].x) / 2;
+		double y_shift = (P[LV.second.first].y + P[LV.second.second].y) / 2;
+		const unsigned long N = P.size();
+		for (unsigned long n = 0; n < N; n++) {
+			P[n].x -= x_shift;
+			P[n].y -= y_shift;
+		}
+		// rotate around midpoint such that largest_vec is horizontal
+		double theta = P[LV.second.first].theta();
+		double cos_theta = cos(theta);
+		double sin_theta = sin(theta);
+		for (unsigned long n = 0; n < N; n++) {
+			P[n] = T::Point(
+				P[n].x * cos_theta + P[n].y * sin_theta, -P[n].x * sin_theta + P[n].y * cos_theta
+			);
+		}
+		// normalise
+		P = normalisePolygon(P);
+		// position x = 0. at P[0]
+		unsigned long n_shift = 0;
+		for (unsigned long n = 0; n < N; n++) {
+			if (P[n].x == 0.) {
+				n_shift = n;
+				break;
+			}
+		}
+		std::rotate(P.begin(), P.begin() + n_shift, P.end());
+		return P;
+	}
+
 }

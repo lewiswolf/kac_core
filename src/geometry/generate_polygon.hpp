@@ -24,76 +24,41 @@ static const double rand_max = static_cast<double>(std::numeric_limits<long>::ma
 
 namespace kac_core::geometry {
 
-	inline T::Polygon generatePolygon(const unsigned long& N, const time_t& seed = 0l) {
+	inline T::Polygon generateIrregularStar(const unsigned long& N, const time_t& seed = 0l) {
 		/*
-		This algorithm is based on a method of eliminating self-intersections in a polygon by
-		using the Lin and Kerningham '2-opt' moves. Such a move eliminates an intersection between
-		two edges by reversing the order of the vertices between the edges. Intersecting edges are
-		detected using a simple sweep through the vertices and then one intersection is chosen at
-		random to eliminate after each sweep.
-		https://doc.cgal.org/latest/Generator/group__PkgGeneratorsRef.html#gaa8cb58e4cc9ab9e225808799b1a61174
-		van Leeuwen, J., & Schoone, A. A. (1982). Untangling a traveling salesman tour in the plane.
-
+		This is a fast method for generating concave polygons, particularly with a large number of
+		vertices. This approach generates polygons by ordering a series of random points around a
+		centre point. As a result, not all possible simple polygons are generated this way.
 		input:
 			N = the number of vertices
 			seed? = the seed for the random number generators
 		output:
-			P = a concave polygon of N random vertices
+			P = an irregular star of N random vertices
 		*/
 
 		// initialise variables
+		T::Matrix_1D X;
+		T::Matrix_1D Y;
 		T::Polygon P;
 		// initialise and sort random coordinates
 		if (seed != 0l) {
 			random_engine.seed(seed);
 		}
+		// first find minmax in both x & y
 		for (unsigned long n = 0; n < N; n++) {
-			P.push_back(T::Point(
-				static_cast<double>(uniform_distribution(random_engine)) / rand_max,
-				static_cast<double>(uniform_distribution(random_engine)) / rand_max
-			));
+			X.push_back(static_cast<double>(uniform_distribution(random_engine)) / rand_max);
+			Y.push_back(static_cast<double>(uniform_distribution(random_engine)) / rand_max);
 		}
-		// 2 opt loop
-		std::vector<std::pair<long, long>> indices;
-		std::string intersection_type = "";
-		bool intersections = true;
-		while (intersections) {
-		Search_loop:
-			for (unsigned long i = 0; i < N - 2; i++) {
-				for (unsigned long j = i + 1; j < N; j++) {
-					// collect indices of lines which should be crossed
-					intersection_type =
-						lineIntersection(T::Line(P[i], P[i + 1]), T::Line(P[j], P[(j + 1) % N]))
-							.first;
-					if (intersection_type == "none" || intersection_type == "vertex") {
-						continue;
-					} else if (intersection_type == "intersect") {
-						indices.push_back(std::make_pair(i + 1, j + 1));
-					} else if (intersection_type == "adjacent") {
-						indices.push_back(std::make_pair(i, j));
-					} else if (intersection_type == "colinear") {
-						int min_i = 0 ? P[i].x < P[i + 1].x : 1;
-						int max_j = 0 ? P[j].x > P[j + 1].x : 1;
-						std::reverse(P.begin() + i + min_i, P.begin() + j + max_j);
-						// restart loop
-						indices.clear();
-						goto Search_loop;
-					}
-				}
-			}
-			if (indices.size() > 0) {
-				// randomly swap one pair
-				std::pair<int, int> swap =
-					indices[abs(uniform_distribution(random_engine)) % indices.size()];
-				std::reverse(P.begin() + swap.first, P.begin() + swap.second);
-				// restart loop
-				indices.clear();
-				goto Search_loop;
-			} else {
-				// close loop
-				intersections = false;
-			}
+		auto x_min_max = std::minmax_element(begin(X), end(X));
+		auto y_min_max = std::minmax_element(begin(Y), end(Y));
+		// center along x and y axes
+		double x_shift = (*x_min_max.first + *x_min_max.second) / 2;
+		double y_shift = (*y_min_max.first + *y_min_max.second) / 2;
+		for (unsigned long n = 0; n < N; n++) {
+			P.push_back(T::Point(X[n] -= x_shift, Y[n] -= y_shift));
 		}
+		// sort by polar angle
+		sort(P.begin(), P.end(), [](T::Point& a, T::Point& b) { return a.theta() < b.theta(); });
 		return P;
 	}
 
@@ -177,4 +142,76 @@ namespace kac_core::geometry {
 		return P;
 	}
 
+	inline T::Polygon generatePolygon(const unsigned long& N, const time_t& seed = 0l) {
+		/*
+		This algorithm is based on a method of eliminating self-intersections in a polygon by
+		using the Lin and Kerningham '2-opt' moves. Such a move eliminates an intersection between
+		two edges by reversing the order of the vertices between the edges. Intersecting edges are
+		detected using a simple sweep through the vertices and then one intersection is chosen at
+		random to eliminate after each sweep.
+		https://doc.cgal.org/latest/Generator/group__PkgGeneratorsRef.html#gaa8cb58e4cc9ab9e225808799b1a61174
+		van Leeuwen, J., & Schoone, A. A. (1982). Untangling a traveling salesman tour in the plane.
+
+		input:
+			N = the number of vertices
+			seed? = the seed for the random number generators
+		output:
+			P = a concave polygon of N random vertices
+		*/
+
+		// initialise variables
+		T::Polygon P;
+		// initialise and sort random coordinates
+		if (seed != 0l) {
+			random_engine.seed(seed);
+		}
+		for (unsigned long n = 0; n < N; n++) {
+			P.push_back(T::Point(
+				static_cast<double>(uniform_distribution(random_engine)) / rand_max,
+				static_cast<double>(uniform_distribution(random_engine)) / rand_max
+			));
+		}
+		// 2 opt loop
+		std::vector<std::pair<long, long>> indices;
+		std::string intersection_type = "";
+		bool intersections = true;
+		while (intersections) {
+		Search_loop:
+			for (unsigned long i = 0; i < N - 2; i++) {
+				for (unsigned long j = i + 1; j < N; j++) {
+					// collect indices of lines which should be crossed
+					intersection_type =
+						lineIntersection(T::Line(P[i], P[i + 1]), T::Line(P[j], P[(j + 1) % N]))
+							.first;
+					if (intersection_type == "none" || intersection_type == "vertex") {
+						continue;
+					} else if (intersection_type == "intersect") {
+						indices.push_back(std::make_pair(i + 1, j + 1));
+					} else if (intersection_type == "adjacent") {
+						indices.push_back(std::make_pair(i, j));
+					} else if (intersection_type == "colinear") {
+						int min_i = 0 ? P[i].x < P[i + 1].x : 1;
+						int max_j = 0 ? P[j].x > P[j + 1].x : 1;
+						std::reverse(P.begin() + i + min_i, P.begin() + j + max_j);
+						// restart loop
+						indices.clear();
+						goto Search_loop;
+					}
+				}
+			}
+			if (indices.size() > 0) {
+				// randomly swap one pair
+				std::pair<int, int> swap =
+					indices[abs(uniform_distribution(random_engine)) % indices.size()];
+				std::reverse(P.begin() + swap.first, P.begin() + swap.second);
+				// restart loop
+				indices.clear();
+				goto Search_loop;
+			} else {
+				// close loop
+				intersections = false;
+			}
+		}
+		return P;
+	}
 }

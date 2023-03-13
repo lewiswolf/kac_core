@@ -214,4 +214,15 @@ namespace kac_core::geometry {
 		}
 		return P;
 	}
+
+	T::Polygon generateUnitRectangle(const double& epsilon) {
+		/*
+		Define a rectangle with unit area and an aspect ration epsilon.
+		*/
+
+		double x = 0.5 * epsilon;
+		double y = 0.5 / epsilon;
+		return T::Polygon({T::Point(x, y), T::Point(x, -y), T::Point(-x, -y), T::Point(-x, y)});
+	}
+
 }

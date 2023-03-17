@@ -86,4 +86,11 @@ namespace kac_core::geometry {
 		return std::make_pair("none", T::Point());
 	}
 
+	inline T::Point lineMidpoint(const T::Line& L) {
+		/*
+		Find the midpoint of a line.
+		*/
+		return T::Point((L.a.x + L.b.x) / 2, (L.a.x + L.b.x) / 2);
+	}
+
 }

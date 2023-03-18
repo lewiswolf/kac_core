@@ -90,7 +90,7 @@ namespace kac_core::geometry {
 		/*
 		Find the midpoint of a line.
 		*/
-		return T::Point((L.a.x + L.b.x) / 2, (L.a.x + L.b.x) / 2);
+		return T::Point((L.a.x + L.b.x) / 2.0, (L.a.y + L.b.y) / 2.0);
 	}
 
 }

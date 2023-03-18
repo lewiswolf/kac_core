@@ -222,7 +222,7 @@ namespace kac_core::geometry {
 
 		double x = 0.5 * epsilon;
 		double y = 0.5 / epsilon;
-		return T::Polygon({T::Point(x, y), T::Point(x, -y), T::Point(-x, -y), T::Point(-x, y)});
+		return T::Polygon({T::Point(-x, -y), T::Point(-x, y), T::Point(x, y), T::Point(x, -y)});
 	}
 
 }

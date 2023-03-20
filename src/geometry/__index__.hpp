@@ -5,7 +5,6 @@ Central import for all files in /geometry.
 #pragma once
 
 // src
-#include "ellipse_properties.hpp"
 #include "generate_polygon.hpp"
 #include "lines.hpp"
 #include "mappings.hpp"

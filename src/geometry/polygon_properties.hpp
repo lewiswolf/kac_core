@@ -17,45 +17,6 @@ namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	inline T::Point centroid(const T::Polygon& P, const double& area) {
-		/*
-		This algorithm is used to calculate the geometric centroid of a 2D
-		polygon. See http://paulbourke.net/geometry/polygonmesh/ 'Calculating
-		the area and centroid of a polygon'.
-
-		output:
-			for N == 3 ->
-			(x, y) = (
-				(x_0 + x_1 + x_2) / 3,
-				(y_0 + y_1 + y_2) / 3,
-			)
-			for N > 3 ->
-			(x, y) = (
-				1/6A * Σ (x_n + x_n+1)(x_n * y_n+1 - x_n+1 * y_n),
-				1/6A * Σ (y_n + y_n+1)(x_n * y_n+1 - x_n+1 * y_n),
-			)
-		 */
-
-		const unsigned long N = P.size();
-		double out_x = 0.;
-		double out_y = 0.;
-		if (N == 3) {
-			// Triangles have a much simpler formula, and so these are
-			// calculated separately.
-			for (unsigned long n = 0; n < 3; n++) {
-				out_x += P[n].x;
-				out_y += P[n].y;
-			}
-			return T::Point(out_x / 3., out_y / 3.);
-		}
-		for (unsigned long n = 0; n < N; n++) {
-			double out = (P[n].x * P[(n + 1) % N].y - P[(n + 1) % N].x * P[n].y);
-			out_x += (P[n].x + P[(n + 1) % N].x) * out;
-			out_y += (P[n].y + P[(n + 1) % N].y) * out;
-		}
-		return T::Point(abs(out_x) / (6 * area), abs(out_y) / (6 * area));
-	}
-
 	inline bool isConvex(const T::Polygon& P) {
 		/*
 		Tests whether or not a given array of vertices forms a convex polygon.
@@ -160,6 +121,45 @@ namespace kac_core::geometry {
 			out += (P[(n + 1) % N].x + P[n].x) * (P[(n + 1) % N].y - P[n].y);
 		}
 		return abs(out) / 2.;
+	}
+
+	inline T::Point polygonCentroid(const T::Polygon& P, const double& area) {
+		/*
+		This algorithm is used to calculate the geometric centroid of a 2D
+		polygon. See http://paulbourke.net/geometry/polygonmesh/ 'Calculating
+		the area and centroid of a polygon'.
+
+		output:
+			for N == 3 ->
+			(x, y) = (
+				(x_0 + x_1 + x_2) / 3,
+				(y_0 + y_1 + y_2) / 3,
+			)
+			for N > 3 ->
+			(x, y) = (
+				1/6A * Σ (x_n + x_n+1)(x_n * y_n+1 - x_n+1 * y_n),
+				1/6A * Σ (y_n + y_n+1)(x_n * y_n+1 - x_n+1 * y_n),
+			)
+		 */
+
+		const unsigned long N = P.size();
+		double out_x = 0.;
+		double out_y = 0.;
+		if (N == 3) {
+			// Triangles have a much simpler formula, and so these are
+			// calculated separately.
+			for (unsigned long n = 0; n < 3; n++) {
+				out_x += P[n].x;
+				out_y += P[n].y;
+			}
+			return T::Point(out_x / 3., out_y / 3.);
+		}
+		for (unsigned long n = 0; n < N; n++) {
+			double out = (P[n].x * P[(n + 1) % N].y - P[(n + 1) % N].x * P[n].y);
+			out_x += (P[n].x + P[(n + 1) % N].x) * out;
+			out_y += (P[n].y + P[(n + 1) % N].y) * out;
+		}
+		return T::Point(abs(out_x) / (6 * area), abs(out_y) / (6 * area));
 	}
 
 }

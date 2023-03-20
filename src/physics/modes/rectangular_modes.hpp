@@ -43,7 +43,7 @@ namespace kac_core::physics {
 			for (unsigned int m = 0; m < M; m++) { A[n][m] = abs(sin((m + 1) * x_hat) * n_hat); }
 		}
 		return A;
-	};
+	}
 
 	inline T::Matrix_2D rectangularSeries(const int& N, const int& M, const double& epsilon) {
 		/*
@@ -67,6 +67,6 @@ namespace kac_core::physics {
 			}
 		}
 		return S;
-	};
+	}
 
 }

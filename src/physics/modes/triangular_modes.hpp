@@ -44,7 +44,7 @@ namespace kac_core::physics {
 			for (unsigned int m = 0; m < M; m++) { A[n][m] = n_hat; }
 		}
 		return A;
-	};
+	}
 
 	inline T::Matrix_2D equilateralTriangleSeries(const int& N, const int& M) {
 		/*
@@ -68,6 +68,6 @@ namespace kac_core::physics {
 			}
 		}
 		return S;
-	};
+	}
 
 }

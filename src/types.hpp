@@ -10,6 +10,11 @@
 
 namespace kac_core::types {
 
+	// Matrices
+	typedef std::vector<double> Matrix_1D;
+	typedef std::vector<std::vector<double>> Matrix_2D;
+	typedef std::vector<std::vector<short>> BooleanImage;
+
 	typedef struct Point {
 		/*
 		A point on the Euclidian plane.
@@ -52,29 +57,5 @@ namespace kac_core::types {
 
 	// A polygon defined on the euclidian plane.
 	typedef std::vector<Point> Polygon;
-
-	typedef struct Circle {
-		/*
-		A circle defined on the euclidian plane.
-		*/
-
-		// vars
-		double r = 1.0;	   // radius
-		Point origin;	   // center
-
-		// constructors
-		Circle() {};
-		Circle(double r): r(r) {};
-		Circle(Point origin): origin(origin) {};
-		Circle(double r, Point origin): r(r), origin(origin) {};
-	} Circle;
-
-	typedef struct Ellipse {
-	} Ellipse;
-
-	// Matrices
-	typedef std::vector<double> Matrix_1D;
-	typedef std::vector<std::vector<double>> Matrix_2D;
-	typedef std::vector<std::vector<short>> BooleanImage;
 
 }

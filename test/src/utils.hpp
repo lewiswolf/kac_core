@@ -21,7 +21,7 @@ struct Timer {
 	std::chrono::time_point<std::chrono::high_resolution_clock> start_tp;
 
 	// constructors
-	Timer() { start_tp = std::chrono::high_resolution_clock::now(); };
+	Timer() { start_tp = std::chrono::high_resolution_clock::now(); }
 	Timer(std::string s) {
 		name = s;
 		start_tp = std::chrono::high_resolution_clock::now();
@@ -37,7 +37,7 @@ struct Timer {
 					   .time_since_epoch()
 					   .count();
 		std::cout << (name != "" ? name + ": " : "") << end - start << "us\n";
-	};
+	}
 };
 
 void booleanTest(const std::string& test_name, const bool& b) {

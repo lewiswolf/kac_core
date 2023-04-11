@@ -51,16 +51,16 @@ namespace kac_core::geometry {
 		Solution 3 => http://paulbourke.net/geometry/polygonmesh/
 		*/
 
-		const unsigned long N = P.size();
 		// determine if the polygon is ordered clockwise
-		short clockwise =
-			(P[1].x - P[0].x) * (P[2].y - P[1].y) - (P[2].x - P[1].x) * (P[1].y - P[0].y) > 0 ? -1
+		const short clockwise =
+			(P[1].x - P[0].x) * (P[2].y - P[1].y) - (P[1].y - P[0].y) * (P[2].x - P[1].x) > 0 ? -1
 																							  : 1;
 		// go through each of the vertices, plus the next vertex in the list
+		const unsigned long N = P.size();
 		for (unsigned long n = 0; n < N; n++) {
-			const T::Point a = P[n];
-			const T::Point b = P[(n + 1) % N];
-			if (((p.y - a.y) * (b.x - a.x) - (p.x - a.x) * (b.y - a.y)) * clockwise > 0) {
+			T::Point a = P[n];
+			T::Point b = P[(n + 1) % N];
+			if (((b.x - a.x) * (p.y - b.y) - (b.y - a.y) * (p.x - b.x)) * clockwise > 0.0) {
 				return false;
 			}
 		}

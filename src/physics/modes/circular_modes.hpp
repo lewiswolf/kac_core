@@ -20,7 +20,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::physics {
 
-	inline double besselJ(const int& n, const double& x) {
+	inline double besselJ(const long& n, const double& x) {
 		/*
 		Calculates the bessel function of the first kind J_n(x).
 		input:
@@ -32,7 +32,7 @@ namespace kac_core::physics {
 		return boost::math::cyl_bessel_j(n, x);
 	}
 
-	inline double besselJZero(const double& n, const int& m) {
+	inline double besselJZero(const double& n, const long& m) {
 		/*
 		Calculates the mth zero crossing of the bessel functions of the first
 		kind.
@@ -60,20 +60,20 @@ namespace kac_core::physics {
 			}
 		*/
 
-		unsigned int N = S.size();
-		unsigned int M = S[0].size();
+		const unsigned long N = S.size();
+		const unsigned long M = S[0].size();
 		const double pi_4 = pi / 4;
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
-		for (unsigned int n = 0; n < N; n++) {
+		for (unsigned long n = 0; n < N; n++) {
 			double angular = n != 0 ? sqrt2 * sin(n * theta + pi_4) : 1.0;
-			for (unsigned int m = 0; m < M; m++) {
+			for (unsigned long m = 0; m < M; m++) {
 				A[n][m] = abs(besselJ(n, S[n][m] * r) * angular);
 			};
 		}
 		return A;
 	}
 
-	inline T::Matrix_2D circularSeries(const int& N, const int& M) {
+	inline T::Matrix_2D circularSeries(const unsigned long& N, const unsigned long& M) {
 		/*
 		Calculate the eigenmodes of a circle.
 		input:
@@ -84,8 +84,8 @@ namespace kac_core::physics {
 		*/
 
 		T::Matrix_2D S(N, T::Matrix_1D(M, 0));
-		for (unsigned int n = 0; n < N; n++) {
-			for (unsigned int m = 0; m < M; m++) { S[n][m] = besselJZero(n, m + 1); }
+		for (unsigned long n = 0; n < N; n++) {
+			for (unsigned long m = 0; m < M; m++) { S[n][m] = besselJZero(n, m + 1); }
 		}
 		return S;
 	}

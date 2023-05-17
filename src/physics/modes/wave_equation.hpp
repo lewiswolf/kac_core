@@ -22,7 +22,7 @@ namespace kac_core::physics {
 		const T::Matrix_2D& A,
 		const double& d,
 		const double& k,
-		const unsigned int& T
+		const unsigned long& T
 	) {
 		/*
 		Calculate a closed form solution to the 2D wave equation.
@@ -37,21 +37,21 @@ namespace kac_core::physics {
 		*/
 
 		T::Matrix_1D waveform(T);
-		unsigned int N = F.size();
-		unsigned int M = F[0].size();
+		const unsigned long N = F.size();
+		const unsigned long M = F[0].size();
 		double A_max = 0.0;
-		for (unsigned int n = 0; n < N; n++) {
-			for (unsigned int m = 0; m < M; m++) {
+		for (unsigned long n = 0; n < N; n++) {
+			for (unsigned long m = 0; m < M; m++) {
 				// calculate A_max and transform F into ω
 				A_max = std::max(A_max, A[n][m]);
 				F[n][m] *= 2 * pi * k;
 			}
 		}
-		for (unsigned int t = 0; t < T; t++) {
+		for (unsigned long t = 0; t < T; t++) {
 			double sum = 0.0;
 			double d_t = pow(e, t * d);
-			for (unsigned int n = 0; n < N; n++) {
-				for (unsigned int m = 0; m < M; m++) {
+			for (unsigned long n = 0; n < N; n++) {
+				for (unsigned long m = 0; m < M; m++) {
 					// 2009 - Bilbao, pp.65-66
 					// 2016 - Chaigne & Kergomard, p.154
 					sum += A[n][m] * d_t * sin(t * F[n][m]) / (N * M * A_max);

@@ -18,7 +18,11 @@ namespace T = kac_core::types;
 namespace kac_core::physics {
 
 	inline T::Matrix_2D equilateralTriangleAmplitudes(
-		const double& x, const double& y, const double& z, const int& N, const int& M
+		const double& x,
+		const double& y,
+		const double& z,
+		const unsigned long& N,
+		const unsigned long& M
 	) {
 		/*
 		Calculate the amplitudes of the equilateral triangle eigenmodes relative to a
@@ -39,14 +43,14 @@ namespace kac_core::physics {
 		double y_hat = y * pi;
 		double z_hat = z * pi;
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
-		for (unsigned int n = 0; n < N; n++) {
+		for (unsigned long n = 0; n < N; n++) {
 			double n_hat = abs(sin((n + 1) * x_hat) * sin((n + 1) * y_hat) * sin((n + 1) * z_hat));
-			for (unsigned int m = 0; m < M; m++) { A[n][m] = n_hat; }
+			for (unsigned long m = 0; m < M; m++) { A[n][m] = n_hat; }
 		}
 		return A;
 	}
 
-	inline T::Matrix_2D equilateralTriangleSeries(const int& N, const int& M) {
+	inline T::Matrix_2D equilateralTriangleSeries(const unsigned long& N, const unsigned long& M) {
 		/*
 		Calculate the eigenmodes of an equilateral triangle according to Lamé's formula.
 		Seth (1940) Transverse Vibrations of Triangular Membranes.
@@ -61,9 +65,9 @@ namespace kac_core::physics {
 		*/
 
 		T::Matrix_2D S(N, T::Matrix_1D(M, 0));
-		for (unsigned int n = 0; n < N; n++) {
+		for (unsigned long n = 0; n < N; n++) {
 			double n_hat = pow((n + 1), 2);
-			for (unsigned int m = 0; m < M; m++) {
+			for (unsigned long m = 0; m < M; m++) {
 				S[n][m] = sqrt(pow((m + 1), 2) + n_hat + m * n);
 			}
 		}

@@ -67,7 +67,7 @@ namespace kac_core::physics {
 			tolerance = the standard deviation between the calculation and the final pattern
 		output:
 			M = {
-				cos(nπx/X) cos(mπy/Y) - cos(mπx/X) cos(nπy/Y)
+				cos(nπx/X) cos(mπy/Y) - cos(mπx/X) cos(nπy/Y) ≈ 0
 			}
 		*/
 

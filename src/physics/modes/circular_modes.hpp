@@ -67,7 +67,7 @@ namespace kac_core::physics {
 		for (unsigned long n = 0; n < N; n++) {
 			double angular = n != 0 ? sqrt2 * sin(n * theta + pi_4) : 1.0;
 			for (unsigned long m = 0; m < M; m++) {
-				A[n][m] = abs(besselJ(n, S[n][m] * r) * angular);
+				A[n][m] = abs(boost::math::cyl_bessel_j(n, S[n][m] * r) * angular);
 			};
 		}
 		return A;
@@ -91,7 +91,7 @@ namespace kac_core::physics {
 		*/
 
 		T::BooleanImage M(H, std::vector<short>(H, 0));
-		double z_mn = besselJZero(n, m);
+		double z_mn = boost::math::cyl_bessel_j_zero((double)n, m);
 		for (unsigned long x = 0; x < H; x++) {
 			double x_prime = (2.0 * x / H) - 1.0;
 			for (unsigned long y = 0; y < H; y++) {
@@ -101,10 +101,11 @@ namespace kac_core::physics {
 					continue;
 				} else {
 					double theta = atan2(y_prime, x_prime);
-					M[x][y] =
-						abs(besselJ(n, z_mn * r) * (cos(n * theta) + sin(n * theta))) < tolerance
-							? 1
-							: 0;
+					M[x][y] = abs(boost::math::cyl_bessel_j(n, z_mn * r)
+								  * (cos(n * theta) + sin(n * theta)))
+									< tolerance
+								? 1
+								: 0;
 				}
 			}
 		}
@@ -123,7 +124,9 @@ namespace kac_core::physics {
 
 		T::Matrix_2D S(N, T::Matrix_1D(M, 0));
 		for (unsigned long n = 0; n < N; n++) {
-			for (unsigned long m = 0; m < M; m++) { S[n][m] = besselJZero(n, m + 1); }
+			for (unsigned long m = 0; m < M; m++) {
+				S[n][m] = boost::math::cyl_bessel_j_zero((double)n, m + 1);
+			}
 		}
 		return S;
 	}

@@ -47,6 +47,7 @@ namespace kac_core::physics {
 				F[n][m] *= 2 * pi * k;
 			}
 		}
+		A_max *= N * M;
 		for (unsigned long t = 0; t < T; t++) {
 			double sum = 0.0;
 			double d_t = pow(e, t * d);
@@ -54,7 +55,7 @@ namespace kac_core::physics {
 				for (unsigned long m = 0; m < M; m++) {
 					// 2009 - Bilbao, pp.65-66
 					// 2016 - Chaigne & Kergomard, p.154
-					sum += A[n][m] * d_t * sin(t * F[n][m]) / (N * M * A_max);
+					sum += A[n][m] * d_t * sin(t * F[n][m]) / A_max;
 				}
 			}
 			waveform[t] = sum;

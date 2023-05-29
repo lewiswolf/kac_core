@@ -33,21 +33,21 @@ namespace kac_core::physics {
 			k = sample length
 			T = length of simulation
 		output:
-			waveform = W[t] ∈ A * e^dt * sin(ωt) / NM * max(A)
+			waveform = W[t] ∈ A * e^dt * sin(ωt) / max(A) * NM
 		*/
 
 		T::Matrix_1D waveform(T);
 		const unsigned long N = F.size();
 		const unsigned long M = F[0].size();
-		double A_max = 0.0;
+		double A_max_NM = 0.0;
 		for (unsigned long n = 0; n < N; n++) {
 			for (unsigned long m = 0; m < M; m++) {
 				// calculate A_max and transform F into ω
-				A_max = std::max(A_max, A[n][m]);
+				A_max_NM = std::max(A_max_NM, A[n][m]);
 				F[n][m] *= 2 * pi * k;
 			}
 		}
-		A_max *= N * M;
+		A_max_NM *= N * M;
 		for (unsigned long t = 0; t < T; t++) {
 			double sum = 0.0;
 			double d_t = pow(e, t * d);
@@ -55,7 +55,7 @@ namespace kac_core::physics {
 				for (unsigned long m = 0; m < M; m++) {
 					// 2009 - Bilbao, pp.65-66
 					// 2016 - Chaigne & Kergomard, p.154
-					sum += A[n][m] * d_t * sin(t * F[n][m]) / A_max;
+					sum += A[n][m] * d_t * sin(t * F[n][m]) / A_max_NM;
 				}
 			}
 			waveform[t] = sum;

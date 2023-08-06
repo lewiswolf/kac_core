@@ -29,6 +29,7 @@ namespace kac_core::physics {
 		output:
 			y = J_n(x) | y ∈ ℝ
 		*/
+
 		return boost::math::cyl_bessel_j(n, x);
 	}
 
@@ -42,6 +43,7 @@ namespace kac_core::physics {
 		output:
 			z_nm = mth zero crossing of J_n() | z_mn ∈ ℝ
 		*/
+
 		return boost::math::cyl_bessel_j_zero(n, m);
 	}
 

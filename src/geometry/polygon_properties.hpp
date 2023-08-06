@@ -67,10 +67,11 @@ namespace kac_core::geometry {
 		return true;
 	}
 
-	inline bool isSimple(T::Polygon P) {
+	inline bool isSimple(const T::Polygon& P) {
 		/*
 		Determine if a polygon is simple by checking for intersections.
 		*/
+
 		const unsigned long N = P.size();
 		for (unsigned long i = 0; i < N - 2; i++) {
 			for (unsigned long j = i + 1; j < N; j++) {

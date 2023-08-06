@@ -14,7 +14,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	inline T::BooleanImage bresenham(T::BooleanImage M, const T::Line& L) {
+	inline T::BooleanImage bresenham(T::BooleanImage& M, const T::Line& L) {
 		/*
 		Apply the Bresenham line drawing algorithm to an input matrix.
 		input:

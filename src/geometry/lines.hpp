@@ -14,6 +14,57 @@ namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
+	inline T::BooleanImage bresenham(T::BooleanImage M, const T::Line& L) {
+		/*
+		Apply the Bresenham line drawing algorithm to an input matrix.
+		input:
+			M = input matrix.
+			L = line to draw, such that x ∈ [0, 1] && y ∈ [0, 1].
+		*/
+
+		// assert line is within the unit interval
+		if (L.a.x > 1.0 || L.a.x < 0.0 || L.a.y > 1.0 || L.a.y < 0.0 || L.b.x > 1.0 || L.b.x < 0.0
+			|| L.b.y > 1.0 || L.b.y < 0.0) {
+			throw std::invalid_argument(
+				"The line L must be within the unit interval, such that x ∈ [0, 1] && y ∈ [0, 1]."
+			);
+		}
+		// handle discretisation
+		const unsigned long x_0 = lround(L.a.x * (M.size() - 1));
+		const unsigned long y_0 = lround(L.a.y * (M[0].size() - 1));
+		long dx = lround(L.b.x * (M.size() - 1)) - x_0;
+		long dy = lround(L.b.y * (M[0].size() - 1)) - y_0;
+		// configure directions
+		short xx, xy, yx, yy;
+		if (std::abs(dx) > std::abs(dy)) {
+			xx = dx > 0 ? 1 : -1;
+			xy = 0;
+			yx = 0;
+			yy = dy > 0 ? 1 : -1;
+		} else {
+			std::swap(dx, dy);
+			xx = 0;
+			xy = dx > 0 ? 1 : -1;
+			yx = dy > 0 ? 1 : -1;
+			yy = 0;
+		}
+		dx = std::abs(dx);
+		dy = std::abs(dy);
+		// paint line
+		unsigned long y = 0;
+		long D = 2 * dy - dx;
+		for (unsigned long x = 0; x < (dx + 1); x++) {
+			M[x_0 + x * xx + y * yx][y_0 + x * xy + y * yy] = 1;
+			// reposition y
+			if (D >= 0) {
+				y += 1;
+				D -= 2 * dx;
+			}
+			D += 2 * dy;
+		}
+		return M;
+	}
+
 	inline bool isColinear(const T::Point& a, const T::Point& b, const T::Point& c) {
 		/*
 		Determines whether or not a given set of three vertices are colinear.
@@ -26,9 +77,9 @@ namespace kac_core::geometry {
 		/*
 		This function determines whether a line has an intersection, and returns it's type as well
 		as the point of intersection (if one exists).
-		input
+		input:
 			A, B - Line segments to compare.
-		output
+		output:
 			type -
 				'none'		No intersection.
 				'intersect' The general case where lines intersect one another.
@@ -44,6 +95,7 @@ namespace kac_core::geometry {
 				'branch'	The branching vertex.
 				'colinear'	The midpoint between all 4 vertices.
 		*/
+
 		// search for shared vertices
 		if (A.a.x == B.a.x && A.a.y == B.a.y || A.a.x == B.b.x && A.a.y == B.b.y) {
 			return std::make_pair("vertex", A.a);
@@ -90,6 +142,7 @@ namespace kac_core::geometry {
 		/*
 		Find the midpoint of a line.
 		*/
+
 		return T::Point((L.a.x + L.b.x) / 2.0, (L.a.y + L.b.y) / 2.0);
 	}
 

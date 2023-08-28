@@ -103,7 +103,7 @@ namespace kac_core::geometry {
 			return std::make_pair("vertex", A.b);
 		}
 		// test for colinear cases.
-		unsigned int colinearities = 0;
+		unsigned short colinearities = 0;
 		colinearities += isColinear(A.a, A.b, B.a);
 		colinearities += isColinear(A.b, B.a, B.b);
 		colinearities += isColinear(B.a, B.b, A.a);

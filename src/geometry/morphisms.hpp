@@ -78,7 +78,7 @@ namespace kac_core::geometry {
 		}
 		// orient largest vector across x-axis
 		// determine largest vector
-		std::pair<double, std::pair<int, int>> LV = largestVector(P);
+		std::pair<double, std::pair<long, long>> LV = largestVector(P);
 		// shift midpoint of the largest vector to origin
 		double x_shift = (P[LV.second.first].x + P[LV.second.second].x) / 2;
 		double y_shift = (P[LV.second.first].y + P[LV.second.second].y) / 2;
@@ -119,8 +119,8 @@ namespace kac_core::geometry {
 		for (unsigned long n = 0; n < N; n++) {
 			T::Point a = P[n];
 			T::Point b = P[(n + 1) % N];
-			int quad_a = whichQuad(a);
-			int quad_b = whichQuad(b);
+			short quad_a = whichQuad(a);
+			short quad_b = whichQuad(b);
 			if (quad_a == quad_b) {
 				// if the points lie in the same quadrant, add the triangular
 				// area to that quadrant.
@@ -158,7 +158,7 @@ namespace kac_core::geometry {
 			}
 		}
 		// reflect initial polygon given the largest quadrant
-		switch (static_cast<int>(
+		switch (static_cast<short>(
 			std::distance(quadAreas.begin(), std::max_element(quadAreas.begin(), quadAreas.end()))
 		)) {
 			case 0:
@@ -204,7 +204,7 @@ namespace kac_core::geometry {
 		}
 		// orient largest vector across x-axis
 		// determine largest vector
-		std::pair<double, std::pair<int, int>> LV = largestVector(P);
+		std::pair<double, std::pair<long, long>> LV = largestVector(P);
 		// shift midpoint of the largest vector to origin
 		double x_shift = (P[LV.second.first].x + P[LV.second.second].x) / 2;
 		double y_shift = (P[LV.second.first].y + P[LV.second.second].y) / 2;

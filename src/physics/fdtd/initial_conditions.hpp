@@ -16,7 +16,8 @@ using namespace kac_core::types;
 
 namespace kac_core::physics {
 
-	inline Matrix_1D raisedCosine1D(const int& size, const double& mu, const double& sigma) {
+	inline Matrix_1D
+	raisedCosine1D(const unsigned long& size, const double& mu, const double& sigma) {
 		/*
 		Calculate a one dimensional raised cosine distribution.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
@@ -32,7 +33,7 @@ namespace kac_core::physics {
 		*/
 
 		Matrix_1D raised_cosine(size);
-		for (int x = 0; x < size; x++) {
+		for (unsigned long x = 0; x < size; x++) {
 			double x_diff = fabs(x - mu);
 			if (x_diff <= sigma) {
 				raised_cosine[x] = 0.5 * (1 + cos(pi * x_diff / sigma));
@@ -42,8 +43,8 @@ namespace kac_core::physics {
 	}
 
 	inline Matrix_2D raisedCosine2D(
-		const int& size_X,
-		const int& size_Y,
+		const unsigned long& size_X,
+		const unsigned long& size_Y,
 		const double& mu_x,
 		const double& mu_y,
 		const double& sigma
@@ -64,8 +65,8 @@ namespace kac_core::physics {
 		*/
 
 		Matrix_2D raised_cosine(size_X, Matrix_1D(size_Y, 0));
-		for (int x = 0; x < size_X; x++) {
-			for (int y = 0; y < size_Y; y++) {
+		for (unsigned long x = 0; x < size_X; x++) {
+			for (unsigned long y = 0; y < size_Y; y++) {
 				double l2_norm = sqrt(pow((x - mu_x), 2) + pow((y - mu_y), 2));
 				if (l2_norm <= sigma) {
 					raised_cosine[x][y] = 0.5 * (1 + cos(pi * l2_norm / sigma));
@@ -75,8 +76,9 @@ namespace kac_core::physics {
 		return raised_cosine;
 	}
 
-	inline Matrix_1D
-	raisedTriangle1D(const int& size, const double& mu, const double& a, const double& b) {
+	inline Matrix_1D raisedTriangle1D(
+		const unsigned long& size, const double& mu, const double& a, const double& b
+	) {
 		/*
 		Calculate a one dimensional triangular distribution.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
@@ -95,7 +97,7 @@ namespace kac_core::physics {
 		*/
 
 		Matrix_1D triangle(size);
-		for (int x = 0; x < size; x++) {
+		for (unsigned long x = 0; x < size; x++) {
 			triangle[x] = a <= x && x <= mu ? double(x - a) / double(mu - a)
 						: mu < x && x <= b	? 1.0 - double(x - mu) / double(b - mu)
 											: 0.0;
@@ -104,8 +106,8 @@ namespace kac_core::physics {
 	}
 
 	inline Matrix_2D raisedTriangle2D(
-		const int& size_X,
-		const int& size_Y,
+		const unsigned long& size_X,
+		const unsigned long& size_Y,
 		const double& mu_x,
 		const double& mu_y,
 		const double& x_a,
@@ -127,11 +129,11 @@ namespace kac_core::physics {
 
 		Matrix_1D y_t = raisedTriangle1D(size_Y, mu_y, y_a, y_b);
 		Matrix_2D triangle(size_X, Matrix_1D(size_Y, 0));
-		for (int x = 0; x < size_X; x++) {
+		for (unsigned long x = 0; x < size_X; x++) {
 			double x_t = x_a <= x && x <= mu_x ? double(x - x_a) / double(mu_x - x_a)
 					   : mu_x < x && x <= x_b  ? 1.0 - double(x - mu_x) / double(x_b - mu_x)
 											   : 0.0;
-			for (int y = 0; y < size_Y; y++) { triangle[x][y] = x_t * y_t[y]; }
+			for (unsigned long y = 0; y < size_Y; y++) { triangle[x][y] = x_t * y_t[y]; }
 		}
 		return triangle;
 	}

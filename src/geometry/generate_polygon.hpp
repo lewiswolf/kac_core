@@ -190,9 +190,10 @@ namespace kac_core::geometry {
 					} else if (intersection_type == "adjacent") {
 						indices.push_back(std::make_pair(i, j));
 					} else if (intersection_type == "colinear") {
-						int min_i = 0 ? P[i].x < P[i + 1].x : 1;
-						int max_j = 0 ? P[j].x > P[j + 1].x : 1;
-						std::reverse(P.begin() + i + min_i, P.begin() + j + max_j);
+						std::reverse(
+							P.begin() + i + (P[i].x < P[i + 1].x ? 0 : 1),
+							P.begin() + j + (P[j].x > P[j + 1].x ? 0 : 1)
+						);
 						// restart loop
 						indices.clear();
 						goto Search_loop;

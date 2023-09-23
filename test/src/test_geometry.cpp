@@ -34,7 +34,8 @@ int main() {
 		{0.0841093, -0.713991},
 		{0.777715, 0.331095},
 		{0.481532, 0.648682},
-		{0.335852, 0.677941}};
+		{0.335852, 0.677941}
+	};
 	batchBooleanTest(
 		"generatedConvexPolygon produces the expected output for a given seed",
 		10,

@@ -39,7 +39,7 @@ namespace kac_core::physics {
 		T::Matrix_1D waveform(T);
 		const unsigned long N = F.size();
 		const unsigned long M = F[0].size();
-		double A_max_NM = 0.0;
+		double A_max_NM = 0.;
 		for (unsigned long n = 0; n < N; n++) {
 			for (unsigned long m = 0; m < M; m++) {
 				// calculate A_max and transform F into ω
@@ -49,7 +49,7 @@ namespace kac_core::physics {
 		}
 		A_max_NM *= N * M;
 		for (unsigned long t = 0; t < T; t++) {
-			double sum = 0.0;
+			double sum = 0.;
 			double d_t = pow(e, t * d);
 			for (unsigned long n = 0; n < N; n++) {
 				for (unsigned long m = 0; m < M; m++) {

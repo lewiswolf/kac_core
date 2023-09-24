@@ -12,7 +12,7 @@ namespace p = kac_core::physics;
 int main() {
 	booleanTest(
 		"raisedCosine is accurate",
-		p::raisedCosine1D(10, 4, 1.0)[4] == 1.0 && p::raisedCosine2D(10, 10, 4, 4, 1.0)[4][4] == 1.0
+		p::raisedCosine1D(10, 4, 1.)[4] == 1. && p::raisedCosine2D(10, 10, 4, 4, 1.)[4][4] == 1.
 	);
 
 	double cfl = 1 / pow(2, 0.5);

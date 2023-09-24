@@ -21,8 +21,8 @@ namespace kac_core::types {
 		*/
 
 		// vars
-		double x = 0.0;
-		double y = 0.0;
+		double x = 0.;
+		double y = 0.;
 		double r() { return sqrt(pow(x, 2) + pow(y, 2)); }
 		double theta() { return atan2(y, x); }
 

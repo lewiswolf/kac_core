@@ -99,8 +99,8 @@ namespace kac_core::physics {
 		Matrix_1D triangle(size);
 		for (unsigned long x = 0; x < size; x++) {
 			triangle[x] = a <= x && x <= mu ? double(x - a) / double(mu - a)
-						: mu < x && x <= b	? 1.0 - double(x - mu) / double(b - mu)
-											: 0.0;
+						: mu < x && x <= b	? 1. - double(x - mu) / double(b - mu)
+											: 0.;
 		}
 		return triangle;
 	}
@@ -131,8 +131,8 @@ namespace kac_core::physics {
 		Matrix_2D triangle(size_X, Matrix_1D(size_Y, 0));
 		for (unsigned long x = 0; x < size_X; x++) {
 			double x_t = x_a <= x && x <= mu_x ? double(x - x_a) / double(mu_x - x_a)
-					   : mu_x < x && x <= x_b  ? 1.0 - double(x - mu_x) / double(x_b - mu_x)
-											   : 0.0;
+					   : mu_x < x && x <= x_b  ? 1. - double(x - mu_x) / double(x_b - mu_x)
+											   : 0.;
 			for (unsigned long y = 0; y < size_Y; y++) { triangle[x][y] = x_t * y_t[y]; }
 		}
 		return triangle;

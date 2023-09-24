@@ -23,8 +23,8 @@ namespace kac_core::geometry {
 		*/
 
 		// assert line is within the unit interval
-		if (L.a.x > 1.0 || L.a.x < 0.0 || L.a.y > 1.0 || L.a.y < 0.0 || L.b.x > 1.0 || L.b.x < 0.0
-			|| L.b.y > 1.0 || L.b.y < 0.0) {
+		if (L.a.x > 1. || L.a.x < 0. || L.a.y > 1. || L.a.y < 0. || L.b.x > 1. || L.b.x < 0.
+			|| L.b.y > 1. || L.b.y < 0.) {
 			throw std::invalid_argument(
 				"The line L must be within the unit interval, such that x ∈ [0, 1] && y ∈ [0, 1]."
 			);
@@ -143,7 +143,7 @@ namespace kac_core::geometry {
 		Find the midpoint of a line.
 		*/
 
-		return T::Point((L.a.x + L.b.x) / 2.0, (L.a.y + L.b.y) / 2.0);
+		return T::Point((L.a.x + L.b.x) / 2., (L.a.y + L.b.y) / 2.);
 	}
 
 }

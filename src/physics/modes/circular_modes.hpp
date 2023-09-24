@@ -67,7 +67,7 @@ namespace kac_core::physics {
 		const double pi_4 = pi / 4;
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned long n = 0; n < N; n++) {
-			double angular = n != 0 ? sqrt2 * sin(n * theta + pi_4) : 1.0;
+			double angular = n != 0 ? sqrt2 * sin(n * theta + pi_4) : 1.;
 			for (unsigned long m = 0; m < M; m++) {
 				A[n][m] = abs(boost::math::cyl_bessel_j(n, S[n][m] * r) * angular);
 			};

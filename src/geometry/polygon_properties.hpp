@@ -60,7 +60,7 @@ namespace kac_core::geometry {
 		for (unsigned long n = 0; n < N; n++) {
 			T::Point a = P[n];
 			T::Point b = P[(n + 1) % N];
-			if (((b.x - a.x) * (p.y - b.y) - (b.y - a.y) * (p.x - b.x)) * clockwise > 0.0) {
+			if (((b.x - a.x) * (p.y - b.y) - (b.y - a.y) * (p.x - b.x)) * clockwise > 0.) {
 				return false;
 			}
 		}

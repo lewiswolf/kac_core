@@ -63,10 +63,10 @@ int main() {
 	*/
 	T::Polygon square_clockwise(4);
 	T::Polygon square_anti(4);
-	square_clockwise[0], square_anti[0] = T::Point(0.0, 0.0);
-	square_clockwise[1], square_anti[3] = T::Point(0.0, 1.0);
-	square_clockwise[2], square_anti[2] = T::Point(1.0, 1.0);
-	square_clockwise[3], square_anti[1] = T::Point(1.0, 0.0);
+	square_clockwise[0], square_anti[0] = T::Point(0., 0.);
+	square_clockwise[1], square_anti[3] = T::Point(0., 1.);
+	square_clockwise[2], square_anti[2] = T::Point(1., 1.);
+	square_clockwise[3], square_anti[1] = T::Point(1., 0.);
 	booleanTest("isConvex holds for counter-clockwise ordered polygons", g::isConvex(square_anti));
 	booleanTest("isConvex holds for clockwise ordered polygons", g::isConvex(square_clockwise));
 	/*

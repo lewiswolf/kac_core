@@ -17,7 +17,7 @@ namespace kac_core::types {
 
 	typedef struct Point {
 		/*
-		A point on the Euclidian plane.
+		A point on the Euclidean plane.
 		*/
 
 		// vars
@@ -55,7 +55,7 @@ namespace kac_core::types {
 		Line(Point a, Point b): a(a), b(b) {};
 	} Line;
 
-	// A polygon defined on the euclidian plane.
+	// A polygon defined on the Euclidean plane.
 	typedef std::vector<Point> Polygon;
 
 }

@@ -8,7 +8,9 @@ project(
 
 # create library
 add_library(${PROJECT_NAME} INTERFACE)
-target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_20)
+# using C++20 may prevent using this as a library in other projects
+# which are using C++17 or lower
+# target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_20)
 
 # link /src
 target_include_directories(${PROJECT_NAME} INTERFACE src)
@@ -18,13 +20,15 @@ target_sources(
 )
 
 # include dependencies
-include(FetchContent)
-FetchContent_Declare(
-  boost_math
-  GIT_REPOSITORY https://github.com/boostorg/math.git
-)
-FetchContent_MakeAvailable(boost_math)
-target_link_libraries(${PROJECT_NAME} INTERFACE boost_math)
+# TODO: find a way to cache this dependency
+# these submodules are 
+# include(FetchContent)
+# FetchContent_Declare(
+#   boost_math
+#   GIT_REPOSITORY https://github.com/boostorg/math.git
+# )
+# FetchContent_MakeAvailable(boost_math)
+# target_link_libraries(${PROJECT_NAME} INTERFACE boost_math)
 
 # if this is project root, run tests
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)

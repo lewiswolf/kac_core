@@ -10,7 +10,7 @@ jobs:
     all-tests:
         strategy:
             matrix:
-                os: [macos-latest]
+                os: [macos-latest, ubuntu-latest]
         runs-on: ${{ matrix.os }}
         steps:
             - uses: actions/checkout@master

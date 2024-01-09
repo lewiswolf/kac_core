@@ -72,9 +72,9 @@ int main() {
 	/*
 	Test normaliseConvexPolygon.
 	*/
-	// booleanTest(
-	// 	"normaliseConvexPolygon produces a polygon on the unit interval.",
-	// 	g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1.
-	// );
+	booleanTest(
+		"normaliseConvexPolygon produces a polygon on the unit interval.",
+		g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1.
+	);
 	return 0;
 }

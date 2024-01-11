@@ -18,5 +18,5 @@ jobs:
             - name: Run unit tests
               run: |
                   cmake -S . -B build
-                  cmake --build build
+                  cmake --build build --target ALL_BUILD
                   cmake --build build --target test

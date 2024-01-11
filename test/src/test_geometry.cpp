@@ -46,6 +46,10 @@ int main() {
 	*/
 	booleanTest("generatedConvexPolygon produces n vertices", P_convex.size() == N);
 	booleanTest("generatedConvexPolygon is convex", g::isConvex(P_convex));
+	booleanTest(
+		"generatedConvexPolygon does not produce colinear points",
+		!g::isColinear(P_convex[N - 1], P_convex[0], P_convex[1])
+	);
 	// batchBooleanTest(
 	// 	"generatedConvexPolygon does not produce colinear points",
 	// 	N,

@@ -18,5 +18,5 @@ jobs:
             - name: Run unit tests
               run: |
                   cmake -S . -B build
-                  cmake --build build --config Release -j
-                  ctest --test-dir build --config Release -j --output-on-failure
+                  cmake --build build --config Debug -j
+                  ctest --test-dir build --C Debug -j --output-on-failure

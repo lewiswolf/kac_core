@@ -34,7 +34,7 @@ namespace kac_core::geometry {
 			return (p.x - p_minus.x) * (p_plus.y - p.y) - (p_plus.x - p.x) * (p.y - p_minus.y);
 		};
 		// determine the direction of the initial point using the cross product
-		const unsigned long N = P.size();
+		const unsigned long N = static_cast<unsigned long>(P.size());
 		bool clockwise = crossProductZ(P[0], P[1], P[N - 1]) < 0;
 		// loop over remaining points
 		for (unsigned long n = 1; n < N; n++) {
@@ -56,7 +56,7 @@ namespace kac_core::geometry {
 			(P[1].x - P[0].x) * (P[2].y - P[1].y) - (P[1].y - P[0].y) * (P[2].x - P[1].x) > 0 ? -1
 																							  : 1;
 		// go through each of the vertices, plus the next vertex in the list
-		const unsigned long N = P.size();
+		const unsigned long N = static_cast<unsigned long>(P.size());
 		for (unsigned long n = 0; n < N; n++) {
 			T::Point a = P[n];
 			T::Point b = P[(n + 1) % N];
@@ -72,7 +72,7 @@ namespace kac_core::geometry {
 		Determine if a polygon is simple by checking for intersections.
 		*/
 
-		const unsigned long N = P.size();
+		const unsigned long N = static_cast<unsigned long>(P.size());
 		for (unsigned long i = 0; i < N - 2; i++) {
 			for (unsigned long j = i + 1; j < N; j++) {
 				std::string intersection_type =
@@ -93,7 +93,7 @@ namespace kac_core::geometry {
 		largest vector, and returns the length of the vector and its indices.
 		*/
 
-		const unsigned long N = P.size();
+		const unsigned long N = static_cast<unsigned long>(P.size());
 		double vec_max = 0.;
 		long index_i = 0;
 		long index_j = 0;
@@ -116,7 +116,7 @@ namespace kac_core::geometry {
 		https://math.blogoverflow.com/2014/06/04/greens-theorem-and-area-of-polygons/
 		*/
 
-		const unsigned long N = P.size();
+		const unsigned long N = static_cast<unsigned long>(P.size());
 		double out = 0.;
 		for (unsigned long n = 0; n < N; n++) {
 			out += (P[(n + 1) % N].x + P[n].x) * (P[(n + 1) % N].y - P[n].y);
@@ -143,7 +143,7 @@ namespace kac_core::geometry {
 			)
 		 */
 
-		const unsigned long N = P.size();
+		const unsigned long N = static_cast<unsigned long>(P.size());
 		double out_x = 0.;
 		double out_y = 0.;
 		if (N == 3) {

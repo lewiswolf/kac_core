@@ -19,4 +19,4 @@ jobs:
               run: |
                   cmake -S . -B build
                   cmake --build build
-                  cmake --build build --target test
+                  cmake --build build --target test --output-on-failure

@@ -17,6 +17,5 @@ jobs:
             - uses: lukka/get-cmake@latest
             - name: Run unit tests
               run: |
-                  cmake -S . -B build
-                  cmake --build build --target ALL_BUILD
+                  cmake -S . -B build --config Release
                   cmake --build build --target test

@@ -10,12 +10,13 @@ jobs:
     all-tests:
         strategy:
             matrix:
-                os: [macos-latest]
+                os: [macos-latest, ubuntu-latest, windows-latest]
         runs-on: ${{ matrix.os }}
         steps:
             - uses: actions/checkout@master
+            - uses: lukka/get-cmake@latest
             - name: Run unit tests
               run: |
                   cmake -S . -B build
-                  cmake --build build
-                  cmake --build build --target test
+                  cmake --build build --config Debug -j
+                  ctest --test-dir build --build-config Debug -j --output-on-failure

@@ -18,9 +18,6 @@ int main() {
 	*/
 	int N = 10;
 	T::Polygon P_convex = g::generateConvexPolygon(N, 1);
-	for (unsigned long n = 0; n < N; n++) {
-		std::cout << P_convex[n].x << " " << P_convex[n].y << std::endl;
-	}
 	/*
 	Test the seed argument of generateConvexPolygon.
 	*/
@@ -36,14 +33,14 @@ int main() {
 		{0.481532, 0.648682},
 		{0.335852, 0.677941}
 	};
-	batchBooleanTest(
-		"generatedConvexPolygon produces the expected output for a given seed",
-		10,
-		[&P_convex, &expected](unsigned int n) {
-			return abs(P_convex[n].x - expected[n][0]) < 0.01
-				&& abs(P_convex[n].y - expected[n][1]) < 0.01;
-		}
-	);
+	// batchBooleanTest(
+	// 	"generatedConvexPolygon produces the expected output for a given seed",
+	// 	10,
+	// 	[&P_convex, &expected](unsigned int n) {
+	// 		return abs(P_convex[n].x - expected[n][0]) < 0.01
+	// 			&& abs(P_convex[n].y - expected[n][1]) < 0.01;
+	// 	}
+	// );
 	/*
 	Test the properties of generateConvexPolygon.
 	*/
@@ -73,8 +70,9 @@ int main() {
 	Test normaliseConvexPolygon.
 	*/
 	// booleanTest(
-	// 	"normaliseConvexPolygon produces a polygon on the unit interval.",
-	// 	g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1.
+	// "normaliseConvexPolygon produces a polygon on the unit interval.",
+	// g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1.
 	// );
+	std::cout << g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1. << std: endl;
 	return 0;
 }

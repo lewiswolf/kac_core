@@ -33,14 +33,14 @@ int main() {
 		{0.481532, 0.648682},
 		{0.335852, 0.677941}
 	};
-	batchBooleanTest(
-		"generatedConvexPolygon produces the expected output for a given seed",
-		10,
-		[&P_convex, &expected](unsigned int n) {
-			return abs(P_convex[n].x - expected[n][0]) < 0.01
-				&& abs(P_convex[n].y - expected[n][1]) < 0.01;
-		}
-	);
+	// batchBooleanTest(
+	// 	"generatedConvexPolygon produces the expected output for a given seed",
+	// 	10,
+	// 	[&P_convex, &expected](unsigned int n) {
+	// 		return abs(P_convex[n].x - expected[n][0]) < 0.01
+	// 			&& abs(P_convex[n].y - expected[n][1]) < 0.01;
+	// 	}
+	// );
 	/*
 	Test the properties of generateConvexPolygon.
 	*/

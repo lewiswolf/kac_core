@@ -17,6 +17,6 @@ jobs:
             - uses: lukka/get-cmake@latest
             - name: Run unit tests
               run: |
-                  cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+                  cmake -S . -B build
                   cmake --build build --config Debug -j
-                  ctest --test-dir build --C Debug -j --output-on-failure
+                  ctest --test-dir build --build-config Debug -j --output-on-failure

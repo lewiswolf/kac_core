@@ -6,7 +6,7 @@ if [ ! -d ./build ]; then
 fi
 
 # build
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+cmake -S . -B build
 cmake --build build --config Debug -j
 
 # run test

@@ -10,4 +10,4 @@ cmake -S . -B build
 cmake --build build --config Release -j
 
 # run test
-ctest --test-dir build --output-on-failure -j
+ctest --test-dir build --config Release -j --output-on-failure

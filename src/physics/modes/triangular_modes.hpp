@@ -18,11 +18,7 @@ namespace T = kac_core::types;
 namespace kac_core::physics {
 
 	inline T::Matrix_2D equilateralTriangleAmplitudes(
-		const double& u,
-		const double& v,
-		const double& w,
-		const unsigned long& N,
-		const unsigned long& M
+		double u, double v, double w, const unsigned long& N, const unsigned long& M
 	) {
 		/*
 		Calculate the amplitudes of the equilateral triangle eigenmodes relative to a
@@ -68,7 +64,7 @@ namespace kac_core::physics {
 		for (unsigned long n = 0; n < N; n++) {
 			double n_hat = pow((n + 1), 2);
 			for (unsigned long m = 0; m < M; m++) {
-				S[n][m] = sqrt(pow((m + 1), 2) + n_hat + ((m + 1) * (n + 1));
+				S[n][m] = sqrt(pow((m + 1), 2) + n_hat + ((m + 1) * (n + 1)));
 			}
 		}
 		return S;

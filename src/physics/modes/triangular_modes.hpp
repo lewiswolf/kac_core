@@ -39,12 +39,12 @@ namespace kac_core::physics {
 			}
 		*/
 
-		double u_hat = u * pi;
-		double v_hat = v * pi;
-		double w_hat = w * pi;
+		u *= pi;
+		v *= pi;
+		w *= pi;
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned long n = 0; n < N; n++) {
-			double n_hat = abs(sin((n + 1) * u_hat) * sin((n + 1) * v_hat) * sin((n + 1) * w_hat));
+			double n_hat = abs(sin((n + 1) * u) * sin((n + 1) * v) * sin((n + 1) * w));
 			for (unsigned long m = 0; m < M; m++) { A[n][m] = n_hat; }
 		}
 		return A;
@@ -68,7 +68,7 @@ namespace kac_core::physics {
 		for (unsigned long n = 0; n < N; n++) {
 			double n_hat = pow((n + 1), 2);
 			for (unsigned long m = 0; m < M; m++) {
-				S[n][m] = sqrt(pow((m + 1), 2) + n_hat + m * n);
+				S[n][m] = sqrt(pow((m + 1), 2) + n_hat + ((m + 1) * (n + 1));
 			}
 		}
 		return S;

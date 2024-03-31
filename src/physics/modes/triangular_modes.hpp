@@ -18,9 +18,9 @@ namespace T = kac_core::types;
 namespace kac_core::physics {
 
 	inline T::Matrix_2D equilateralTriangleAmplitudes(
-		const double& x,
-		const double& y,
-		const double& z,
+		const double& u,
+		const double& v,
+		const double& w,
 		const unsigned long& N,
 		const unsigned long& M
 	) {
@@ -29,7 +29,7 @@ namespace kac_core::physics {
 		trilinear strike location according to Lamé's formula.
 		Seth (1940) Transverse Vibrations of Triangular Membranes.
 		input:
-			( x, y, z ) = trilinear coordinate
+			( u, v, w ) = trilinear coordinate
 			N = number of modal orders
 			M = number of modes per order
 		output:
@@ -39,12 +39,12 @@ namespace kac_core::physics {
 			}
 		*/
 
-		double x_hat = x * pi;
-		double y_hat = y * pi;
-		double z_hat = z * pi;
+		double u_hat = u * pi;
+		double v_hat = v * pi;
+		double w_hat = w * pi;
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned long n = 0; n < N; n++) {
-			double n_hat = abs(sin((n + 1) * x_hat) * sin((n + 1) * y_hat) * sin((n + 1) * z_hat));
+			double n_hat = abs(sin((n + 1) * u_hat) * sin((n + 1) * v_hat) * sin((n + 1) * w_hat));
 			for (unsigned long m = 0; m < M; m++) { A[n][m] = n_hat; }
 		}
 		return A;

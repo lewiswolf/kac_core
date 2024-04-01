@@ -5,6 +5,8 @@ Utility functions for working with lines and curves.
 #pragma once
 
 // core
+#include <algorithm>
+#include <math.h>
 #include <string>
 #include <utility>
 
@@ -36,7 +38,7 @@ namespace kac_core::geometry {
 		long dy = lround(L.b.y * (M[0].size() - 1)) - y_0;
 		// configure directions
 		short xx, xy, yx, yy;
-		if (std::abs(dx) > std::abs(dy)) {
+		if (abs(dx) > abs(dy)) {
 			xx = dx > 0 ? 1 : -1;
 			xy = 0;
 			yx = 0;
@@ -48,8 +50,8 @@ namespace kac_core::geometry {
 			yx = dy > 0 ? 1 : -1;
 			yy = 0;
 		}
-		dx = std::abs(dx);
-		dy = std::abs(dy);
+		dx = abs(dx);
+		dy = abs(dy);
 		// paint line
 		unsigned long y = 0;
 		long D = 2 * dy - dx;

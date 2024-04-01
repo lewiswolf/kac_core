@@ -54,8 +54,8 @@ namespace kac_core::physics {
 			throw std::invalid_argument("u_0 and B differ in size.");
 		}
 		// lambda for sampling the 2D matrix using bilinear interpolation.
-		const unsigned long x_0 = std::floor(w.x * (u_0.size() - 2));
-		const unsigned long y_0 = std::floor(w.y * (u_0[0].size() - 2));
+		const unsigned long x_0 = floor(w.x * (u_0.size() - 2));
+		const unsigned long y_0 = floor(w.y * (u_0[0].size() - 2));
 		const double a = w.x * (u_0.size() - 2) - x_0;
 		const double b = w.y * (u_0[0].size() - 2) - y_0;
 		const double coef_0 = (1 - a) * (1 - b);

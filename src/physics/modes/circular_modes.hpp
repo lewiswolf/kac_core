@@ -93,12 +93,11 @@ namespace kac_core::physics {
 		*/
 
 		// interpolate n and z_mn
-		double n_round = std::round(n);
-		double m_floor = std::floor(m);
+		double n_round = round(n);
+		double m_floor = floor(m);
 		double z_mn_floor = boost::math::cyl_bessel_j_zero(n, m_floor);
-		double z_mn =
-			z_mn_floor
-			+ ((boost::math::cyl_bessel_j_zero(n, std::ceil(m)) - z_mn_floor) * (m - m_floor));
+		double z_mn = z_mn_floor
+					+ ((boost::math::cyl_bessel_j_zero(n, ceil(m)) - z_mn_floor) * (m - m_floor));
 		// calculate pattern
 		T::BooleanImage M(H, std::vector<short>(H, 0));
 		for (unsigned long x = 0; x < H; x++) {

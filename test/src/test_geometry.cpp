@@ -2,8 +2,6 @@
 Tests for /geometry.
 */
 
-#include <iostream>
-
 // src
 #include <kac_core.hpp>
 namespace T = kac_core::types;		 // types
@@ -18,9 +16,6 @@ int main() {
 	*/
 	int N = 10;
 	T::Polygon P_convex = g::generateConvexPolygon(N, 1);
-	for (unsigned long n = 0; n < N; n++) {
-		std::cout << P_convex[n].x << " " << P_convex[n].y << std::endl;
-	}
 	/*
 	Test the seed argument of generateConvexPolygon.
 	*/

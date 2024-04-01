@@ -50,8 +50,8 @@ namespace kac_core::physics {
 	}
 
 	inline T::BooleanImage rectangularChladniPattern(
-		const long& m,
-		const long& n,
+		const double& m,
+		const double& n,
 		const unsigned long& X,
 		const unsigned long& Y,
 		const double& tolerance = 0.1

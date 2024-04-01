@@ -76,14 +76,14 @@ namespace kac_core::physics {
 	}
 
 	inline T::BooleanImage circularChladniPattern(
-		const long& m, const long& n, const unsigned long& H, const double& tolerance = 0.1
+		const double& n, const double& m, const unsigned long& H, const double& tolerance = 0.1
 	) {
 		/*
 		Produce the 2D chladni pattern for a circular plate.
 		http://paulbourke.net/geometry/chladni/
 		input:
-			m = mth modal index
 			n = nth modal index
+			m = mth modal index
 			H = length of the X and Y axis
 			tolerance = the standard deviation between the calculation and the final pattern
 		output:
@@ -92,8 +92,15 @@ namespace kac_core::physics {
 			}
 		*/
 
+		// interpolate n and z_mn
+		double n_round = std::round(n);
+		double m_floor = std::floor(m);
+		double z_mn_floor = boost::math::cyl_bessel_j_zero(n, m_floor);
+		double z_mn =
+			z_mn_floor
+			+ ((boost::math::cyl_bessel_j_zero(n, std::ceil(m)) - z_mn_floor) * (m - m_floor));
+		// calculate pattern
 		T::BooleanImage M(H, std::vector<short>(H, 0));
-		double z_mn = boost::math::cyl_bessel_j_zero((double)n, m);
 		for (unsigned long x = 0; x < H; x++) {
 			double x_prime = (2.0 * x / H) - 1.0;
 			for (unsigned long y = 0; y < H; y++) {
@@ -104,7 +111,7 @@ namespace kac_core::physics {
 				} else {
 					double theta = atan2(y_prime, x_prime);
 					M[x][y] = abs(boost::math::cyl_bessel_j(n, z_mn * r)
-								  * (cos(n * theta) + sin(n * theta)))
+								  * (cos(n_round * theta) + sin(n_round * theta)))
 									< tolerance
 								? 1
 								: 0;

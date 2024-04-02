@@ -93,7 +93,7 @@ namespace kac_core::physics {
 		*/
 
 		// interpolate n and z_mn
-		double n_round = round(n);
+		double n_round = round(2. * n) / 2.;
 		double m_floor = floor(m);
 		double z_mn_floor = boost::math::cyl_bessel_j_zero(n, m_floor);
 		double z_mn = z_mn_floor
@@ -101,11 +101,11 @@ namespace kac_core::physics {
 		// calculate pattern
 		T::BooleanImage M(H, std::vector<short>(H, 0));
 		for (unsigned long x = 0; x < H; x++) {
-			double x_prime = (2.0 * x / H) - 1.0;
+			double x_prime = (2. * x / H) - 1.;
 			for (unsigned long y = 0; y < H; y++) {
-				double y_prime = (2.0 * y / H) - 1.0;
+				double y_prime = (2. * y / H) - 1.;
 				double r = sqrt(pow(x_prime, 2) + pow(y_prime, 2));
-				if (r > 1.0) {
+				if (r > 1.) {
 					continue;
 				} else {
 					double theta = atan2(y_prime, x_prime);

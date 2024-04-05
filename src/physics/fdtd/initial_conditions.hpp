@@ -45,7 +45,7 @@ namespace kac_core::physics {
 	inline Matrix_2D raisedCosine2D(
 		const unsigned long& size_X,
 		const unsigned long& size_Y,
-		const Point& mu,
+		const T::Point& mu,
 		const double& sigma
 	) {
 		/*
@@ -107,7 +107,7 @@ namespace kac_core::physics {
 	inline Matrix_2D raisedTriangle2D(
 		const unsigned long& size_X,
 		const unsigned long& size_Y,
-		const Point& mu,
+		const T::Point& mu,
 		const double& x_a,
 		const double& x_b,
 		const double& y_a,

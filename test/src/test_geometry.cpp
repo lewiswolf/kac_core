@@ -16,6 +16,7 @@ int main() {
 	*/
 	int N = 10;
 	T::Polygon P_convex = g::generateConvexPolygon(N, 1);
+
 	/*
 	Test the seed argument of generateConvexPolygon.
 	*/
@@ -39,6 +40,7 @@ int main() {
 				&& abs(P_convex[n].y - expected[n][1]) < 0.01;
 		}
 	);
+
 	/*
 	Test the properties of generateConvexPolygon.
 	*/
@@ -53,6 +55,7 @@ int main() {
 			);
 		}
 	);
+
 	/*
 	Test that convexity holds for both clockwise and anticlockwise oriented polygons.
 	*/
@@ -64,6 +67,7 @@ int main() {
 	square_clockwise[3], square_anti[1] = T::Point(1., 0.);
 	booleanTest("isConvex holds for counter-clockwise ordered polygons", g::isConvex(square_anti));
 	booleanTest("isConvex holds for clockwise ordered polygons", g::isConvex(square_clockwise));
+
 	/*
 	Test normaliseConvexPolygon.
 	*/
@@ -71,5 +75,6 @@ int main() {
 		"normaliseConvexPolygon produces a polygon on the unit interval.",
 		g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1.
 	);
+
 	return 0;
 }

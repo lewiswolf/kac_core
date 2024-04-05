@@ -19,14 +19,12 @@ struct Timer {
 	// vars
 	std::string name = "";
 	std::chrono::time_point<std::chrono::high_resolution_clock> start_tp;
-
 	// constructors
 	Timer() { start_tp = std::chrono::high_resolution_clock::now(); }
 	Timer(std::string s) {
 		name = s;
 		start_tp = std::chrono::high_resolution_clock::now();
 	}
-
 	// destructors
 	~Timer() {
 		auto end_tp = std::chrono::high_resolution_clock::now();
@@ -44,6 +42,7 @@ void booleanTest(const std::string& test_name, const bool& b) {
 	/*
 	Prints a warning to the console if the test fails.
 	*/
+
 	if (!b) {
 		std::cout << test_name;
 		throw;

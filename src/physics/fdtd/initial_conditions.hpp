@@ -45,8 +45,7 @@ namespace kac_core::physics {
 	inline Matrix_2D raisedCosine2D(
 		const unsigned long& size_X,
 		const unsigned long& size_Y,
-		const double& mu_x,
-		const double& mu_y,
+		const Point& mu,
 		const double& sigma
 	) {
 		/*
@@ -67,7 +66,7 @@ namespace kac_core::physics {
 		Matrix_2D raised_cosine(size_X, Matrix_1D(size_Y, 0));
 		for (unsigned long x = 0; x < size_X; x++) {
 			for (unsigned long y = 0; y < size_Y; y++) {
-				double l2_norm = sqrt(pow((x - mu_x), 2) + pow((y - mu_y), 2));
+				double l2_norm = sqrt(pow((x - mu.x), 2) + pow((y - mu.y), 2));
 				if (l2_norm <= sigma) {
 					raised_cosine[x][y] = 0.5 * (1 + cos(pi * l2_norm / sigma));
 				}
@@ -108,8 +107,7 @@ namespace kac_core::physics {
 	inline Matrix_2D raisedTriangle2D(
 		const unsigned long& size_X,
 		const unsigned long& size_Y,
-		const double& mu_x,
-		const double& mu_y,
+		const Point& mu,
 		const double& x_a,
 		const double& x_b,
 		const double& y_a,
@@ -127,11 +125,11 @@ namespace kac_core::physics {
 			Λ(x, y) = Λ(x) * Λ(y)
 		*/
 
-		Matrix_1D y_t = raisedTriangle1D(size_Y, mu_y, y_a, y_b);
+		Matrix_1D y_t = raisedTriangle1D(size_Y, mu.y, y_a, y_b);
 		Matrix_2D triangle(size_X, Matrix_1D(size_Y, 0));
 		for (unsigned long x = 0; x < size_X; x++) {
-			double x_t = x_a <= x && x <= mu_x ? double(x - x_a) / double(mu_x - x_a)
-					   : mu_x < x && x <= x_b  ? 1. - double(x - mu_x) / double(x_b - mu_x)
+			double x_t = x_a <= x && x <= mu.x ? double(x - x_a) / double(mu.x - x_a)
+					   : mu.x < x && x <= x_b  ? 1. - double(x - mu.x) / double(x_b - mu.x)
 											   : 0.;
 			for (unsigned long y = 0; y < size_Y; y++) { triangle[x][y] = x_t * y_t[y]; }
 		}

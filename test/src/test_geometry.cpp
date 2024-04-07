@@ -14,7 +14,7 @@ int main() {
 	/*
 	Initialise polygon.
 	*/
-	int N = 10;
+	unsigned long N = 10;
 	T::Polygon P_convex = g::generateConvexPolygon(N, 1);
 
 	/*
@@ -24,7 +24,7 @@ int main() {
 	batchBooleanTest(
 		"generatedConvexPolygon produces the expected output for a given seed",
 		N,
-		[&P_convex, &P_copy](unsigned int n) {
+		[&P_convex, &P_copy](const unsigned long n) {
 			return abs(P_convex[n].x - P_copy[n].x) == 0. && abs(P_convex[n].y - P_copy[n].y) == 0.;
 		}
 	);
@@ -37,7 +37,7 @@ int main() {
 	batchBooleanTest(
 		"generatedConvexPolygon does not produce colinear points",
 		N,
-		[&P_convex, &N](unsigned int n) {
+		[&P_convex, &N](const unsigned long& n) {
 			return !g::isColinear(
 				P_convex[n > 0 ? n - 1 : N - 1], P_convex[n], P_convex[(n + 1) % N]
 			);

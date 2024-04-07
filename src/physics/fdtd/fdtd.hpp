@@ -70,8 +70,7 @@ namespace kac_core::physics {
 		T::Matrix_1D waveform(T);
 		waveform[0] = bilinearInterpolation(u_0);
 		waveform[1] = bilinearInterpolation(u_1);
-		// for efficiency, calculate the loop range relative to dirichlet
-		// boundary conditions
+		// for efficiency, calculate the loop range relative to dirichlet boundary conditions
 		std::array<unsigned long, 2> x_range = {B.size(), 0};
 		std::array<unsigned long, 2> y_range = {B[0].size(), 0};
 		// forward loop to find the first ones
@@ -110,8 +109,8 @@ namespace kac_core::physics {
 		};
 		// main loop
 		for (unsigned long t = 2; t < T; t++) {
-			// branching maintains memory efficiency, meaning that only two
-			// matrices need to be in memory at one time
+			// branching maintains memory efficiency, meaning that only two matrices need to be in
+			// memory at one time
 			if ((t % 2) == 0) {
 				FDTDUpdate2D(u_0, u_1);
 				waveform[t] = bilinearInterpolation(u_0);

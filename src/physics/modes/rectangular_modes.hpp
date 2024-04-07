@@ -25,8 +25,8 @@ namespace kac_core::physics {
 		const double& epsilon
 	) {
 		/*
-		Calculate the amplitudes of the rectangular eigenmodes relative to a
-		cartesian strike location.
+		Calculate the amplitudes of the rectangular eigenmodes relative to a cartesian strike
+		location.
 		input:
 			( x , y ) = cartesian product
 			N = number of modal orders

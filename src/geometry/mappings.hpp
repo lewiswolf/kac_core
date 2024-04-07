@@ -18,9 +18,9 @@ namespace kac_core::geometry {
 
 	inline T::Point simpleElliptic_Circle2Square(const T::Point& p) {
 		/*
-			Map a point using a non-conformal map from circle to square.
-			Fong, C. (2014). Analytical methods for squaring the disc. 27th
-			International Congress of Mathematics (ICM). p.5
+		Map a point using a non-conformal map from circle to square.
+		Fong, C. (2014). Analytical methods for squaring the disc. 27th International Congress
+		of Mathematics (ICM). p.5
 		*/
 
 		double u_2 = pow(p.x, 2);
@@ -35,9 +35,9 @@ namespace kac_core::geometry {
 
 	inline T::Point simpleElliptic_Square2Circle(const T::Point& p) {
 		/*
-			Map a point using a non-conformal map from square to circle.
-			Fong, C. (2014). Analytical methods for squaring the disc. 27th
-			International Congress of Mathematics (ICM). p.5
+		Map a point using a non-conformal map from square to circle.
+		Fong, C. (2014). Analytical methods for squaring the disc. 27th International Congress
+		of Mathematics (ICM). p.5
 		*/
 
 		return T::Point(p.x * sqrt(1 - (pow(p.y, 2) / 2)), p.y * sqrt(1 - (pow(p.x, 2) / 2)));

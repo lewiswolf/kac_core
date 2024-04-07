@@ -19,13 +19,11 @@ namespace kac_core::geometry {
 
 	inline bool isConvex(const T::Polygon& P) {
 		/*
-		Tests whether or not a given array of vertices forms a convex polygon.
-		This is achieved using the resultant sign of the cross product for each
-		vertex:
+		Tests whether or not a given array of vertices forms a convex polygon. This is achieved
+		using the resultant sign of the cross product for each vertex:
 			[(x_i - x_i-1), (y_i - y_i-1)] × [(x_i+1 - x_i), (y_i+1 - y_i)]
-		See => http://paulbourke.net/geometry/polygonmesh/ 'Determining whether
-		or not a polygon (2D) has its vertices ordered clockwise or
-		counter-clockwise'.
+		See => http://paulbourke.net/geometry/polygonmesh/ 'Determining whether or not a polygon
+		(2D) has its vertices ordered clockwise or counter-clockwise'.
 		*/
 
 		// cross product - z component only, see np.cross =>
@@ -89,8 +87,8 @@ namespace kac_core::geometry {
 
 	inline std::pair<double, std::pair<long, long>> largestVector(const T::Polygon& P) {
 		/*
-		This function tests each pair of vertices in a given polygon to find the
-		largest vector, and returns the length of the vector and its indices.
+		This function tests each pair of vertices in a given polygon to find the largest vector, and
+		returns the length of the vector and its indices.
 		*/
 
 		const unsigned long N = P.size();
@@ -126,10 +124,9 @@ namespace kac_core::geometry {
 
 	inline T::Point polygonCentroid(const T::Polygon& P, const double& area) {
 		/*
-		This algorithm is used to calculate the geometric centroid of a 2D
-		polygon. See http://paulbourke.net/geometry/polygonmesh/ 'Calculating
-		the area and centroid of a polygon'.
-
+		This algorithm is used to calculate the geometric centroid of a 2D polygon.
+		See http://paulbourke.net/geometry/polygonmesh/ 'Calculating the area and centroid of a
+		polygon'.
 		output:
 			for N == 3 ->
 			(x, y) = (

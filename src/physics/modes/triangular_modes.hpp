@@ -21,8 +21,8 @@ namespace kac_core::physics {
 		double u, double v, double w, const unsigned long& N, const unsigned long& M
 	) {
 		/*
-		Calculate the amplitudes of the equilateral triangle eigenmodes relative to a
-		trilinear strike location according to Lamé's formula.
+		Calculate the amplitudes of the equilateral triangle eigenmodes relative to a trilinear
+		strike location according to Lamé's formula.
 		Seth (1940) Transverse Vibrations of Triangular Membranes.
 		input:
 			( u, v, w ) = trilinear coordinate

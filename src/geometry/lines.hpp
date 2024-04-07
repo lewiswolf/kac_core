@@ -19,6 +19,7 @@ namespace kac_core::geometry {
 	inline T::BooleanImage bresenham(T::BooleanImage& M, const T::Line& L) {
 		/*
 		Apply the Bresenham line drawing algorithm to an input matrix.
+
 		input:
 			M = input matrix.
 			L = line to draw, such that x ∈ [0, 1] && y ∈ [0, 1].
@@ -79,6 +80,7 @@ namespace kac_core::geometry {
 		/*
 		This function determines whether a line has an intersection, and returns it's type as well
 		as the point of intersection (if one exists).
+
 		input:
 			A, B - Line segments to compare.
 		output:

@@ -151,7 +151,6 @@ namespace kac_core::geometry {
 		random to eliminate after each sweep.
 		https://doc.cgal.org/latest/Generator/group__PkgGeneratorsRef.html#gaa8cb58e4cc9ab9e225808799b1a61174
 		van Leeuwen, J., & Schoone, A. A. (1982). Untangling a traveling salesman tour in the plane.
-
 		input:
 			N = the number of vertices
 			seed? = the seed for the random number generators

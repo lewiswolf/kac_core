@@ -71,8 +71,8 @@ namespace kac_core::physics {
 		waveform[0] = bilinearInterpolation(u_0);
 		waveform[1] = bilinearInterpolation(u_1);
 		// for efficiency, calculate the loop range relative to dirichlet boundary conditions
-		std::array<unsigned long, 2> x_range = {B.size(), 0};
-		std::array<unsigned long, 2> y_range = {B[0].size(), 0};
+		std::array<size_t, 2> x_range = {B.size(), 0};
+		std::array<size_t, 2> y_range = {B[0].size(), 0};
 		// forward loop to find the first ones
 		for (unsigned long x = 1; x < B.size() - 1; x++) {
 			for (unsigned long y = 1; y < B[0].size() - 1; y++) {

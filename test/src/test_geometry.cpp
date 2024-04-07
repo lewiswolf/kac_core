@@ -37,10 +37,8 @@ int main() {
 	batchBooleanTest(
 		"generatedConvexPolygon does not produce colinear points",
 		N,
-		[&P_convex, &N](const unsigned long n) {
-			return !g::isColinear(
-				P_convex[n > 0 ? n - 1 : N - 1], P_convex[n], P_convex[(n + 1) % N]
-			);
+		[&P_convex](const unsigned long n) {
+			return !g::isColinear(P_convex[n > 0 ? n - 1 : 9], P_convex[n], P_convex[(n + 1) % 10]);
 		}
 	);
 

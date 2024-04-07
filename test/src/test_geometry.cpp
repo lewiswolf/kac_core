@@ -29,11 +29,11 @@ int main() {
 		}
 	);
 
-	// /*
-	// Test the properties of generateConvexPolygon.
-	// */
-	// booleanTest("generatedConvexPolygon produces n vertices", P_convex.size() == N);
-	// booleanTest("generatedConvexPolygon is convex", g::isConvex(P_convex));
+	/*
+	Test the properties of generateConvexPolygon.
+	*/
+	booleanTest("generatedConvexPolygon produces n vertices", P_convex.size() == N);
+	booleanTest("generatedConvexPolygon is convex", g::isConvex(P_convex));
 	// batchBooleanTest(
 	// 	"generatedConvexPolygon does not produce colinear points",
 	// 	N,

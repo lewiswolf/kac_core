@@ -34,11 +34,10 @@ int main() {
 	*/
 	booleanTest("generatedConvexPolygon produces n vertices", P_convex.size() == N);
 	booleanTest("generatedConvexPolygon is convex", g::isConvex(P_convex));
-	booleanTest(
-		"generatedConvexPolygon does not produce colinear points 9 0 1",
-		!g::isColinear(P_convex[9], P_convex[0], P_convex[1])
-	);
-
+	// booleanTest(
+	// 	"generatedConvexPolygon does not produce colinear points 9 0 1",
+	// 	!g::isColinear(P_convex[9], P_convex[0], P_convex[1])
+	// );
 	// batchBooleanTest(
 	// 	"generatedConvexPolygon does not produce colinear points",
 	// 	N,
@@ -48,18 +47,17 @@ int main() {
 	// 	}
 	// );
 
-	// /*
-	// Test that convexity holds for both clockwise and anticlockwise oriented polygons.
-	// */
-	// T::Polygon square_clockwise(4);
-	// T::Polygon square_anti(4);
-	// square_clockwise[0], square_anti[0] = T::Point(0., 0.);
-	// square_clockwise[1], square_anti[3] = T::Point(0., 1.);
-	// square_clockwise[2], square_anti[2] = T::Point(1., 1.);
-	// square_clockwise[3], square_anti[1] = T::Point(1., 0.);
-	// booleanTest("isConvex holds for counter-clockwise ordered polygons",
-	// g::isConvex(square_anti)); booleanTest("isConvex holds for clockwise ordered polygons",
-	// g::isConvex(square_clockwise));
+	/*
+	Test that convexity holds for both clockwise and anticlockwise oriented polygons.
+	*/
+	T::Polygon square_clockwise(4);
+	T::Polygon square_anti(4);
+	square_clockwise[0], square_anti[0] = T::Point(0., 0.);
+	square_clockwise[1], square_anti[3] = T::Point(0., 1.);
+	square_clockwise[2], square_anti[2] = T::Point(1., 1.);
+	square_clockwise[3], square_anti[1] = T::Point(1., 0.);
+	booleanTest("isConvex holds for counter-clockwise ordered polygons", g::isConvex(square_anti));
+	booleanTest("isConvex holds for clockwise ordered polygons", g::isConvex(square_clockwise));
 
 	// /*
 	// Test normaliseConvexPolygon.

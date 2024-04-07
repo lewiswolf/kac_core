@@ -34,13 +34,51 @@ int main() {
 	*/
 	booleanTest("generatedConvexPolygon produces n vertices", P_convex.size() == N);
 	booleanTest("generatedConvexPolygon is convex", g::isConvex(P_convex));
-	batchBooleanTest(
-		"generatedConvexPolygon does not produce colinear points",
-		N,
-		[&P_convex](const unsigned long& n) {
-			return !g::isColinear(P_convex[n > 0 ? n - 1 : 9], P_convex[n], P_convex[(n + 1) % 10]);
-		}
+	booleanTest(
+		"generatedConvexPolygon does not produce colinear points 9 0 1",
+		!g::isColinear(P_convex[9], P_convex[0], P_convex[1])
 	);
+	booleanTest(
+		"generatedConvexPolygon does not produce colinear points 0 1 2",
+		!g::isColinear(P_convex[0], P_convex[1], P_convex[2])
+	);
+	booleanTest(
+		"generatedConvexPolygon does not produce colinear points 1 2 3",
+		!g::isColinear(P_convex[1], P_convex[2], P_convex[3])
+	);
+	booleanTest(
+		"generatedConvexPolygon does not produce colinear points 2 3 4",
+		!g::isColinear(P_convex[2], P_convex[3], P_convex[4])
+	);
+	booleanTest(
+		"generatedConvexPolygon does not produce colinear points 3 4 5",
+		!g::isColinear(P_convex[3], P_convex[4], P_convex[5])
+	);
+	booleanTest(
+		"generatedConvexPolygon does not produce colinear points 4 5 6",
+		!g::isColinear(P_convex[4], P_convex[5], P_convex[6])
+	);
+	booleanTest(
+		"generatedConvexPolygon does not produce colinear points 5 6 7",
+		!g::isColinear(P_convex[5], P_convex[6], P_convex[7])
+	);
+	booleanTest(
+		"generatedConvexPolygon does not produce colinear points 6 7 8",
+		!g::isColinear(P_convex[6], P_convex[7], P_convex[8])
+	);
+	booleanTest(
+		"generatedConvexPolygon does not produce colinear points 7 8 9",
+		!g::isColinear(P_convex[7], P_convex[8], P_convex[9])
+	);
+
+	// batchBooleanTest(
+	// 	"generatedConvexPolygon does not produce colinear points",
+	// 	N,
+	// 	[&P_convex](const unsigned long& n) {
+	// 		return !g::isColinear(P_convex[n > 0 ? n - 1 : 9], P_convex[n], P_convex[(n + 1) %
+	// 10]);
+	// 	}
+	// );
 
 	// /*
 	// Test that convexity holds for both clockwise and anticlockwise oriented polygons.

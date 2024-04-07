@@ -110,7 +110,7 @@ namespace kac_core::geometry {
 		};
 		// area of a triangle, simplified due to point c = [0., 0.]
 		auto triangleArea = [](const T::Point& a, const T::Point& b) {
-			return fabs(b.y * a.x - b.x * a.y) / 2;
+			return abs(b.y * a.x - b.x * a.y) / 2;
 		};
 		// loop over points and sum quadrant areas
 		for (unsigned long n = 0; n < N; n++) {

@@ -27,8 +27,8 @@ namespace kac_core::geometry {
 		// first find minmax in both x & y
 		T::Matrix_1D X;
 		T::Matrix_1D Y;
-		const size_t N = P.size();
-		for (size_t n = 0; n < N; n++) {
+		const unsigned long N = P.size();
+		for (unsigned long n = 0; n < N; n++) {
 			X.push_back(P[n].x);
 			Y.push_back(P[n].y);
 		}
@@ -37,7 +37,7 @@ namespace kac_core::geometry {
 		// center along x and y axes
 		double x_shift = (*x_min_max.first + *x_min_max.second) / 2;
 		double y_shift = (*y_min_max.first + *y_min_max.second) / 2;
-		for (size_t n = 0; n < N; n++) {
+		for (unsigned long n = 0; n < N; n++) {
 			P[n].x -= x_shift;
 			P[n].y -= y_shift;
 		}
@@ -50,7 +50,7 @@ namespace kac_core::geometry {
 		double v_d =
 			(*x_min_max.second > *y_min_max.second ? *x_min_max.second : *y_min_max.second) - v_min;
 		// normalise
-		for (size_t n = 0; n < N; n++) {
+		for (unsigned long n = 0; n < N; n++) {
 			P[n].x = (P[n].x - v_min) / v_d;
 			P[n].y = (P[n].y - v_min) / v_d;
 		}
@@ -79,8 +79,8 @@ namespace kac_core::geometry {
 		// shift midpoint of the largest vector to origin
 		double x_shift = (P[LV.second.first].x + P[LV.second.second].x) / 2;
 		double y_shift = (P[LV.second.first].y + P[LV.second.second].y) / 2;
-		const size_t N = P.size();
-		for (size_t n = 0; n < N; n++) {
+		const unsigned long N = P.size();
+		for (unsigned long n = 0; n < N; n++) {
 			P[n].x -= x_shift;
 			P[n].y -= y_shift;
 		}
@@ -88,7 +88,7 @@ namespace kac_core::geometry {
 		double theta = P[LV.second.first].theta();
 		double cos_theta = cos(theta);
 		double sin_theta = sin(theta);
-		for (size_t n = 0; n < N; n++) {
+		for (unsigned long n = 0; n < N; n++) {
 			P[n] = T::Point(
 				P[n].x * cos_theta + P[n].y * sin_theta, -P[n].x * sin_theta + P[n].y * cos_theta
 			);
@@ -113,7 +113,7 @@ namespace kac_core::geometry {
 			return abs(b.y * a.x - b.x * a.y) / 2;
 		};
 		// loop over points and sum quadrant areas
-		for (size_t n = 0; n < N; n++) {
+		for (unsigned long n = 0; n < N; n++) {
 			T::Point a = P[n];
 			T::Point b = P[(n + 1) % N];
 			short quad_a = whichQuad(a);
@@ -160,22 +160,24 @@ namespace kac_core::geometry {
 			case 0:
 				break;
 			case 1:
-				for (size_t n = 0; n < N; n++) { P[n].y *= -1.; }
+				for (unsigned long n = 0; n < N; n++) { P[n].y *= -1.; }
 				std::reverse(P.begin(), P.end());
 				break;
 			case 2:
-				for (size_t n = 0; n < N; n++) { P[n] = T::Point(P[n].x *= -1., P[n].y *= -1.); }
+				for (unsigned long n = 0; n < N; n++) {
+					P[n] = T::Point(P[n].x *= -1., P[n].y *= -1.);
+				}
 				break;
 			case 3:
-				for (size_t n = 0; n < N; n++) { P[n].x *= -1.; }
+				for (unsigned long n = 0; n < N; n++) { P[n].x *= -1.; }
 				std::reverse(P.begin(), P.end());
 				break;
 		}
 		// normalise
 		P = normalisePolygon(P);
 		// position x = 0. at P[0]
-		size_t n_shift = 0;
-		for (size_t n = 0; n < N; n++) {
+		unsigned long n_shift = 0;
+		for (unsigned long n = 0; n < N; n++) {
 			if (P[n].x == 0.) {
 				n_shift = n;
 				break;
@@ -202,8 +204,8 @@ namespace kac_core::geometry {
 		// shift midpoint of the largest vector to origin
 		double x_shift = (P[LV.second.first].x + P[LV.second.second].x) / 2;
 		double y_shift = (P[LV.second.first].y + P[LV.second.second].y) / 2;
-		const size_t N = P.size();
-		for (size_t n = 0; n < N; n++) {
+		const unsigned long N = P.size();
+		for (unsigned long n = 0; n < N; n++) {
 			P[n].x -= x_shift;
 			P[n].y -= y_shift;
 		}
@@ -211,7 +213,7 @@ namespace kac_core::geometry {
 		double theta = P[LV.second.first].theta();
 		double cos_theta = cos(theta);
 		double sin_theta = sin(theta);
-		for (size_t n = 0; n < N; n++) {
+		for (unsigned long n = 0; n < N; n++) {
 			P[n] = T::Point(
 				P[n].x * cos_theta + P[n].y * sin_theta, -P[n].x * sin_theta + P[n].y * cos_theta
 			);
@@ -219,8 +221,8 @@ namespace kac_core::geometry {
 		// normalise
 		P = normalisePolygon(P);
 		// position x = 0. at P[0]
-		size_t n_shift = 0;
-		for (size_t n = 0; n < N; n++) {
+		unsigned long n_shift = 0;
+		for (unsigned long n = 0; n < N; n++) {
 			if (P[n].x == 0.) {
 				n_shift = n;
 				break;

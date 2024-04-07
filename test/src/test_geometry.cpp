@@ -24,7 +24,7 @@ int main() {
 	batchBooleanTest(
 		"generatedConvexPolygon produces the expected output for a given seed",
 		N,
-		[&P_convex, &P_copy](const unsigned long n) {
+		[&P_convex, &P_copy](const unsigned long& n) {
 			return abs(P_convex[n].x - P_copy[n].x) == 0. && abs(P_convex[n].y - P_copy[n].y) == 0.;
 		}
 	);
@@ -37,7 +37,7 @@ int main() {
 	batchBooleanTest(
 		"generatedConvexPolygon does not produce colinear points",
 		N,
-		[&P_convex](const unsigned long n) {
+		[&P_convex](const unsigned long& n) {
 			return !g::isColinear(P_convex[n > 0 ? n - 1 : 9], P_convex[n], P_convex[(n + 1) % 10]);
 		}
 	);

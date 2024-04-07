@@ -18,18 +18,14 @@ namespace T = kac_core::types;
 namespace kac_core::physics {
 
 	inline T::Matrix_2D equilateralTriangleAmplitudes(
-		const double& x,
-		const double& y,
-		const double& z,
-		const unsigned long& N,
-		const unsigned long& M
+		double u, double v, double w, const unsigned long& N, const unsigned long& M
 	) {
 		/*
 		Calculate the amplitudes of the equilateral triangle eigenmodes relative to a
 		trilinear strike location according to Lamé's formula.
 		Seth (1940) Transverse Vibrations of Triangular Membranes.
 		input:
-			( x, y, z ) = trilinear coordinate
+			( u, v, w ) = trilinear coordinate
 			N = number of modal orders
 			M = number of modes per order
 		output:
@@ -39,12 +35,12 @@ namespace kac_core::physics {
 			}
 		*/
 
-		double x_hat = x * pi;
-		double y_hat = y * pi;
-		double z_hat = z * pi;
+		u *= pi;
+		v *= pi;
+		w *= pi;
 		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
 		for (unsigned long n = 0; n < N; n++) {
-			double n_hat = abs(sin((n + 1) * x_hat) * sin((n + 1) * y_hat) * sin((n + 1) * z_hat));
+			double n_hat = abs(sin((n + 1) * u) * sin((n + 1) * v) * sin((n + 1) * w));
 			for (unsigned long m = 0; m < M; m++) { A[n][m] = n_hat; }
 		}
 		return A;
@@ -65,10 +61,10 @@ namespace kac_core::physics {
 		*/
 
 		T::Matrix_2D S(N, T::Matrix_1D(M, 0));
-		for (unsigned long n = 0; n < N; n++) {
-			double n_hat = pow((n + 1), 2);
-			for (unsigned long m = 0; m < M; m++) {
-				S[n][m] = sqrt(pow((m + 1), 2) + n_hat + m * n);
+		for (unsigned long n = 1; n < N + 1; n++) {
+			double n_hat = pow(n, 2);
+			for (unsigned long m = 1; m < M + 1; m++) {
+				S[n - 1][m - 1] = sqrt(pow(m, 2) + n_hat + (m * n));
 			}
 		}
 		return S;

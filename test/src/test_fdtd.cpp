@@ -10,13 +10,19 @@ namespace p = kac_core::physics;
 #include "./utils.hpp"
 
 int main() {
+	/*
+	Test raisedCosine.
+	*/
 	booleanTest(
 		"raisedCosine is accurate",
-		p::raisedCosine1D(10, 4, 1.)[4] == 1. && p::raisedCosine2D(10, 10, 4, 4, 1.)[4][4] == 1.
+		p::raisedCosine1D(10, 4, 1.)[4] == 1.
+			&& p::raisedCosine2D(10, 10, T::Point(4, 4), 1.)[4][4] == 1.
 	);
 
+	/*
+	Create a square FDTD simulation.
+	*/
 	double cfl = 1 / pow(2, 0.5);
-	// square simulation
 	p::FDTDWaveform2D(
 		{{0., 0., 0., 0., 0.},
 		 {0., 0., 0., 0., 0.},
@@ -35,5 +41,6 @@ int main() {
 		10,
 		T::Point(0.5, 0.5)
 	);
+
 	return 0;
 }

@@ -50,8 +50,8 @@ namespace kac_core::physics {
 	}
 
 	inline T::BooleanImage rectangularChladniPattern(
-		const long& m,
-		const long& n,
+		const double& n,
+		const double& m,
 		const unsigned long& X,
 		const unsigned long& Y,
 		const double& tolerance = 0.1
@@ -60,8 +60,8 @@ namespace kac_core::physics {
 		Produce the 2D chladni pattern for a rectangular plate.
 		http://paulbourke.net/geometry/chladni/
 		input:
-			m = mth modal index
 			n = nth modal index
+			m = mth modal index
 			X = length of the X axis
 			Y = length of the Y axis
 			tolerance = the standard deviation between the calculation and the final pattern

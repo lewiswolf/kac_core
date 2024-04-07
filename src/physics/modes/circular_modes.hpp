@@ -76,14 +76,14 @@ namespace kac_core::physics {
 	}
 
 	inline T::BooleanImage circularChladniPattern(
-		const long& m, const long& n, const unsigned long& H, const double& tolerance = 0.1
+		const double& n, const double& m, const unsigned long& H, const double& tolerance = 0.1
 	) {
 		/*
 		Produce the 2D chladni pattern for a circular plate.
 		http://paulbourke.net/geometry/chladni/
 		input:
-			m = mth modal index
 			n = nth modal index
+			m = mth modal index
 			H = length of the X and Y axis
 			tolerance = the standard deviation between the calculation and the final pattern
 		output:
@@ -92,19 +92,25 @@ namespace kac_core::physics {
 			}
 		*/
 
+		// interpolate n and z_mn
+		double n_round = round(2. * n) / 2.;
+		double m_floor = floor(m);
+		double z_mn_floor = boost::math::cyl_bessel_j_zero(n, m_floor);
+		double z_mn = z_mn_floor
+					+ ((boost::math::cyl_bessel_j_zero(n, ceil(m)) - z_mn_floor) * (m - m_floor));
+		// calculate pattern
 		T::BooleanImage M(H, std::vector<short>(H, 0));
-		double z_mn = boost::math::cyl_bessel_j_zero((double)n, m);
 		for (unsigned long x = 0; x < H; x++) {
-			double x_prime = (2.0 * x / H) - 1.0;
+			double x_prime = (2. * x / H) - 1.;
 			for (unsigned long y = 0; y < H; y++) {
-				double y_prime = (2.0 * y / H) - 1.0;
+				double y_prime = (2. * y / H) - 1.;
 				double r = sqrt(pow(x_prime, 2) + pow(y_prime, 2));
-				if (r > 1.0) {
+				if (r > 1.) {
 					continue;
 				} else {
 					double theta = atan2(y_prime, x_prime);
 					M[x][y] = abs(boost::math::cyl_bessel_j(n, z_mn * r)
-								  * (cos(n * theta) + sin(n * theta)))
+								  * (cos(n_round * theta) + sin(n_round * theta)))
 									< tolerance
 								? 1
 								: 0;

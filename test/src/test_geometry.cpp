@@ -59,13 +59,13 @@ int main() {
 	booleanTest("isConvex holds for counter-clockwise ordered polygons", g::isConvex(square_anti));
 	booleanTest("isConvex holds for clockwise ordered polygons", g::isConvex(square_clockwise));
 
-	// /*
-	// Test normaliseConvexPolygon.
-	// */
-	// booleanTest(
-	// 	"normaliseConvexPolygon produces a polygon on the unit interval.",
-	// 	g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1.
-	// );
+	/*
+	Test normaliseConvexPolygon.
+	*/
+	booleanTest(
+		"normaliseConvexPolygon produces a polygon on the unit interval.",
+		g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1.
+	);
 
 	return 0;
 }

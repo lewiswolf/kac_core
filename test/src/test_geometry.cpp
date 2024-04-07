@@ -17,29 +17,17 @@ int main() {
 	int N = 10;
 	T::Polygon P_convex = g::generateConvexPolygon(N, 1);
 
-	// /*
-	// Test the seed argument of generateConvexPolygon.
-	// */
-	// T::Matrix_2D expected = {
-	// 	{-0.552113, 0.713991},
-	// 	{-0.670506, 0.425103},
-	// 	{-0.713519, 0.302169},
-	// 	{-0.777715, -0.0903147},
-	// 	{-0.745129, -0.162445},
-	// 	{-0.621568, -0.323642},
-	// 	{0.0841093, -0.713991},
-	// 	{0.777715, 0.331095},
-	// 	{0.481532, 0.648682},
-	// 	{0.335852, 0.677941}
-	// };
-	// batchBooleanTest(
-	// 	"generatedConvexPolygon produces the expected output for a given seed",
-	// 	10,
-	// 	[&P_convex, &expected](unsigned int n) {
-	// 		return abs(P_convex[n].x - expected[n][0]) < 0.01
-	// 			&& abs(P_convex[n].y - expected[n][1]) < 0.01;
-	// 	}
-	// );
+	/*
+	Test the seed argument of generateConvexPolygon.
+	*/
+	T::Polygon P_copy = g::generateConvexPolygon(N, 1);
+	batchBooleanTest(
+		"generatedConvexPolygon produces the expected output for a given seed",
+		N,
+		[&P_convex, &P_copy](unsigned int n) {
+			return abs(P_convex[n].x - P_copy[n].x) == 0. && abs(P_convex[n].y - P_copy[n].y) == 0.;
+		}
+	);
 
 	// /*
 	// Test the properties of generateConvexPolygon.

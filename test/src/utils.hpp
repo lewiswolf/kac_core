@@ -58,8 +58,8 @@ void batchBooleanTest(
 	Runs booleanTest N times on the input function.
 	*/
 
-	for (unsigned long n = 0; n < _N; n++) {
-		if (!lambda(n)) {
+	for (unsigned long _n = 0; _n < _N; _n++) {
+		if (!lambda(_n)) {
 			booleanTest(test_name, false);
 			return;
 		}

@@ -12,7 +12,7 @@ namespace g = kac_core::geometry;	 // geometry
 
 int main() {
 	/*
-	Initialise polygons.
+	Initialise polygon.
 	*/
 	int N = 10;
 	T::Polygon P_convex = g::generateConvexPolygon(N, 1);
@@ -34,15 +34,15 @@ int main() {
 	*/
 	booleanTest("generatedConvexPolygon produces n vertices", P_convex.size() == N);
 	booleanTest("generatedConvexPolygon is convex", g::isConvex(P_convex));
-	// batchBooleanTest(
-	// 	"generatedConvexPolygon does not produce colinear points",
-	// 	N,
-	// 	[&P_convex, &N](unsigned int n) {
-	// 		return !g::isColinear(
-	// 			P_convex[n > 0 ? n - 1 : N - 1], P_convex[n], P_convex[(n + 1) % N]
-	// 		);
-	// 	}
-	// );
+	batchBooleanTest(
+		"generatedConvexPolygon does not produce colinear points",
+		N,
+		[&P_convex, &N](unsigned int n) {
+			return !g::isColinear(
+				P_convex[n > 0 ? n - 1 : N - 1], P_convex[n], P_convex[(n + 1) % N]
+			);
+		}
+	);
 
 	// /*
 	// Test that convexity holds for both clockwise and anticlockwise oriented polygons.

@@ -81,13 +81,13 @@ namespace kac_core::geometry::ETC {
 		*/
 
 		typeGuard(P);
-		const double a = (P[2].x - P[1].x) * (P[2].y - P[0].y);
-		const double b = (P[2].y - P[1].y) * (P[2].x - P[0].x);
-		const double c = P[1].x * (P[0].x - P[2].x) + P[1].y * (P[0].y - P[2].y);
-		const double d = P[0].x * (P[1].x - P[2].x) + P[0].y * (P[1].y - P[2].y);
+		const double a = P[1].x * (P[0].x - P[2].x) + P[1].y * (P[0].y - P[2].y);
+		const double b = P[0].x * (P[1].x - P[2].x) + P[0].y * (P[1].y - P[2].y);
+		const double c = (P[2].x - P[1].x) * (P[2].y - P[0].y);
+		const double d = (P[2].y - P[1].y) * (P[2].x - P[0].x);
 		return T::Point(
-			(c * (P[2].y - P[1].y) - d * (P[2].y - P[0].y)) / (a - b),
-			(c * (P[2].x - P[1].x) - d * (P[2].x - P[0].x)) / (b - a)
+			(a * (P[2].y - P[1].y) - b * (P[2].y - P[0].y)) / (c - d),
+			(a * (P[2].x - P[1].x) - b * (P[2].x - P[0].x)) / (d - c)
 		);
 	}
 

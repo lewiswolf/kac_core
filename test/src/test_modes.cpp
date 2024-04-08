@@ -18,7 +18,7 @@ int main() {
 	*/
 	booleanTest(
 		"besselJ is accurate",
-		abs(p::besselJ(0, 4.2) - -0.37655) < 0.01 && abs(p::besselJ(1, 1.2) - 0.498289) < 0.01
+		abs(p::besselJ(0, 4.2) - -0.37655) < 0.001 && abs(p::besselJ(1, 1.2) - 0.498289) < 0.001
 	);
 
 	/*

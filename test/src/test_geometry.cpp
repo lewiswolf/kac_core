@@ -29,7 +29,7 @@ int main() {
 		"generatedConvexPolygon produces the expected output for a given seed",
 		N,
 		[&P_convex, &P_copy](const unsigned long& n) {
-			return abs(P_convex[n].x - P_copy[n].x) == 0. && abs(P_convex[n].y - P_copy[n].y) == 0.;
+			return (P_convex[n].x - P_copy[n].x) == 0. && (P_convex[n].y - P_copy[n].y) == 0.;
 		}
 	);
 
@@ -76,12 +76,12 @@ int main() {
 	T::Point incenter = g::ETC::incenter(tri);
 	booleanTest(
 		"X(1) produces the correct output.",
-		(incenter.x - 0.707107) < 0.001 && (incenter.y - 0.292893) < 0.01
+		(incenter.x - 0.707107) < 0.001 && (incenter.y - 0.292893) < 0.001
 	);
 	T::Point centroid = g::ETC::centroid(tri);
 	booleanTest(
 		"X(2) produces the correct output.",
-		(centroid.x - (2. / 3.)) < 0.001 && (centroid.y - (1. / 3.)) < 0.01
+		(centroid.x - (2. / 3.)) < 0.001 && (centroid.y - (1. / 3.)) < 0.001
 	);
 	T::Point circumcenter = g::ETC::circumcenter(tri);
 	booleanTest(

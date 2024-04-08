@@ -7,6 +7,7 @@ Utility functions for working with lines and curves.
 // core
 #include <algorithm>
 #include <math.h>
+#include <stdexcept>
 #include <string>
 #include <utility>
 

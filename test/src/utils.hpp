@@ -44,7 +44,7 @@ void booleanTest(const std::string& test_name, const bool& b) {
 	*/
 
 	if (!b) {
-		std::cout << test_name;
+		std::cerr << test_name << std::endl;
 		throw;
 	}
 }

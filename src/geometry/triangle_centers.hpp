@@ -42,12 +42,53 @@ namespace kac_core::geometry::ETC {
 		);
 	}
 
-	// T::Point centroid(const T::Polygon& P) {
-	// 	/*
-	// 	X(2) Centroid
-	// 	*/
+	T::Point centroid(const T::Polygon& P) {
+		/*
+		X(2) Centroid
+		output:
+			( x, y ) = coordinates of the centroid.
+		*/
 
-	// 	return T::Point();
-	// }
+		typeGuard(P);
+		return T::Point((P[0].x + P[1].x + P[2].x) / 3., (P[0].y + P[1].y + P[2].y) / 3.);
+	}
+
+	T::Point circumcenter(const T::Polygon& P) {
+		/*
+		X(2) Circumcenter
+		output:
+			( x, y ) = coordinates of the circumcenter.
+		*/
+
+		typeGuard(P);
+		const double a_2 = P[0].x * P[0].x + P[0].y * P[0].y;
+		const double b_2 = P[1].x * P[1].x + P[1].y * P[1].y;
+		const double c_2 = P[2].x * P[2].x + P[2].y * P[2].y;
+		const double d = 2
+					   * (P[0].x * (P[1].y - P[2].y) + P[1].x * (P[2].y - P[0].y)
+						  + P[2].x * (P[0].y + P[1].y));
+		return T::Point(
+			((a_2 * (P[1].y - P[2].y)) + (b_2 * (P[2].y - P[0].y)) + (c_2 * (P[0].y - P[1].y))) / d,
+			((a_2 * (P[2].x - P[1].x)) + (b_2 * (P[0].x - P[2].x)) + (c_2 * (P[1].x - P[0].x))) / d
+		);
+	}
+
+	T::Point orthocenter(const T::Polygon& P) {
+		/*
+		X(4) Orthocenter
+		output:
+			( x, y ) = coordinates of the orthocenter.
+		*/
+
+		typeGuard(P);
+		const double a = (P[2].x - P[1].x) * (P[2].y - P[0].y);
+		const double b = (P[2].y - P[1].y) * (P[2].x - P[0].x);
+		const double c = P[1].x * (P[0].x - P[2].x) + P[1].y * (P[0].y - P[2].y);
+		const double d = P[0].x * (P[1].x - P[2].x) + P[0].y * (P[1].y - P[2].y);
+		return T::Point(
+			(c * (P[2].y - P[1].y) - d * (P[2].y - P[0].y)) / (a - b),
+			(c * (P[2].x - P[1].x) - d * (P[2].x - P[0].x)) / (b - a)
+		);
+	}
 
 }

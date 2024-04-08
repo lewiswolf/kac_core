@@ -78,6 +78,19 @@ int main() {
 		"X(1) produces the correct output.",
 		(incenter.x - 0.707107) < 0.001 && (incenter.y - 0.292893) < 0.01
 	);
+	T::Point centroid = g::ETC::centroid(tri);
+	booleanTest(
+		"X(2) produces the correct output.",
+		(centroid.x - (2. / 3.)) < 0.001 && (centroid.y - (1. / 3.)) < 0.01
+	);
+	T::Point circumcenter = g::ETC::circumcenter(tri);
+	booleanTest(
+		"X(3) produces the correct output.", (circumcenter.x == 0.5) && (circumcenter.y == 0.5)
+	);
+	T::Point orthocenter = g::ETC::orthocenter(tri);
+	booleanTest(
+		"X(4) produces the correct output.", (orthocenter.x == 1.) && (orthocenter.y == 0.)
+	);
 
 	return 0;
 }

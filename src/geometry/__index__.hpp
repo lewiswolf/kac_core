@@ -10,3 +10,4 @@ Central import for all files in /geometry.
 #include "mappings.hpp"
 #include "morphisms.hpp"
 #include "polygon_properties.hpp"
+#include "triangle_centers.hpp"

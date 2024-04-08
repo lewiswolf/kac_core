@@ -69,5 +69,15 @@ int main() {
 	// 	g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1.
 	// );
 
+	/*
+	Test Encyclopedia of Triangle Centers.
+	*/
+	T::Polygon tri = {T::Point(0., 0.), T::Point(1., 0.), T::Point(1., 1.)};
+	T::Point incenter = g::ETC::incenter(tri);
+	booleanTest(
+		"X(1) produces the correct output.",
+		(incenter.x - 0.707107) < 0.001 && (incenter.y - 0.292893) < 0.01
+	);
+
 	return 0;
 }

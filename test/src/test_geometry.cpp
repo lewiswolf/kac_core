@@ -6,8 +6,6 @@ Tests for /geometry.
 #include <numbers>
 using namespace std::numbers;
 
-#include <iostream>
-
 // src
 #include <kac_core.hpp>
 namespace T = kac_core::types;		 // types
@@ -40,10 +38,6 @@ int main() {
 	*/
 	booleanTest("generatedConvexPolygon produces n vertices", P_convex.size() == N);
 	booleanTest("generatedConvexPolygon is convex", g::isConvex(P_convex));
-	// booleanTest(
-	// 	"generatedConvexPolygon does not produce colinear points 9 0 1",
-	// 	!g::isColinear(P_convex[9], P_convex[0], P_convex[1])
-	// );
 	// batchBooleanTest(
 	// 	"generatedConvexPolygon does not produce colinear points",
 	// 	N,

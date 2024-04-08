@@ -35,8 +35,7 @@ namespace kac_core::physics {
 
 	inline double besselJZero(const double& n, const long& m) {
 		/*
-		Calculates the mth zero crossing of the bessel functions of the first
-		kind.
+		Calculates the mth zero crossing of the bessel functions of the first kind.
 		input:
 			n = order of the bessel function
 			m = mth zero
@@ -50,8 +49,7 @@ namespace kac_core::physics {
 	inline T::Matrix_2D
 	circularAmplitudes(const double& r, const double& theta, const T::Matrix_2D& S) {
 		/*
-		Calculate the amplitudes of the circular eigenmodes relative to a polar
-		strike location.
+		Calculate the amplitudes of the circular eigenmodes relative to a polar strike location.
 		input:
 			(r, θ) = polar strike location
 			S = { z_nm | s ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M }

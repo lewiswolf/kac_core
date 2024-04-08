@@ -50,14 +50,16 @@ void booleanTest(const std::string& test_name, const bool& b) {
 }
 
 void batchBooleanTest(
-	const std::string& test_name, const int& N, const std::function<bool(unsigned int)>& lambda
+	const std::string& test_name,
+	const unsigned long& _N,
+	const std::function<bool(const unsigned long&)>& lambda
 ) {
 	/*
 	Runs booleanTest N times on the input function.
 	*/
 
-	for (unsigned int i = 0; i < N; i++) {
-		if (!lambda(i)) {
+	for (unsigned long _n = 0; _n < _N; _n++) {
+		if (!lambda(_n)) {
 			booleanTest(test_name, false);
 			return;
 		}

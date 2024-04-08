@@ -19,8 +19,7 @@ namespace kac_core::physics {
 
 	inline T::Matrix_1D linearAmplitudes(const double& x, const unsigned long& N) {
 		/*
-		Calculate the amplitudes of the 1D eigenmodes relative to a strike
-		location.
+		Calculate the amplitudes of the 1D eigenmodes relative to a strike location.
 		input:
 			x = strike location
 			N = number of modes

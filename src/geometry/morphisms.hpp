@@ -20,8 +20,8 @@ namespace kac_core::geometry {
 
 	inline T::Polygon normalisePolygon(T::Polygon P) {
 		/*
-		This function takes a polygon, centers it across the x and y axis, then
-		normalises the vertices to the unit interval ℝ^2.
+		This function takes a polygon, centers it across the x and y axis, then normalises the
+		vertices to the unit interval ℝ^2.
 		*/
 
 		// first find minmax in both x & y
@@ -59,16 +59,13 @@ namespace kac_core::geometry {
 
 	inline T::Polygon normaliseConvexPolygon(T::Polygon P) {
 		/*
-		This algorithm produces an identity polygon for each unique polygon
-		given as input. This method normalises an input polygon to the unit
-		interval such that x ∈ [0, 1] && y ∈ [0, 1], reducing each input polygon
-		by isometric and similarity transformations. This is achieved by first
-		enforcing that the vertices of a polygon are ordered clockwise. Then,
-		the largest vector is used to determine the lower and upper bounds
-		across the x-axis. Next, the polygon is split into quadrants, the
-		largest of whose area determines the rotation/reflection of the polygon.
-		Finally, the points are normalised, and ordered such that
-		P[0] = [0., y].
+		This algorithm produces an identity polygon for each unique polygon given as input. This
+		method normalises an input polygon to the unit interval such that x ∈ [0, 1] && y ∈ [0, 1],
+		reducing each input polygon by isometric and similarity transformations. This is achieved by
+		first enforcing that the vertices of a polygon are ordered clockwise. Then, the largest
+		vector is used to determine the lower and upper bounds across the x-axis. Next, the polygon
+		is split into quadrants, the largest of whose area determines the rotation/reflection of the
+		polygon. Finally, the points are normalised, and ordered such that P[0] = [0., y].
 		*/
 
 		// enforce that each polygon is clockwise
@@ -96,8 +93,8 @@ namespace kac_core::geometry {
 				P[n].x * cos_theta + P[n].y * sin_theta, -P[n].x * sin_theta + P[n].y * cos_theta
 			);
 		}
-		// find area of each cartesian quadrant and position the largest in
-		// the positive x and y to remove isometric transformations.
+		// find area of each cartesian quadrant and position the largest in the positive x and y to
+		// remove isometric transformations.
 		std::array<double, 4> quadAreas = {0., 0., 0., 0.};
 		// determine which quadrant each point is in
 		auto whichQuad = [](const T::Point& p) {
@@ -113,7 +110,7 @@ namespace kac_core::geometry {
 		};
 		// area of a triangle, simplified due to point c = [0., 0.]
 		auto triangleArea = [](const T::Point& a, const T::Point& b) {
-			return fabs(b.y * a.x - b.x * a.y) / 2;
+			return abs(b.y * a.x - b.x * a.y) / 2;
 		};
 		// loop over points and sum quadrant areas
 		for (unsigned long n = 0; n < N; n++) {
@@ -122,12 +119,11 @@ namespace kac_core::geometry {
 			short quad_a = whichQuad(a);
 			short quad_b = whichQuad(b);
 			if (quad_a == quad_b) {
-				// if the points lie in the same quadrant, add the triangular
-				// area to that quadrant.
+				// if the points lie in the same quadrant, add the triangular area to that quadrant.
 				quadAreas[quad_a] += triangleArea(a, b);
 			} else if (((quad_b + 4) - quad_a) % 4 == 1) {
-				// if the points are in neighbouring quadrants, find the axis
-				// intersection between them and update both quadrants.
+				// if the points are in neighbouring quadrants, find the axis intersection between
+				// them and update both quadrants.
 				T::Point c;
 				if ((a.x * b.x) < 0) {
 					// crosses y axis
@@ -141,8 +137,8 @@ namespace kac_core::geometry {
 				quadAreas[quad_a] += triangleArea(a, c);
 				quadAreas[quad_b] += triangleArea(c, b);
 			} else if (((quad_b + 4) - quad_a) % 4 == 2) {
-				// if the points lie across three quadrants, update the two
-				// quadrants containing the points in question.
+				// if the points lie across three quadrants, update the two quadrants containing the
+				// points in question.
 				T::Point c = T::Point(0, a.y - (b.y - a.y) / (b.x - a.x) * a.x);
 				T::Point d = T::Point(a.x - (b.x - a.x) / (b.y - a.y) * a.y, 0);
 				if (sqrt(pow(a.x - c.x, 2) + pow(a.y - c.y, 2))

@@ -19,13 +19,11 @@ namespace kac_core::geometry {
 
 	inline bool isConvex(const T::Polygon& P) {
 		/*
-		Tests whether or not a given array of vertices forms a convex polygon.
-		This is achieved using the resultant sign of the cross product for each
-		vertex:
+		Tests whether or not a given array of vertices forms a convex polygon. This is achieved
+		using the resultant sign of the cross product for each vertex:
 			[(x_i - x_i-1), (y_i - y_i-1)] × [(x_i+1 - x_i), (y_i+1 - y_i)]
-		See => http://paulbourke.net/geometry/polygonmesh/ 'Determining whether
-		or not a polygon (2D) has its vertices ordered clockwise or
-		counter-clockwise'.
+		See => http://paulbourke.net/geometry/polygonmesh/ 'Determining whether or not a polygon
+		(2D) has its vertices ordered clockwise or counter-clockwise'.
 		*/
 
 		// cross product - z component only, see np.cross =>
@@ -87,23 +85,24 @@ namespace kac_core::geometry {
 		return true;
 	}
 
-	inline std::pair<double, std::pair<long, long>> largestVector(const T::Polygon& P) {
+	inline std::pair<double, std::pair<unsigned long, unsigned long>>
+	largestVector(const T::Polygon& P) {
 		/*
-		This function tests each pair of vertices in a given polygon to find the
-		largest vector, and returns the length of the vector and its indices.
+		This function tests each pair of vertices in a given polygon to find the largest vector, and
+		returns the length of the vector and its indices.
 		*/
 
 		const unsigned long N = P.size();
+		unsigned long index_i = 0;
+		unsigned long index_j = 0;
 		double vec_max = 0.;
-		long index_i = 0;
-		long index_j = 0;
 		for (unsigned long i = 0; i < N; i++) {
 			for (unsigned long j = i + 1; j < N; j++) {
 				double vec = sqrt(pow(P[i].x - P[j].x, 2) + pow(P[i].y - P[j].y, 2));
 				if (vec > vec_max) {
-					vec_max = vec;
 					index_i = i;
 					index_j = j;
+					vec_max = vec;
 				}
 			}
 		}
@@ -126,10 +125,9 @@ namespace kac_core::geometry {
 
 	inline T::Point polygonCentroid(const T::Polygon& P, const double& area) {
 		/*
-		This algorithm is used to calculate the geometric centroid of a 2D
-		polygon. See http://paulbourke.net/geometry/polygonmesh/ 'Calculating
-		the area and centroid of a polygon'.
-
+		This algorithm is used to calculate the geometric centroid of a 2D polygon.
+		See http://paulbourke.net/geometry/polygonmesh/ 'Calculating the area and centroid of a
+		polygon'.
 		output:
 			for N == 3 ->
 			(x, y) = (

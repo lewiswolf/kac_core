@@ -49,16 +49,14 @@ namespace kac_core::physics {
 		}
 		A_max_NM *= N * M;
 		for (unsigned long t = 0; t < T; t++) {
-			double sum = 0.;
 			double d_t = pow(e, t * d);
 			for (unsigned long n = 0; n < N; n++) {
 				for (unsigned long m = 0; m < M; m++) {
 					// 2009 - Bilbao, pp.65-66
 					// 2016 - Chaigne & Kergomard, p.154
-					sum += A[n][m] * d_t * sin(t * F[n][m]) / A_max_NM;
+					waveform[t] += A[n][m] * d_t * sin(t * F[n][m]) / A_max_NM;
 				}
 			}
-			waveform[t] = sum;
 		}
 		return waveform;
 	}

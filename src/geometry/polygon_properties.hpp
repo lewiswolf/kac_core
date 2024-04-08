@@ -147,11 +147,7 @@ namespace kac_core::geometry {
 		if (N == 3) {
 			// Triangles have a much simpler formula, and so these are
 			// calculated separately.
-			for (unsigned long n = 0; n < 3; n++) {
-				out_x += P[n].x;
-				out_y += P[n].y;
-			}
-			return T::Point(out_x / 3., out_y / 3.);
+			return T::Point((P[0].x + P[1].x + P[2].x) / 3., (P[0].y + P[1].y + P[2].y) / 3.);
 		}
 		for (unsigned long n = 0; n < N; n++) {
 			double out = (P[n].x * P[(n + 1) % N].y - P[(n + 1) % N].x * P[n].y);

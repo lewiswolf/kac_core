@@ -75,9 +75,7 @@ namespace kac_core::geometry {
 			for (unsigned long j = i + 1; j < N; j++) {
 				std::string intersection_type =
 					lineIntersection(T::Line(P[i], P[i + 1]), T::Line(P[j], P[(j + 1) % N])).first;
-				if (intersection_type == "none" || intersection_type == "vertex") {
-					continue;
-				} else {
+				if (intersection_type != "none" && intersection_type != "vertex") {
 					return false;
 				}
 			}

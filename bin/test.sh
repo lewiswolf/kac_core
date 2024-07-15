@@ -2,7 +2,7 @@
 
 # build dir
 if [ ! -d ./build ]; then
-  mkdir -p ./build
+	mkdir -p ./build
 fi
 
 # build
@@ -11,3 +11,4 @@ cmake --build build --config Debug -j
 
 # run test
 ctest --test-dir build --build-config Debug -j --output-on-failure
+./build/test/profiler

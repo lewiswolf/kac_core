@@ -97,9 +97,11 @@ namespace kac_core::geometry {
 			y_max = std::max(P[n].y, y_max);
 		}
 		// center around origin
+		double x_shift = ((x_max - x_min) / 2.0) - x_max;
+		double y_shift = ((y_max - y_min) / 2.0) - y_max;
 		for (unsigned long n = 0; n < N; n++) {
-			P[n].x += ((x_max - x_min) / 2.0) - x_max;
-			P[n].y += ((y_max - y_min) / 2.0) - y_max;
+			P[n].x += x_shift;
+			P[n].y += y_shift;
 		}
 		return P;
 	}

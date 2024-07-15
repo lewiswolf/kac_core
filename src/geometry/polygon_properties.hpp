@@ -49,16 +49,15 @@ namespace kac_core::geometry {
 		Solution 3 => http://paulbourke.net/geometry/polygonmesh/
 		*/
 
+		auto crossProductZ = [](T::Point a, T::Point b, T::Point p) {
+			return (b.x - a.x) * (p.y - a.y) - (p.x - a.x) * (b.y - a.y);
+		};
 		// determine if the polygon is ordered clockwise
-		const short clockwise =
-			(P[1].x - P[0].x) * (P[2].y - P[1].y) - (P[1].y - P[0].y) * (P[2].x - P[1].x) > 0 ? -1
-																							  : 1;
-		// go through each of the vertices, plus the next vertex in the list
+		const short clockwise = crossProductZ(P[0], P[1], P[2]) > 0 ? -1 : 1;
+		// go through each of the vertices, and test with p
 		const unsigned long N = P.size();
 		for (unsigned long n = 0; n < N; n++) {
-			T::Point a = P[n];
-			T::Point b = P[(n + 1) % N];
-			if (((b.x - a.x) * (p.y - b.y) - (b.y - a.y) * (p.x - b.x)) * clockwise > 0.) {
+			if (crossProductZ(P[n], P[(n + 1) % N], p) * clockwise > 0.) {
 				return false;
 			}
 		}

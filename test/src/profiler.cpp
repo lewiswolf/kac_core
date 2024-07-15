@@ -17,7 +17,7 @@ namespace g = kac_core::geometry;	 // geometry
 unsigned long N = 200;
 
 int main() {
-	std::cout << "Profiler for `./src/shapes`.\n";
+	std::cout << "Profiler for `./geometry/generate_polygon.hpp`.\n";
 	std::cout << "Efficiency relative to " << N << " vertices...\n";
 	T::Polygon P;
 

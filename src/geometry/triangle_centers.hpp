@@ -55,7 +55,7 @@ namespace kac_core::geometry::ETC {
 
 	T::Point circumcenter(const T::Polygon& P) {
 		/*
-		X(2) Circumcenter
+		X(3) Circumcenter
 		output:
 			( x, y ) = coordinates of the circumcenter.
 		*/

@@ -17,10 +17,10 @@ Functions for generating polygons.
 #include "./lines.hpp"
 namespace T = kac_core::types;
 
-static std::default_random_engine random_engine = std::default_random_engine(time(0l));
+static std::default_random_engine random_engine(time(0l));
+static std::uniform_real_distribution<double> uniform_distribution(-1., 1.);
 static std::uniform_int_distribution<long>
-	uniform_distribution(std::numeric_limits<long>::min(), std::numeric_limits<long>::max());
-static const double rand_max = static_cast<double>(std::numeric_limits<long>::max());
+	uniform_sequence(std::numeric_limits<long>::min(), std::numeric_limits<long>::max());
 
 namespace kac_core::geometry {
 
@@ -49,17 +49,17 @@ namespace kac_core::geometry {
 			random_engine.seed(seed);
 		}
 		std::generate(X_rand.begin(), X_rand.end(), []() {
-			return static_cast<double>(uniform_distribution(random_engine)) / rand_max;
+			return uniform_distribution(random_engine);
 		});
 		std::generate(Y_rand.begin(), Y_rand.end(), []() {
-			return static_cast<double>(uniform_distribution(random_engine)) / rand_max;
+			return uniform_distribution(random_engine);
 		});
 		std::sort(X_rand.begin(), X_rand.end());
 		std::sort(Y_rand.begin(), Y_rand.end());
 		// divide the interior points into two chains
 		for (unsigned long n = 1; n < N; n++) {
 			if (n != N - 1) {
-				if (rand() % 2 == 1) {
+				if (uniform_sequence(random_engine) % 2 == 1) {
 					X[n] = X_rand[n] - X_rand[last_true];
 					Y[n] = Y_rand[n] - Y_rand[last_true];
 					last_true = n;
@@ -97,9 +97,11 @@ namespace kac_core::geometry {
 			y_max = std::max(P[n].y, y_max);
 		}
 		// center around origin
+		double x_shift = ((x_max - x_min) / 2.0) - x_max;
+		double y_shift = ((y_max - y_min) / 2.0) - y_max;
 		for (unsigned long n = 0; n < N; n++) {
-			P[n].x += ((x_max - x_min) / 2.0) - x_max;
-			P[n].y += ((y_max - y_min) / 2.0) - y_max;
+			P[n].x += x_shift;
+			P[n].y += y_shift;
 		}
 		return P;
 	}
@@ -126,8 +128,8 @@ namespace kac_core::geometry {
 		}
 		// first find minmax in both x & y
 		for (unsigned long n = 0; n < N; n++) {
-			X.push_back(static_cast<double>(uniform_distribution(random_engine)) / rand_max);
-			Y.push_back(static_cast<double>(uniform_distribution(random_engine)) / rand_max);
+			X.push_back(uniform_distribution(random_engine));
+			Y.push_back(uniform_distribution(random_engine));
 		}
 		auto x_min_max = std::minmax_element(begin(X), end(X));
 		auto y_min_max = std::minmax_element(begin(Y), end(Y));
@@ -151,7 +153,6 @@ namespace kac_core::geometry {
 		random to eliminate after each sweep.
 		https://doc.cgal.org/latest/Generator/group__PkgGeneratorsRef.html#gaa8cb58e4cc9ab9e225808799b1a61174
 		van Leeuwen, J., & Schoone, A. A. (1982). Untangling a traveling salesman tour in the plane.
-
 		input:
 			N = the number of vertices
 			seed? = the seed for the random number generators
@@ -166,10 +167,9 @@ namespace kac_core::geometry {
 			random_engine.seed(seed);
 		}
 		for (unsigned long n = 0; n < N; n++) {
-			P.push_back(T::Point(
-				static_cast<double>(uniform_distribution(random_engine)) / rand_max,
-				static_cast<double>(uniform_distribution(random_engine)) / rand_max
-			));
+			P.push_back(
+				T::Point(uniform_distribution(random_engine), uniform_distribution(random_engine))
+			);
 		}
 		// 2 opt loop
 		std::vector<std::pair<long, long>> indices;
@@ -203,7 +203,7 @@ namespace kac_core::geometry {
 			if (indices.size() > 0) {
 				// randomly swap one pair
 				std::pair<long, long> swap =
-					indices[abs(uniform_distribution(random_engine)) % indices.size()];
+					indices[abs(uniform_sequence(random_engine)) % indices.size()];
 				std::reverse(P.begin() + swap.first, P.begin() + swap.second);
 				// restart loop
 				indices.clear();

@@ -19,13 +19,11 @@ namespace kac_core::geometry {
 
 	inline bool isConvex(const T::Polygon& P) {
 		/*
-		Tests whether or not a given array of vertices forms a convex polygon.
-		This is achieved using the resultant sign of the cross product for each
-		vertex:
+		Tests whether or not a given array of vertices forms a convex polygon. This is achieved
+		using the resultant sign of the cross product for each vertex:
 			[(x_i - x_i-1), (y_i - y_i-1)] × [(x_i+1 - x_i), (y_i+1 - y_i)]
-		See => http://paulbourke.net/geometry/polygonmesh/ 'Determining whether
-		or not a polygon (2D) has its vertices ordered clockwise or
-		counter-clockwise'.
+		See => http://paulbourke.net/geometry/polygonmesh/ 'Determining whether or not a polygon
+		(2D) has its vertices ordered clockwise or counter-clockwise'.
 		*/
 
 		// cross product - z component only, see np.cross =>
@@ -51,16 +49,15 @@ namespace kac_core::geometry {
 		Solution 3 => http://paulbourke.net/geometry/polygonmesh/
 		*/
 
+		auto crossProductZ = [](T::Point a, T::Point b, T::Point p) {
+			return (b.x - a.x) * (p.y - a.y) - (p.x - a.x) * (b.y - a.y);
+		};
 		// determine if the polygon is ordered clockwise
-		const short clockwise =
-			(P[1].x - P[0].x) * (P[2].y - P[1].y) - (P[1].y - P[0].y) * (P[2].x - P[1].x) > 0 ? -1
-																							  : 1;
-		// go through each of the vertices, plus the next vertex in the list
+		const short clockwise = crossProductZ(P[0], P[1], P[2]) > 0 ? -1 : 1;
+		// go through each of the vertices, and test with p
 		const unsigned long N = P.size();
 		for (unsigned long n = 0; n < N; n++) {
-			T::Point a = P[n];
-			T::Point b = P[(n + 1) % N];
-			if (((b.x - a.x) * (p.y - b.y) - (b.y - a.y) * (p.x - b.x)) * clockwise > 0.) {
+			if (crossProductZ(P[n], P[(n + 1) % N], p) * clockwise > 0.) {
 				return false;
 			}
 		}
@@ -77,9 +74,7 @@ namespace kac_core::geometry {
 			for (unsigned long j = i + 1; j < N; j++) {
 				std::string intersection_type =
 					lineIntersection(T::Line(P[i], P[i + 1]), T::Line(P[j], P[(j + 1) % N])).first;
-				if (intersection_type == "none" || intersection_type == "vertex") {
-					continue;
-				} else {
+				if (intersection_type != "none" && intersection_type != "vertex") {
 					return false;
 				}
 			}
@@ -87,23 +82,24 @@ namespace kac_core::geometry {
 		return true;
 	}
 
-	inline std::pair<double, std::pair<long, long>> largestVector(const T::Polygon& P) {
+	inline std::pair<double, std::pair<unsigned long, unsigned long>>
+	largestVector(const T::Polygon& P) {
 		/*
-		This function tests each pair of vertices in a given polygon to find the
-		largest vector, and returns the length of the vector and its indices.
+		This function tests each pair of vertices in a given polygon to find the largest vector, and
+		returns the length of the vector and its indices.
 		*/
 
 		const unsigned long N = P.size();
+		unsigned long index_i = 0;
+		unsigned long index_j = 0;
 		double vec_max = 0.;
-		long index_i = 0;
-		long index_j = 0;
 		for (unsigned long i = 0; i < N; i++) {
 			for (unsigned long j = i + 1; j < N; j++) {
 				double vec = sqrt(pow(P[i].x - P[j].x, 2) + pow(P[i].y - P[j].y, 2));
 				if (vec > vec_max) {
-					vec_max = vec;
 					index_i = i;
 					index_j = j;
+					vec_max = vec;
 				}
 			}
 		}
@@ -126,10 +122,9 @@ namespace kac_core::geometry {
 
 	inline T::Point polygonCentroid(const T::Polygon& P, const double& area) {
 		/*
-		This algorithm is used to calculate the geometric centroid of a 2D
-		polygon. See http://paulbourke.net/geometry/polygonmesh/ 'Calculating
-		the area and centroid of a polygon'.
-
+		This algorithm is used to calculate the geometric centroid of a 2D polygon.
+		See http://paulbourke.net/geometry/polygonmesh/ 'Calculating the area and centroid of a
+		polygon'.
 		output:
 			for N == 3 ->
 			(x, y) = (
@@ -149,11 +144,7 @@ namespace kac_core::geometry {
 		if (N == 3) {
 			// Triangles have a much simpler formula, and so these are
 			// calculated separately.
-			for (unsigned long n = 0; n < 3; n++) {
-				out_x += P[n].x;
-				out_y += P[n].y;
-			}
-			return T::Point(out_x / 3., out_y / 3.);
+			return T::Point((P[0].x + P[1].x + P[2].x) / 3., (P[0].y + P[1].y + P[2].y) / 3.);
 		}
 		for (unsigned long n = 0; n < N; n++) {
 			double out = (P[n].x * P[(n + 1) % N].y - P[(n + 1) % N].x * P[n].y);

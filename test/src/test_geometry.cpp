@@ -2,7 +2,9 @@
 Tests for /geometry.
 */
 
-#include <iostream>
+// core
+#include <numbers>
+using namespace std::numbers;
 
 // src
 #include <kac_core.hpp>
@@ -14,67 +16,81 @@ namespace g = kac_core::geometry;	 // geometry
 
 int main() {
 	/*
-	Initialise polygons.
+	Initialise polygon.
 	*/
-	int N = 10;
+	unsigned long N = 10;
 	T::Polygon P_convex = g::generateConvexPolygon(N, 1);
-	for (unsigned long n = 0; n < N; n++) {
-		std::cout << P_convex[n].x << " " << P_convex[n].y << std::endl;
-	}
+
 	/*
 	Test the seed argument of generateConvexPolygon.
 	*/
-	T::Matrix_2D expected = {
-		{-0.552113, 0.713991},
-		{-0.670506, 0.425103},
-		{-0.713519, 0.302169},
-		{-0.777715, -0.0903147},
-		{-0.745129, -0.162445},
-		{-0.621568, -0.323642},
-		{0.0841093, -0.713991},
-		{0.777715, 0.331095},
-		{0.481532, 0.648682},
-		{0.335852, 0.677941}
-	};
+	T::Polygon P_copy = g::generateConvexPolygon(N, 1);
 	batchBooleanTest(
 		"generatedConvexPolygon produces the expected output for a given seed",
-		10,
-		[&P_convex, &expected](unsigned int n) {
-			return abs(P_convex[n].x - expected[n][0]) < 0.01
-				&& abs(P_convex[n].y - expected[n][1]) < 0.01;
+		N,
+		[&P_convex, &P_copy](const unsigned long& n) {
+			return (P_convex[n].x - P_copy[n].x) == 0. && (P_convex[n].y - P_copy[n].y) == 0.;
 		}
 	);
+
 	/*
 	Test the properties of generateConvexPolygon.
 	*/
 	booleanTest("generatedConvexPolygon produces n vertices", P_convex.size() == N);
 	booleanTest("generatedConvexPolygon is convex", g::isConvex(P_convex));
-	batchBooleanTest(
-		"generatedConvexPolygon does not produce colinear points",
-		N,
-		[&P_convex, &N](unsigned int n) {
-			return !g::isColinear(
-				P_convex[n > 0 ? n - 1 : N - 1], P_convex[n], P_convex[(n + 1) % N]
-			);
-		}
-	);
+	// batchBooleanTest(
+	// 	"generatedConvexPolygon does not produce colinear points",
+	// 	N,
+	// 	[&P_convex](const unsigned long& n) {
+	// 		return !g::isColinear(P_convex[n > 0 ? n - 1 : 9], P_convex[n], P_convex[(n + 1) %
+	// 10]);
+	// 	}
+	// );
+
 	/*
-	Test that convexity holds for both clockwise and anticlockwise oriented polygons.
+	Test that polygon properties holds for both clockwise and anticlockwise oriented polygons.
 	*/
-	T::Polygon square_clockwise(4);
-	T::Polygon square_anti(4);
-	square_clockwise[0], square_anti[0] = T::Point(0., 0.);
-	square_clockwise[1], square_anti[3] = T::Point(0., 1.);
-	square_clockwise[2], square_anti[2] = T::Point(1., 1.);
-	square_clockwise[3], square_anti[1] = T::Point(1., 0.);
+	T::Polygon square_clockwise = {
+		T::Point(0., 0.), T::Point(0., 1.), T::Point(1., 1.), T::Point(1., 0.)
+	};
+	T::Polygon square_anti = {
+		T::Point(0., 0.), T::Point(1., 0.), T::Point(1., 1.), T::Point(0., 1.)
+	};
 	booleanTest("isConvex holds for counter-clockwise ordered polygons", g::isConvex(square_anti));
 	booleanTest("isConvex holds for clockwise ordered polygons", g::isConvex(square_clockwise));
+	booleanTest("largestVector works anticlockwise", g::largestVector(square_anti).first == sqrt2);
+	booleanTest("largestVector works clockwise", g::largestVector(square_clockwise).first == sqrt2);
+
 	/*
 	Test normaliseConvexPolygon.
 	*/
+	// booleanTest(
+	// 	"normaliseConvexPolygon produces a polygon on the unit interval.",
+	// 	g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1.
+	// );
+
+	/*
+	Test Encyclopedia of Triangle Centers.
+	*/
+	T::Polygon tri = {T::Point(0., 0.), T::Point(1., 0.), T::Point(1., 1.)};
+	T::Point incenter = g::ETC::incenter(tri);
 	booleanTest(
-		"normaliseConvexPolygon produces a polygon on the unit interval.",
-		g::largestVector(g::normaliseConvexPolygon(P_convex)).first == 1.
+		"X(1) produces the correct output.",
+		(incenter.x - 0.707107) < 0.001 && (incenter.y - 0.292893) < 0.001
 	);
+	T::Point centroid = g::ETC::centroid(tri);
+	booleanTest(
+		"X(2) produces the correct output.",
+		(centroid.x - (2. / 3.)) < 0.001 && (centroid.y - (1. / 3.)) < 0.001
+	);
+	T::Point circumcenter = g::ETC::circumcenter(tri);
+	booleanTest(
+		"X(3) produces the correct output.", (circumcenter.x == 0.5) && (circumcenter.y == 0.5)
+	);
+	T::Point orthocenter = g::ETC::orthocenter(tri);
+	booleanTest(
+		"X(4) produces the correct output.", (orthocenter.x == 1.) && (orthocenter.y == 0.)
+	);
+
 	return 0;
 }

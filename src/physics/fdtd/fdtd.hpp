@@ -54,8 +54,8 @@ namespace kac_core::physics {
 			throw std::invalid_argument("u_0 and B differ in size.");
 		}
 		// lambda for sampling the 2D matrix using bilinear interpolation.
-		const unsigned long x_0 = std::floor(w.x * (u_0.size() - 2));
-		const unsigned long y_0 = std::floor(w.y * (u_0[0].size() - 2));
+		const unsigned long x_0 = floor(w.x * (u_0.size() - 2));
+		const unsigned long y_0 = floor(w.y * (u_0[0].size() - 2));
 		const double a = w.x * (u_0.size() - 2) - x_0;
 		const double b = w.y * (u_0[0].size() - 2) - y_0;
 		const double coef_0 = (1 - a) * (1 - b);
@@ -70,10 +70,9 @@ namespace kac_core::physics {
 		T::Matrix_1D waveform(T);
 		waveform[0] = bilinearInterpolation(u_0);
 		waveform[1] = bilinearInterpolation(u_1);
-		// for efficiency, calculate the loop range relative to dirichlet
-		// boundary conditions
-		std::array<unsigned long, 2> x_range = {B.size(), 0};
-		std::array<unsigned long, 2> y_range = {B[0].size(), 0};
+		// for efficiency, calculate the loop range relative to dirichlet boundary conditions
+		std::array<size_t, 2> x_range = {B.size(), 0};
+		std::array<size_t, 2> y_range = {B[0].size(), 0};
 		// forward loop to find the first ones
 		for (unsigned long x = 1; x < B.size() - 1; x++) {
 			for (unsigned long y = 1; y < B[0].size() - 1; y++) {
@@ -110,8 +109,8 @@ namespace kac_core::physics {
 		};
 		// main loop
 		for (unsigned long t = 2; t < T; t++) {
-			// branching maintains memory efficiency, meaning that only two
-			// matrices need to be in memory at one time
+			// branching maintains memory efficiency, meaning that only two matrices need to be in
+			// memory at one time
 			if ((t % 2) == 0) {
 				FDTDUpdate2D(u_0, u_1);
 				waveform[t] = bilinearInterpolation(u_0);

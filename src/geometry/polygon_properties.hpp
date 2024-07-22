@@ -43,7 +43,7 @@ namespace kac_core::geometry {
 		return true;
 	}
 
-	inline bool isPointInsideConvexPolygon(const T::Point& p, T::Polygon P) {
+	inline bool isPointInsideConvexPolygon(const T::Point& p, const T::Polygon& P) {
 		/*
 		Determines whether or not a cartesian pair is within a polygon, including boundaries.
 		Solution 3 => http://paulbourke.net/geometry/polygonmesh/

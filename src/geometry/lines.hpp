@@ -76,6 +76,19 @@ namespace kac_core::geometry {
 		return (c.y - b.y) * (b.x - a.x) == (b.y - a.y) * (c.x - b.x);
 	}
 
+	inline bool isPointOnLine(const T::Point& p, const T::Line& A) {
+		/*
+		Determines whether or not a point lies on a line segment.
+		*/
+
+		double d_x = A.b.x - A.a.x;
+		double d_y = A.b.y - A.a.y;
+		if (abs(d_x) >= abs(d_y)) {
+			return d_x > 0 ? A.a.x <= p.x && p.x <= A.b.x : A.b.x <= p.x && p.x <= A.a.x;
+		}
+		return d_y > 0 ? A.a.y <= p.y && p.y <= A.b.y : A.b.y <= p.y && p.y <= A.a.y;
+	}
+
 	inline std::pair<std::string, T::Point> lineIntersection(const T::Line& A, const T::Line& B) {
 		/*
 		This function determines whether a line has an intersection, and returns it's type as well
@@ -106,36 +119,37 @@ namespace kac_core::geometry {
 			return std::make_pair("vertex", A.b);
 		}
 		// test for colinear cases.
-		unsigned short colinearities = 0;
-		colinearities += isColinear(A.a, A.b, B.a);
-		colinearities += isColinear(A.b, B.a, B.b);
-		colinearities += isColinear(B.a, B.b, A.a);
-		colinearities += isColinear(B.b, A.a, A.b);
-		if (colinearities == 4) {
-			return std::make_pair(
-				"colinear",
-				T::Point((A.a.x + A.b.x + B.a.x + B.b.x) / 4, (A.a.y + A.b.y + B.a.y + B.b.y) / 4)
-			);
-		}
-		// calculate the general case using distance to intersection point.
-		double u_A = ((B.b.x - B.a.x) * (A.a.y - B.a.y) - (B.b.y - B.a.y) * (A.a.x - B.a.x))
-				   / ((B.b.y - B.a.y) * (A.b.x - A.a.x) - (B.b.x - B.a.x) * (A.b.y - A.a.y));
-		double u_B = ((A.b.x - A.a.x) * (A.a.y - B.a.y) - (A.b.y - A.a.y) * (A.a.x - B.a.x))
-				   / ((B.b.y - B.a.y) * (A.b.x - A.a.x) - (B.b.x - B.a.x) * (A.b.y - A.a.y));
-		if (u_A >= 0 && u_A <= 1 && u_B >= 0 && u_B <= 1) {
-			T::Point p = T::Point(A.a.x + u_A * (A.b.x - A.a.x), A.a.y + u_A * (A.b.y - A.a.y));
-			// test for adjacent case
-			if (A.a.x == p.x && A.a.y == p.y) {
-				return std::make_pair("adjacent", A.a);
-			} else if (A.b.x == p.x && A.b.y == p.y) {
-				return std::make_pair("adjacent", A.b);
-			} else if (B.a.x == p.x && B.a.y == p.y) {
-				return std::make_pair("adjacent", B.a);
-			} else if (B.b.x == p.x && B.b.y == p.y) {
-				return std::make_pair("adjacent", B.b);
+		if (isColinear(A.a, A.b, B.a) && isColinear(A.a, A.b, B.b)) {
+			if (isPointOnLine(A.a, B) || isPointOnLine(A.b, B) || isPointOnLine(B.a, A)
+				|| isPointOnLine(B.b, A)) {
+				return std::make_pair(
+					"colinear",
+					T::Point(
+						(A.a.x + A.b.x + B.a.x + B.b.x) / 4, (A.a.y + A.b.y + B.a.y + B.b.y) / 4
+					)
+				);
 			}
-			// return general case
-			return std::make_pair("intersect", p);
+		} else {
+			// calculate the general case using distance to intersection point.
+			double u_A = ((B.b.x - B.a.x) * (A.a.y - B.a.y) - (B.b.y - B.a.y) * (A.a.x - B.a.x))
+					   / ((B.b.y - B.a.y) * (A.b.x - A.a.x) - (B.b.x - B.a.x) * (A.b.y - A.a.y));
+			double u_B = ((A.b.x - A.a.x) * (A.a.y - B.a.y) - (A.b.y - A.a.y) * (A.a.x - B.a.x))
+					   / ((B.b.y - B.a.y) * (A.b.x - A.a.x) - (B.b.x - B.a.x) * (A.b.y - A.a.y));
+			if (u_A >= 0 && u_A <= 1 && u_B >= 0 && u_B <= 1) {
+				T::Point p = T::Point(A.a.x + u_A * (A.b.x - A.a.x), A.a.y + u_A * (A.b.y - A.a.y));
+				// test for adjacent case
+				if (A.a.x == p.x && A.a.y == p.y) {
+					return std::make_pair("adjacent", A.a);
+				} else if (A.b.x == p.x && A.b.y == p.y) {
+					return std::make_pair("adjacent", A.b);
+				} else if (B.a.x == p.x && B.a.y == p.y) {
+					return std::make_pair("adjacent", B.a);
+				} else if (B.b.x == p.x && B.b.y == p.y) {
+					return std::make_pair("adjacent", B.b);
+				}
+				// return general case
+				return std::make_pair("intersect", p);
+			}
 		}
 		// return the null case
 		return std::make_pair("none", T::Point());

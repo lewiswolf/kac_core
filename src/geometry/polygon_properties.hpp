@@ -90,20 +90,19 @@ namespace kac_core::geometry {
 		*/
 
 		const unsigned long N = P.size();
-		unsigned long index_i = 0;
-		unsigned long index_j = 0;
+		std::pair<unsigned long, unsigned long> index = std::make_pair(0, 0);
 		double vec_max = 0.;
 		for (unsigned long i = 0; i < N; i++) {
 			for (unsigned long j = i + 1; j < N; j++) {
 				double vec = sqrt(pow(P[i].x - P[j].x, 2) + pow(P[i].y - P[j].y, 2));
 				if (vec > vec_max) {
-					index_i = i;
-					index_j = j;
+					index.first = i;
+					index.second = j;
 					vec_max = vec;
 				}
 			}
 		}
-		return std::make_pair(vec_max, std::make_pair(index_i, index_j));
+		return std::make_pair(vec_max, index);
 	}
 
 	inline double polygonArea(const T::Polygon& P) {

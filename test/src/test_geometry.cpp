@@ -92,5 +92,46 @@ int main() {
 		"X(4) produces the correct output.", (orthocenter.x == 1.) && (orthocenter.y == 0.)
 	);
 
+	/*
+	Test isPointOnLine is accurate.
+	*/
+	T::Line test_line = T::Line(T::Point(0., 0.), T::Point(1., 1.));
+	booleanTest(
+		"isPointOnLine identifies a point on the line.",
+		g::isPointOnLine(T::Point(0.5, 0.5), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point on the line.",
+		g::isPointOnLine(T::Point(0., 0.), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point on the line.",
+		g::isPointOnLine(T::Point(1., 1.), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(0.501, 0.5), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(0.5, 0.501), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(1.001, 1.001), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(-0.001, -0.001), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(-1., -1.), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(2., 2.), test_line)
+	);
+
 	return 0;
 }

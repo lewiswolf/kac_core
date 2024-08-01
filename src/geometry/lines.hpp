@@ -81,12 +81,13 @@ namespace kac_core::geometry {
 		Determines whether or not a point lies on a line segment.
 		*/
 
-		double d_x = A.b.x - A.a.x;
-		double d_y = A.b.y - A.a.y;
-		if (abs(d_x) >= abs(d_y)) {
-			return d_x > 0 ? A.a.x <= p.x && p.x <= A.b.x : A.b.x <= p.x && p.x <= A.a.x;
+		// Check if p is within the bounding box of A
+		if (p.x < std::min(A.a.x, A.b.x) || p.x > std::max(A.a.x, A.b.x)
+			|| p.y < std::min(A.a.y, A.b.y) || p.y > std::max(A.a.y, A.b.y)) {
+			return false;
 		}
-		return d_y > 0 ? A.a.y <= p.y && p.y <= A.b.y : A.b.y <= p.y && p.y <= A.a.y;
+		// Check if p is collinear with A.a and A.b
+		return isColinear(A.a, A.b, p);
 	}
 
 	inline std::pair<std::string, T::Point> lineIntersection(const T::Line& A, const T::Line& B) {

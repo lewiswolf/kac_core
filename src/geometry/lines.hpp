@@ -81,12 +81,12 @@ namespace kac_core::geometry {
 		Determines whether or not a point lies on a line segment.
 		*/
 
-		// Check if p is within the bounding box of A
+		// check if p is within the bounding box of A
 		if (p.x < std::min(A.a.x, A.b.x) || p.x > std::max(A.a.x, A.b.x)
 			|| p.y < std::min(A.a.y, A.b.y) || p.y > std::max(A.a.y, A.b.y)) {
 			return false;
 		}
-		// Check if p is collinear with A.a and A.b
+		// check if p is collinear with A.a and A.b
 		return isColinear(A.a, A.b, p);
 	}
 

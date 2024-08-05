@@ -30,7 +30,7 @@ namespace kac_core::physics {
 			M = number of modes per order
 		output:
 			A = {
-				abs(sin(nxπ) sin(nyπ) sin(nzπ))
+				abs(sin(nuπ) sin(nvπ) sin(nwπ))
 				| a ∈ ℝ, 0 < n <= N, 0 < m <= M
 			}
 		*/

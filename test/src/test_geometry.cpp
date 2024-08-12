@@ -62,6 +62,17 @@ int main() {
 	booleanTest("largestVector works clockwise", g::largestVector(square_clockwise).first == sqrt2);
 
 	/*
+	Test that isPointInsideConvexPolygon and isPointInsidePolygon are accurate.
+	*/
+	booleanTest(
+		"isPointInsideConvexPolygon holds.",
+		g::isPointInsideConvexPolygon(T::Point(0.5, 0.5), square_clockwise)
+	);
+	booleanTest(
+		"isPointInsidePolygon holds.", g::isPointInsidePolygon(T::Point(0.5, 0.5), square_clockwise)
+	);
+
+	/*
 	Test that _polygonCentroid works for negative values.
 	*/
 	T::Polygon square_negative = {

@@ -70,6 +70,38 @@ namespace kac_core::geometry {
 		return true;
 	}
 
+	inline bool isPointInsidePolygon(const T::Point& p, const T::Polygon& P) {
+		/*
+		Determines whether or not a cartesian pair is within a polygon, including boundaries.
+		This algorithm builds upon the ray tracing ideas shown in solution 1
+			=> https://paulbourke.net/geometry/polygonmesh/
+		*/
+
+		const unsigned long N = P.size();
+		// create a ray that extends to the right of the polygon
+		double max_x = 0.;
+		for (int n = 0; n <= N; n++) { max_x = P[n].x > max_x ? P[n].x : max_x; }
+		T::Line ray = T::Line(p, T::Point(max_x + 1., p.y));
+		// count the number of times the ray is intersected
+		unsigned long count = 0;
+		for (int n = 0; n < N; n++) {
+			// return true if point is a vertex
+			if (P[n].x == p.x && P[n].y == p.y) {
+				return true;
+			}
+			// return true if point is on the line
+			T::Line A = T::Line(P[n], P[(n + 1) % N]);
+			if (isPointOnLine(p, A)) {
+				return true;
+			}
+			// general case
+			if (lineIntersection(ray, A).first == "intersect") {
+				count++;
+			}
+		}
+		return count % 2 == 1;
+	}
+
 	inline bool isSimple(const T::Polygon& P) {
 		/*
 		Determine if a polygon is simple by checking for intersections.

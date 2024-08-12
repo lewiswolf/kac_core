@@ -60,13 +60,18 @@ int main() {
 	std::cout << "\nProfiler for `./geometry/polygon_properties.hpp`.\n";
 	std::cout << "Efficiency relative to a " << N << " sided polygon...\n";
 	T::Point centroid = g::polygonCentroid(P);
+	T::Point convex_centroid = g::polygonCentroid(P_convex);
 	{
 		Timer timer("  isConvex");
 		g::isConvex(P_convex);
 	}
 	{
 		Timer timer("  isPointInsideConvexPolygon");
-		g::isPointInsideConvexPolygon(centroid, P_convex);
+		g::isPointInsideConvexPolygon(convex_centroid, P_convex);
+	}
+	{
+		Timer timer("  isPointInsidePolygon");
+		g::isPointInsidePolygon(centroid, P);
 	}
 	{
 		Timer timer("  isSimple");

@@ -59,7 +59,7 @@ int main() {
 	// geometry/polygon_properties.hpp
 	std::cout << "\nProfiler for `./geometry/polygon_properties.hpp`.\n";
 	std::cout << "Efficiency relative to a " << N << " sided polygon...\n";
-	T::Point centroid = g::polygonCentroid(P, g::polygonArea(P));
+	T::Point centroid = g::polygonCentroid(P);
 	{
 		Timer timer("  isConvex");
 		g::isConvex(P_convex);
@@ -78,7 +78,7 @@ int main() {
 	}
 	{
 		Timer timer("  polygonCentroid");
-		g::polygonCentroid(P, g::polygonArea(P));
+		g::polygonCentroid(P);
 	}
 	{
 		Timer timer("  polygonArea");

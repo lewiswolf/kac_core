@@ -62,6 +62,17 @@ int main() {
 	booleanTest("largestVector works clockwise", g::largestVector(square_clockwise).first == sqrt2);
 
 	/*
+	Test that _polygonCentroid works for negative values.
+	*/
+	T::Polygon square_negative = {
+		T::Point(-11., -10.), T::Point(-10., -9.), T::Point(-9., -10.), T::Point(-10., -11.)
+	};
+	T::Point centroid = g::polygonCentroid(square_negative);
+	booleanTest(
+		"polygonCentroid holds for negative centroids", centroid.x == -10. && centroid.y == -10.
+	);
+
+	/*
 	Test normaliseConvexPolygon.
 	*/
 	// booleanTest(
@@ -78,7 +89,7 @@ int main() {
 		"X(1) produces the correct output.",
 		(incenter.x - 0.707107) < 0.001 && (incenter.y - 0.292893) < 0.001
 	);
-	T::Point centroid = g::ETC::centroid(tri);
+	centroid = g::ETC::centroid(tri);
 	booleanTest(
 		"X(2) produces the correct output.",
 		(centroid.x - (2. / 3.)) < 0.001 && (centroid.y - (1. / 3.)) < 0.001

@@ -116,10 +116,10 @@ namespace kac_core::geometry {
 		for (unsigned long n = 0; n < N; n++) {
 			out += (P[(n + 1) % N].x + P[n].x) * (P[(n + 1) % N].y - P[n].y);
 		}
-		return abs(out) / 2.;
+		return abs(out) * 0.5;
 	}
 
-	inline T::Point polygonCentroid(const T::Polygon& P, const double& area) {
+	inline T::Point polygonCentroid(const T::Polygon& P) {
 		/*
 		This algorithm is used to calculate the geometric centroid of a 2D polygon.
 		See http://paulbourke.net/geometry/polygonmesh/ 'Calculating the area and centroid of a
@@ -138,19 +138,21 @@ namespace kac_core::geometry {
 		 */
 
 		const unsigned long N = P.size();
-		double out_x = 0.;
-		double out_y = 0.;
 		if (N == 3) {
 			// Triangles have a much simpler formula, and so these are
 			// calculated separately.
 			return T::Point((P[0].x + P[1].x + P[2].x) / 3., (P[0].y + P[1].y + P[2].y) / 3.);
 		}
+		double area = 0.;
+		double out_x = 0.;
+		double out_y = 0.;
 		for (unsigned long n = 0; n < N; n++) {
-			double out = (P[n].x * P[(n + 1) % N].y - P[(n + 1) % N].x * P[n].y);
-			out_x += (P[n].x + P[(n + 1) % N].x) * out;
-			out_y += (P[n].y + P[(n + 1) % N].y) * out;
+			area += (P[(n + 1) % N].x + P[n].x) * (P[(n + 1) % N].y - P[n].y);
+			double scalar = (P[n].x * P[(n + 1) % N].y - P[(n + 1) % N].x * P[n].y);
+			out_x += (P[n].x + P[(n + 1) % N].x) * scalar;
+			out_y += (P[n].y + P[(n + 1) % N].y) * scalar;
 		}
-		return T::Point(abs(out_x) / (6 * area), abs(out_y) / (6 * area));
+		return T::Point(out_x / (3 * area), out_y / (3 * area));
 	}
 
 }

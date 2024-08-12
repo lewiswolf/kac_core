@@ -57,6 +57,12 @@ namespace kac_core::geometry {
 		// go through each of the vertices, and test with p
 		const unsigned long N = P.size();
 		for (unsigned long n = 0; n < N; n++) {
+			if (p.x == P[n].x && p.y == P[n].y) {
+				return true;
+			}
+		}
+		// determine if the point is always on the right side of the line
+		for (unsigned long n = 0; n < N; n++) {
 			if (crossProductZ(P[n], P[(n + 1) % N], p) * clockwise > 0.) {
 				return false;
 			}
@@ -131,7 +137,7 @@ namespace kac_core::geometry {
 				(y_0 + y_1 + y_2) / 3,
 			)
 			for N > 3 ->
-			A = Σ (x_n * y_n+1) - (x_n+! * y_n)
+			A = Σ (x_n * y_n+1) - (x_n+1 * y_n)
 			(x, y) = (
 				1/3A * Σ (x_n + x_n+1)(x_n * y_n+1 - x_n+1 * y_n),
 				1/3A * Σ (y_n + y_n+1)(x_n * y_n+1 - x_n+1 * y_n),

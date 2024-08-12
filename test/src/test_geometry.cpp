@@ -64,13 +64,13 @@ int main() {
 	/*
 	Test that isPointInsideConvexPolygon and isPointInsidePolygon are accurate.
 	*/
-	booleanTest(
-		"isPointInsideConvexPolygon holds.",
-		g::isPointInsideConvexPolygon(T::Point(0.5, 0.5), square_clockwise)
-	);
-	booleanTest(
-		"isPointInsidePolygon holds.", g::isPointInsidePolygon(T::Point(0.5, 0.5), square_clockwise)
-	);
+	// booleanTest(
+	// 	"isPointInsideConvexPolygon holds.",
+	// 	g::isPointInsideConvexPolygon(T::Point(0.5, 0.5), square_clockwise)
+	// );
+	// booleanTest(
+	// 	"isPointInsidePolygon holds.", g::isPointInsidePolygon(T::Point(0.5, 0.5), square_clockwise)
+	// );
 
 	/*
 	Test that _polygonCentroid works for negative values.

@@ -18,7 +18,7 @@ namespace T = kac_core::types;
 
 namespace kac_core::geometry {
 
-	inline T::Polygon normalisePolygon(T::Polygon P) {
+	inline T::Polygon normalisePolygon(T::Polygon P, const bool& signed_norm = false) {
 		/*
 		This function takes a polygon, centers it across the x and y axis, then normalises the
 		vertices to the unit interval ℝ^2.
@@ -50,14 +50,21 @@ namespace kac_core::geometry {
 		double v_d =
 			(*x_min_max.second > *y_min_max.second ? *x_min_max.second : *y_min_max.second) - v_min;
 		// normalise
-		for (unsigned long n = 0; n < N; n++) {
-			P[n].x = (P[n].x - v_min) / v_d;
-			P[n].y = (P[n].y - v_min) / v_d;
+		if (signed_norm) {
+			for (unsigned long n = 0; n < N; n++) {
+				P[n].x = 2 * (P[n].x - v_min) / v_d - 1;
+				P[n].y = 2 * (P[n].y - v_min) / v_d - 1;
+			}
+		} else {
+			for (unsigned long n = 0; n < N; n++) {
+				P[n].x = (P[n].x - v_min) / v_d;
+				P[n].y = (P[n].y - v_min) / v_d;
+			}
 		}
 		return P;
 	}
 
-	inline T::Polygon normaliseConvexPolygon(T::Polygon P) {
+	inline T::Polygon normaliseConvexPolygon(T::Polygon P, const bool& signed_norm = false) {
 		/*
 		This algorithm produces an identity polygon for each unique polygon given as input. This
 		method normalises an input polygon to the unit interval such that x ∈ [0, 1] && y ∈ [0, 1],
@@ -174,20 +181,29 @@ namespace kac_core::geometry {
 				break;
 		}
 		// normalise
-		P = normalisePolygon(P);
-		// position x = 0. at P[0]
+		P = normalisePolygon(P, signed_norm);
+		// position x = -1 : 0 at P[0]
 		unsigned long n_shift = 0;
-		for (unsigned long n = 0; n < N; n++) {
-			if (P[n].x == 0.) {
-				n_shift = n;
-				break;
+		if (signed_norm) {
+			for (unsigned long n = 0; n < N; n++) {
+				if (P[n].x == -1.) {
+					n_shift = n;
+					break;
+				}
+			}
+		} else {
+			for (unsigned long n = 0; n < N; n++) {
+				if (P[n].x == -0.) {
+					n_shift = n;
+					break;
+				}
 			}
 		}
 		std::rotate(P.begin(), P.begin() + n_shift, P.end());
 		return P;
 	}
 
-	inline T::Polygon normaliseSimplePolygon(T::Polygon P) {
+	inline T::Polygon normaliseSimplePolygon(T::Polygon P, const bool& signed_norm = false) {
 		/*
 		This algorithm performs general normalisation rotations to ensure uniqueness, however it is
 		not comprehensive for all simple geometric transformations.
@@ -219,13 +235,22 @@ namespace kac_core::geometry {
 			);
 		}
 		// normalise
-		P = normalisePolygon(P);
-		// position x = 0. at P[0]
+		P = normalisePolygon(P, signed_norm);
+		// position x = -1 : 0 at P[0]
 		unsigned long n_shift = 0;
-		for (unsigned long n = 0; n < N; n++) {
-			if (P[n].x == 0.) {
-				n_shift = n;
-				break;
+		if (signed_norm) {
+			for (unsigned long n = 0; n < N; n++) {
+				if (P[n].x == -1.) {
+					n_shift = n;
+					break;
+				}
+			}
+		} else {
+			for (unsigned long n = 0; n < N; n++) {
+				if (P[n].x == -0.) {
+					n_shift = n;
+					break;
+				}
 			}
 		}
 		std::rotate(P.begin(), P.begin() + n_shift, P.end());

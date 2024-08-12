@@ -109,6 +109,8 @@ namespace kac_core::geometry {
 		/*
 		An implementation of the polygon area algorithm derived using Green's Theorem.
 		https://math.blogoverflow.com/2014/06/04/greens-theorem-and-area-of-polygons/
+		output:
+			| 1/2 * Σ (x_n * y_n+1) - (x_n+! * y_n) |
 		*/
 
 		const unsigned long N = P.size();
@@ -131,9 +133,10 @@ namespace kac_core::geometry {
 				(y_0 + y_1 + y_2) / 3,
 			)
 			for N > 3 ->
+			A = Σ (x_n * y_n+1) - (x_n+! * y_n)
 			(x, y) = (
-				1/6A * Σ (x_n + x_n+1)(x_n * y_n+1 - x_n+1 * y_n),
-				1/6A * Σ (y_n + y_n+1)(x_n * y_n+1 - x_n+1 * y_n),
+				1/3A * Σ (x_n + x_n+1)(x_n * y_n+1 - x_n+1 * y_n),
+				1/3A * Σ (y_n + y_n+1)(x_n * y_n+1 - x_n+1 * y_n),
 			)
 		 */
 

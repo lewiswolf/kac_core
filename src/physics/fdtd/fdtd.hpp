@@ -126,9 +126,9 @@ namespace kac_core::physics {
 		T::Matrix_2D& u_0,
 		const T::Matrix_2D& u_1,
 		const T::BooleanImage& B,
-		const float& c_0,
-		const float& c_1,
-		const float& c_2,
+		const double& c_0,
+		const double& c_1,
+		const double& c_2,
 		const std::array<unsigned long, 2>& x_range,
 		const std::array<unsigned long, 2>& y_range
 	) {

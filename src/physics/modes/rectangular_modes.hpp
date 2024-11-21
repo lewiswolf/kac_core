@@ -49,7 +49,7 @@ namespace kac_core::physics {
 		return A;
 	}
 
-	inline T::BooleanImage rectangularChladniPattern(
+	inline T::BooleanMatrix_2D rectangularChladniPattern(
 		const double& n,
 		const double& m,
 		const unsigned long& X,
@@ -57,7 +57,7 @@ namespace kac_core::physics {
 		const double& tolerance = 0.1
 	) {
 		/*
-		Produce the 2D chladni pattern for a rectangular plate.
+		Produce the 2D Chladni pattern for a rectangular plate.
 		http://paulbourke.net/geometry/chladni/
 		input:
 			n = nth modal index
@@ -71,7 +71,7 @@ namespace kac_core::physics {
 			}
 		*/
 
-		T::BooleanImage M(X, std::vector<short>(Y, 0));
+		T::BooleanMatrix_2D M(X, std::vector<short>(Y, 0));
 		for (unsigned long x = 0; x < X; x++) {
 			double x_m = cos(m * pi * x / X);
 			double x_n = cos(n * pi * x / X);

@@ -73,7 +73,7 @@ namespace kac_core::physics {
 		return A;
 	}
 
-	inline T::BooleanMatrix_2D circularChladniPattern(
+	inline T::BooleanImage circularChladniPattern(
 		const double& n, const double& m, const unsigned long& H, const double& tolerance = 0.1
 	) {
 		/*
@@ -97,7 +97,7 @@ namespace kac_core::physics {
 		double z_mn = z_mn_floor
 					+ ((boost::math::cyl_bessel_j_zero(n, ceil(m)) - z_mn_floor) * (m - m_floor));
 		// calculate pattern
-		T::BooleanMatrix_2D M(H, std::vector<short>(H, 0));
+		T::BooleanImage M(H, std::vector<short>(H, 0));
 		for (unsigned long x = 0; x < H; x++) {
 			double x_prime = (2. * x / H) - 1.;
 			for (unsigned long y = 0; y < H; y++) {

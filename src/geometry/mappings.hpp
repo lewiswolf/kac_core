@@ -25,11 +25,13 @@ namespace kac_core::geometry {
 
 		double u_2 = pow(p.x, 2);
 		double v_2 = pow(p.y, 2);
-		double u_prime = 2 * sqrt2 * p.x;
-		double v_prime = 2 * sqrt2 * p.y;
+		double u_prime_1 = 2 + u_2 - v_2;
+		double u_prime_2 = 2 * sqrt2 * p.x;
+		double v_prime_1 = 2 - u_2 + v_2;
+		double v_prime_2 = 2 * sqrt2 * p.y;
 		return T::Point(
-			(0.5 * sqrt(2 + u_2 - v_2 + u_prime)) - (0.5 * sqrt(2 + u_2 - v_2 - u_prime)),
-			(0.5 * sqrt(2 - u_2 + v_2 + v_prime)) - (0.5 * sqrt(2 - u_2 + v_2 - v_prime))
+			(0.5 * sqrt(abs(u_prime_1 + u_prime_2))) - (0.5 * sqrt(abs(u_prime_1 - u_prime_2))),
+			(0.5 * sqrt(abs(v_prime_1 + v_prime_2))) - (0.5 * sqrt(abs(v_prime_1 - v_prime_2)))
 		);
 	}
 

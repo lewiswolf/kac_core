@@ -41,6 +41,18 @@ int main() {
 	}
 
 	// geometry/morphisms.hpp
+	std::cout << "\nProfiler for `./geometry/mappings.hpp`.\n";
+	std::cout << "Efficiency relative to " << N << " points...\n";
+	{
+		Timer timer("  circle2Square");
+		for (unsigned long n = 0; n < P.size(); n++) { g::simpleElliptic_Circle2Square(P[n]); }
+	}
+	{
+		Timer timer("  square2Circle");
+		for (unsigned long n = 0; n < P.size(); n++) { g::simpleElliptic_Square2Circle(P[n]); }
+	}
+
+	// geometry/morphisms.hpp
 	std::cout << "\nProfiler for `./geometry/morphisms.hpp`.\n";
 	std::cout << "Efficiency relative to a " << N << " sided polygon...\n";
 	{

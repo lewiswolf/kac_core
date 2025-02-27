@@ -91,4 +91,17 @@ namespace kac_core::geometry::ETC {
 		);
 	}
 
+	T::Point ninePointCenter(const T::Polygon& P) {
+		/*
+		X(5) Nine-Point Center
+		output:
+			( x, y ) = coordinates of the nine-point center.
+		*/
+
+		typeGuard(P);
+		T::Point o = orthocenter(P);
+		T::Point c = circumcenter(P);
+		return T::Point((o.x + c.x) * 0.5, (o.y + c.y) * 0.5);
+	}
+
 }

@@ -20,8 +20,8 @@ target_sources(
 # include dependencies
 include(FetchContent)
 FetchContent_Declare(
-  boost_math
-  GIT_REPOSITORY https://github.com/boostorg/math.git
+	boost_math
+	GIT_REPOSITORY https://github.com/boostorg/math.git
 )
 FetchContent_MakeAvailable(boost_math)
 target_link_libraries(${PROJECT_NAME} INTERFACE boost_math)

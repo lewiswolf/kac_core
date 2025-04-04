@@ -27,8 +27,8 @@ namespace kac_core::types {
 		double theta() { return atan2(y, x); }
 
 		// constructors
-		Point() {};
-		Point(double x, double y): x(x), y(y) {};
+		Point() {}
+		Point(double x, double y): x(x), y(y) {}
 
 		// methods
 		void updatePol(double r, double theta) {
@@ -51,8 +51,8 @@ namespace kac_core::types {
 		Point b;
 
 		// constructors
-		Line() {};
-		Line(Point a, Point b): a(a), b(b) {};
+		Line() {}
+		Line(Point a, Point b): a(a), b(b) {}
 	} Line;
 
 	// A polygon defined on the Euclidean plane.

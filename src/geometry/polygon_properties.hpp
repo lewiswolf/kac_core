@@ -80,7 +80,7 @@ namespace kac_core::geometry {
 		const unsigned long N = P.size();
 		// create a ray that extends to the right of the polygon
 		double max_x = 0.;
-		for (unsigned long n = 0; n <= N; n++) { max_x = std::max(P[n].x, max_x); }
+		for (unsigned long n = 0; n < N; n++) { max_x = std::max(P[n].x, max_x); }
 		T::Line ray = T::Line(p, T::Point(max_x + 1., p.y));
 		// count the number of times the ray is intersected
 		unsigned long count = 0;

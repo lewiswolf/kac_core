@@ -176,9 +176,9 @@ namespace kac_core::geometry {
 		std::string intersection_type = "";
 		bool intersections = true;
 		while (intersections) {
-		Search_loop:
-			for (unsigned long i = 0; i < N - 2; i++) {
-				for (unsigned long j = i + 1; j < N; j++) {
+			bool restarted = false;
+			for (unsigned long i = 0; i < N - 2 && !restarted; i++) {
+				for (unsigned long j = i + 1; j < N && !restarted; j++) {
 					// collect indices of lines which should be crossed
 					intersection_type =
 						lineIntersection(T::Line(P[i], P[i + 1]), T::Line(P[j], P[(j + 1) % N]))
@@ -186,9 +186,9 @@ namespace kac_core::geometry {
 					if (intersection_type == "none" || intersection_type == "vertex") {
 						continue;
 					} else if (intersection_type == "intersect") {
-						indices.push_back(std::make_pair(i + 1, j + 1));
+						indices.emplace_back(i + 1, j + 1);
 					} else if (intersection_type == "adjacent") {
-						indices.push_back(std::make_pair(i, j));
+						indices.emplace_back(i, j);
 					} else if (intersection_type == "colinear") {
 						std::reverse(
 							P.begin() + i + (P[i].x < P[i + 1].x ? 0 : 1),
@@ -196,21 +196,23 @@ namespace kac_core::geometry {
 						);
 						// restart loop
 						indices.clear();
-						goto Search_loop;
+						restarted = true;
 					}
 				}
 			}
-			if (indices.size() > 0) {
-				// randomly swap one pair
+			if (restarted) {
+				// goto replacement
+				continue;
+			}
+			if (indices.empty()) {
+				// close loop
+				intersections = false;
+			} else {
 				std::pair<long, long> swap =
 					indices[abs(uniform_sequence(random_engine)) % indices.size()];
 				std::reverse(P.begin() + swap.first, P.begin() + swap.second);
 				// restart loop
 				indices.clear();
-				goto Search_loop;
-			} else {
-				// close loop
-				intersections = false;
 			}
 		}
 		return P;

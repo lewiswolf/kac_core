@@ -10,6 +10,7 @@ Tests and profiling for /shapes.
 #include <kac_core.hpp>
 namespace T = kac_core::types;		 // types
 namespace g = kac_core::geometry;	 // geometry
+namespace p = kac_core::physics;	 // physics
 
 // test
 #include "./utils.hpp"
@@ -100,6 +101,26 @@ int main() {
 	{
 		Timer timer("  polygonArea");
 		g::polygonArea(P);
+	}
+
+	// ./physics/modes
+	std::cout << "\nProfiler for `./physics/modes.\n";
+	std::cout << "Efficiency relative to a " << N << " X " << N << " matrix...\n";
+	{
+		Timer timer("  circularChladniPattern");
+		T::BooleanImage circular_pattern = p::circularChladniPattern(2, 2, N, 0.1);
+	}
+	{
+		Timer timer("  circularCymatics");
+		T::Matrix_2D circular_pattern = p::circularCymatics(2, 2, N);
+	}
+	{
+		Timer timer("  rectangularChladniPattern");
+		T::BooleanImage rectangular_pattern = p::rectangularChladniPattern(2, 2, N, N, 0.1);
+	}
+	{
+		Timer timer("  rectangularCymatics");
+		T::Matrix_2D rectangular_pattern = p::rectangularCymatics(2, 2, N, N);
 	}
 
 	return 0;

@@ -49,6 +49,34 @@ namespace kac_core::physics {
 		return A;
 	}
 
+	inline T::Matrix_2D rectangularCymatics(
+		const double& n, const double& m, const unsigned long& X, const unsigned long& Y
+	) {
+		/*
+		Produce the 2D continuos cymatic diagram for particular a mode of a rectangular domain.
+		http://paulbourke.net/geometry/chladni/
+		input:
+			n = nth modal index
+			m = mth modal index
+			X = length of the X axis
+			Y = length of the Y axis
+		output:
+			M = {
+				cos(nπx/X) cos(mπy/Y) - cos(mπx/X) cos(nπy/Y) ≈ 0
+			}
+		*/
+
+		T::Matrix_2D M(X, T::Matrix_1D(Y, 0));
+		for (unsigned long x = 0; x < X; x++) {
+			double x_m = cos(m * pi * x / X);
+			double x_n = cos(n * pi * x / X);
+			for (unsigned long y = 0; y < Y; y++) {
+				M[x][y] = (x_n * cos(m * pi * y / Y)) - (x_m * cos(n * pi * y / Y));
+			}
+		}
+		return M;
+	}
+
 	inline T::BooleanImage rectangularChladniPattern(
 		const double& n,
 		const double& m,
@@ -57,7 +85,7 @@ namespace kac_core::physics {
 		const double& tolerance = 0.1
 	) {
 		/*
-		Produce the 2D Chladni pattern for a rectangular plate.
+		Produce the 2D Chladni pattern for a rectangular domain.
 		http://paulbourke.net/geometry/chladni/
 		input:
 			n = nth modal index
@@ -66,22 +94,17 @@ namespace kac_core::physics {
 			Y = length of the Y axis
 			tolerance = the standard deviation between the calculation and the final pattern
 		output:
-			M = {
+			M = abs({
 				cos(nπx/X) cos(mπy/Y) - cos(mπx/X) cos(nπy/Y) ≈ 0
-			}
+			}) < tolerance
 		*/
 
-		T::BooleanImage M(X, std::vector<short>(Y, 0));
+		T::Matrix_2D M = rectangularCymatics(n, m, X, Y);
+		T::BooleanImage B(X, std::vector<short>(Y, 0));
 		for (unsigned long x = 0; x < X; x++) {
-			double x_m = cos(m * pi * x / X);
-			double x_n = cos(n * pi * x / X);
-			for (unsigned long y = 0; y < Y; y++) {
-				M[x][y] = abs((x_n * cos(m * pi * y / Y)) - (x_m * cos(n * pi * y / Y))) < tolerance
-							? 1
-							: 0;
-			}
+			for (unsigned long y = 0; y < Y; y++) { B[x][y] = abs(M[x][y]) < tolerance ? 1 : 0; }
 		}
-		return M;
+		return B;
 	}
 
 	inline T::Matrix_2D

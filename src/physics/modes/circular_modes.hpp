@@ -73,17 +73,14 @@ namespace kac_core::physics {
 		return A;
 	}
 
-	inline T::BooleanImage circularChladniPattern(
-		const double& n, const double& m, const unsigned long& H, const double& tolerance = 0.1
-	) {
+	inline T::Matrix_2D circularCymatics(const double& n, const double& m, const unsigned long& H) {
 		/*
-		Produce the 2D Chladni pattern for a circular plate.
+		Produce the 2D continuos cymatic diagram for a particular mode of a circular domain.
 		http://paulbourke.net/geometry/chladni/
 		input:
 			n = nth modal index
 			m = mth modal index
 			H = length of the X and Y axis
-			tolerance = the standard deviation between the calculation and the final pattern
 		output:
 			M = {
 				J_n(z_nm * r) * (cos(nθ) + sin(nθ)) ≈ 0
@@ -97,7 +94,7 @@ namespace kac_core::physics {
 		double z_mn = z_mn_floor
 					+ ((boost::math::cyl_bessel_j_zero(n, ceil(m)) - z_mn_floor) * (m - m_floor));
 		// calculate pattern
-		T::BooleanImage M(H, std::vector<short>(H, 0));
+		T::Matrix_2D M(H, T::Matrix_1D(H, 0));
 		for (unsigned long x = 0; x < H; x++) {
 			double x_prime = (2. * x / H) - 1.;
 			for (unsigned long y = 0; y < H; y++) {
@@ -107,15 +104,38 @@ namespace kac_core::physics {
 					continue;
 				} else {
 					double theta = atan2(y_prime, x_prime);
-					M[x][y] = abs(boost::math::cyl_bessel_j(n, z_mn * r)
-								  * (cos(n_round * theta) + sin(n_round * theta)))
-									< tolerance
-								? 1
-								: 0;
+					M[x][y] = boost::math::cyl_bessel_j(n, z_mn * r)
+							* (cos(n_round * theta) + sin(n_round * theta));
 				}
 			}
 		}
 		return M;
+	}
+
+	inline T::BooleanImage circularChladniPattern(
+		const double& n, const double& m, const unsigned long& H, const double& tolerance = 0.1
+	) {
+		/*
+		Produce the 2D Chladni pattern for a circular plate.
+		http://paulbourke.net/geometry/chladni/
+		input:
+			n = nth modal index
+			m = mth modal index
+			H = length of the X and Y axis
+			tolerance = the standard deviation between the calculation and the final pattern
+		output:
+			B = abs({
+				J_n(z_nm * r) * (cos(nθ) + sin(nθ)) ≈ 0
+			}) < tolerance
+		*/
+
+		// calculate pattern
+		T::Matrix_2D M = circularCymatics(n, m, H);
+		T::BooleanImage B(H, std::vector<short>(H, 0));
+		for (unsigned long x = 0; x < H; x++) {
+			for (unsigned long y = 0; y < H; y++) { B[x][y] = abs(M[x][y]) < tolerance ? 1 : 0; }
+		}
+		return B;
 	}
 
 	inline T::Matrix_2D circularSeries(const unsigned long& N, const unsigned long& M) {

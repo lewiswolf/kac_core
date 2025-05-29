@@ -33,6 +33,21 @@ namespace kac_core::physics {
 		return A;
 	}
 
+	inline T::Matrix_1D linearCymatics(const double& n, const unsigned long& H) {
+		/*
+		Produce the 1D continuos cymatic diagram for a particular mode of a linear domain.
+		input:
+			n = nth modal index
+			H = length of the X axis
+		output:
+			M = cos(nπx/H) ≈ 0
+		*/
+
+		T::Matrix_1D M(H);
+		for (unsigned long x = 0; x < H; x++) { M[x] = cos(n * pi * x / H); }
+		return M;
+	}
+
 	inline T::Matrix_1D linearSeries(const unsigned long& N) {
 		/*
 		Calculate the the harmonic series.

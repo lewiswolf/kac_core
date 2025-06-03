@@ -55,18 +55,22 @@ namespace kac_core::physics {
 		T::Matrix_1D M(H);
 		double omega = 0.0;
 		if (boundary_conditions.first) {
-			if (boundary_conditions.second) {	 // fixed left and right boundary condition
+			if (boundary_conditions.second) {
+				// fixed left and right boundary condition
 				omega = n * pi / H;
 				for (unsigned long x = 0; x < H; x++) { M[x] = sin(omega * x); }
-			} else {							 // fixed left, free right boundary condition
+			} else {
+				// fixed left, free right boundary condition
 				omega = (n - 0.5) * pi / H;
 				for (unsigned long x = 0; x < H; x++) { M[x] = sin(omega * x); }
 			}
 		} else {
-			if (boundary_conditions.second) {	 // fixed right, free left boundary condition
+			if (boundary_conditions.second) {
+				// fixed right, free left boundary condition
 				omega = (n - 0.5) * pi / H;
 				for (unsigned long x = 0; x < H; x++) { M[x] = sin(omega * (H - 1 - x)); }
-			} else {							 // free left and right boundary condition
+			} else {
+				// free left and right boundary condition
 				omega = n * pi / H;
 				for (unsigned long x = 0; x < H; x++) { M[x] = cos(omega * x); }
 			}

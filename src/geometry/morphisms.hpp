@@ -257,4 +257,19 @@ namespace kac_core::geometry {
 		return P;
 	}
 
+	inline T::Polygon scalePolygonByArea(T::Polygon P, const double& a) {
+		/*
+		Scale a polygon by area, whilst preserving angle and distance relationships between
+		vertices.
+		*/
+
+		double scale = std::sqrt(abs(a) / polygonArea(P));
+		T::Point centroid = polygonCentroid(P);
+		for (unsigned long n = 0; n < P.size(); n++) {
+			P[n].x = centroid.x + scale * (P[n].x - centroid.x);
+			P[n].y = centroid.y + scale * (P[n].y - centroid.y);
+		}
+		return P;
+	}
+
 }

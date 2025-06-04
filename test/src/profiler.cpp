@@ -41,7 +41,7 @@ int main() {
 		P_tmp = g::generateUnitRectangle(0.5);
 	}
 
-	// geometry/morphisms.hpp
+	// geometry/mappings.hpp
 	std::cout << "\nProfiler for `./geometry/mappings.hpp`.\n";
 	std::cout << "Efficiency relative to " << N << " points...\n";
 	{
@@ -67,6 +67,10 @@ int main() {
 	{
 		Timer timer("  normaliseSimplePolygon");
 		g::normaliseSimplePolygon(P);
+	}
+	{
+		Timer timer("  scalePolygonByArea");
+		g::scalePolygonByArea(P, 100.0);
 	}
 
 	// geometry/polygon_properties.hpp

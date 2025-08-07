@@ -124,9 +124,9 @@ namespace kac_core::physics {
 
 		T::Matrix_2D S(N, T::Matrix_1D(M, 0));
 		for (unsigned long n = 0; n < N; n++) {
-			double n_hat = pow(n + 1, 2) * epsilon;
+			double n_hat = (n + 1) * (n + 1) * epsilon;
 			for (unsigned long m = 0; m < M; m++) {
-				S[n][m] = sqrt(pow(m + 1, 2) / epsilon + n_hat);
+				S[n][m] = sqrt((m + 1) * (m + 1) / epsilon + n_hat);
 			}
 		}
 		return S;

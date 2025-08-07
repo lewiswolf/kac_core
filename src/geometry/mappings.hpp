@@ -23,8 +23,8 @@ namespace kac_core::geometry {
 		of Mathematics (ICM). p.5
 		*/
 
-		double u_2 = pow(p.x, 2);
-		double v_2 = pow(p.y, 2);
+		double u_2 = p.x * p.x;
+		double v_2 = p.y * p.x;
 		double u_prime_1 = 2 + u_2 - v_2;
 		double u_prime_2 = 2 * sqrt2 * p.x;
 		double v_prime_1 = 2 - u_2 + v_2;
@@ -42,7 +42,7 @@ namespace kac_core::geometry {
 		of Mathematics (ICM). p.5
 		*/
 
-		return T::Point(p.x * sqrt(1 - (pow(p.y, 2) / 2)), p.y * sqrt(1 - (pow(p.x, 2) / 2)));
+		return T::Point(p.x * sqrt(1 - (p.y * p.y / 2)), p.y * sqrt(1 - (p.x * p.x / 2)));
 	}
 
 }

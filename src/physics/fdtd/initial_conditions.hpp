@@ -66,7 +66,7 @@ namespace kac_core::physics {
 		Matrix_2D raised_cosine(size_X, Matrix_1D(size_Y, 0));
 		for (unsigned long x = 0; x < size_X; x++) {
 			for (unsigned long y = 0; y < size_Y; y++) {
-				double l2_norm = sqrt(pow(x - mu.x, 2) + pow(y - mu.y, 2));
+				double l2_norm = hypot(x - mu.x, y - mu.y);
 				if (l2_norm <= sigma) {
 					raised_cosine[x][y] = 0.5 * (1 + cos(pi * l2_norm / sigma));
 				}

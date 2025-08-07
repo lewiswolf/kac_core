@@ -132,7 +132,7 @@ namespace kac_core::geometry {
 		double vec_max = 0.;
 		for (unsigned long i = 0; i < N; i++) {
 			for (unsigned long j = i + 1; j < N; j++) {
-				double vec = sqrt(pow(P[i].x - P[j].x, 2) + pow(P[i].y - P[j].y, 2));
+				double vec = hypot(P[i].x - P[j].x, P[i].y - P[j].y);
 				if (vec > vec_max) {
 					index.first = i;
 					index.second = j;

@@ -148,8 +148,7 @@ namespace kac_core::geometry {
 				// points in question.
 				T::Point c = T::Point(0, a.y - (b.y - a.y) / (b.x - a.x) * a.x);
 				T::Point d = T::Point(a.x - (b.x - a.x) / (b.y - a.y) * a.y, 0);
-				if (sqrt(pow(a.x - c.x, 2) + pow(a.y - c.y, 2))
-					< sqrt(pow(a.x - d.x, 2) + pow(a.y - d.y, 2))) {
+				if (hypot(a.x - c.x, a.y - c.y) < hypot(a.x - d.x, a.y - d.y)) {
 					quadAreas[quad_a] += triangleArea(a, c);
 					// quadAreas[(quad_a + 1) % 4] += triangleArea(c, d);
 					quadAreas[quad_b] += triangleArea(d, b);

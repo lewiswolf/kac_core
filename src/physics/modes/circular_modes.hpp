@@ -99,7 +99,7 @@ namespace kac_core::physics {
 			double x_prime = (2. * x / H) - 1.;
 			for (unsigned long y = 0; y < H; y++) {
 				double y_prime = (2. * y / H) - 1.;
-				double r = sqrt(pow(x_prime, 2) + pow(y_prime, 2));
+				double r = hypot(x_prime, y_prime);
 				if (r > 1.) {
 					continue;
 				} else {

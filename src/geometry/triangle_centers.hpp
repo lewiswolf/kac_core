@@ -33,9 +33,9 @@ namespace kac_core::geometry::ETC {
 		*/
 
 		typeGuard(P);
-		double a = sqrt(pow(P[1].x - P[2].x, 2) + pow(P[1].y - P[2].y, 2));
-		double b = sqrt(pow(P[0].x - P[2].x, 2) + pow(P[0].y - P[2].y, 2));
-		double c = sqrt(pow(P[0].x - P[1].x, 2) + pow(P[0].y - P[1].y, 2));
+		double a = hypot(P[1].x - P[2].x, P[1].y - P[2].y);
+		double b = hypot(P[0].x - P[2].x, P[0].y - P[2].y);
+		double c = hypot(P[0].x - P[1].x, P[0].y - P[1].y);
 		return T::Point(
 			(a * P[0].x + b * P[1].x + c * P[2].x) / (a + b + c),
 			(a * P[0].y + b * P[1].y + c * P[2].y) / (a + b + c)

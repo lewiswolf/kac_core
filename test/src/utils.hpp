@@ -17,24 +17,18 @@ struct Timer {
 	*/
 
 	// vars
-	std::string name = "";
-	std::chrono::time_point<std::chrono::high_resolution_clock> start_tp;
+	std::string name;
+	std::chrono::time_point<std::chrono::steady_clock> start_tp;
 	// constructors
-	Timer() { start_tp = std::chrono::high_resolution_clock::now(); }
-	Timer(std::string s) {
-		name = s;
-		start_tp = std::chrono::high_resolution_clock::now();
+	Timer() { start_tp = std::chrono::steady_clock::now(); }
+	explicit Timer(std::string s = ""): name(std::move(s)) {
+		start_tp = std::chrono::steady_clock::now();
 	}
 	// destructors
 	~Timer() {
-		auto end_tp = std::chrono::high_resolution_clock::now();
-		auto start = std::chrono::time_point_cast<std::chrono::microseconds>(start_tp)
-						 .time_since_epoch()
-						 .count();
-		auto end = std::chrono::time_point_cast<std::chrono::microseconds>(end_tp)
-					   .time_since_epoch()
-					   .count();
-		std::cout << (name != "" ? name + ": " : "") << end - start << "us\n";
+		auto end_tp = std::chrono::steady_clock::now();
+		auto duration = duration_cast<std::chrono::nanoseconds>(end_tp - start_tp).count();
+		std::cout << (name.empty() ? "" : name + ": ") << duration / 1000 << "us\n";
 	}
 };
 
@@ -64,5 +58,4 @@ void batchBooleanTest(
 			return;
 		}
 	}
-	booleanTest(test_name, true);
 }

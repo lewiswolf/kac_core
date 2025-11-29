@@ -15,7 +15,8 @@ namespace p = kac_core::physics;	 // physics
 // test
 #include "./utils.hpp"
 
-unsigned long N = 200;
+const unsigned long N = 200;
+const unsigned long t = 48000;
 
 int main() {
 	// geometry/generate_polygon.hpp
@@ -109,7 +110,15 @@ int main() {
 
 	// ./physics/modes
 	std::cout << "\nProfiler for `./physics/modes.\n";
-	std::cout << "Efficiency relative to a " << N << " X " << N << " matrix...\n";
+	std::cout << "Efficiency relative to " << N << " modes and a waveform of duration of " << t
+			  << " samples...\n";
+	T::Matrix_1D F_1d = p::linearSeries(N);
+	T::Matrix_1D A_1d = p::linearAmplitudes(0.5, N);
+	{
+		Timer timer("  WaveEquationWaveform2D");
+		T::Matrix_1D waveform = p::WaveEquationWaveform1D(F_1d, A_1d, 1.0, 1 / t, t);
+	}
+	std::cout << "Efficiency relative to a " << N << " X " << N << " matrix of modes...\n";
 	{
 		Timer timer("  circularChladniPattern");
 		T::BooleanImage circular_pattern = p::circularChladniPattern(2, 2, N, 0.1);
@@ -125,6 +134,14 @@ int main() {
 	{
 		Timer timer("  rectangularCymatics");
 		T::Matrix_2D rectangular_pattern = p::rectangularCymatics(2, 2, N, N);
+	}
+	std::cout << "Efficiency relative to a " << N << " X " << N
+			  << " matrix of modes and a waveform of duration of " << t << " samples...\n";
+	T::Matrix_2D F_2d = p::rectangularSeries(N, N, 1);
+	T::Matrix_2D A_2d = p::rectangularAmplitudes(0.5, 0.5, N, N, 1);
+	{
+		Timer timer("  WaveEquationWaveform2D");
+		T::Matrix_1D waveform = p::WaveEquationWaveform2D(F_2d, A_2d, 1.0, 1 / t, t);
 	}
 
 	return 0;

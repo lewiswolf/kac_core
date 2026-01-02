@@ -26,8 +26,8 @@ T::Matrix_1D normalise(T::Matrix_1D& waveform) {
 
 namespace kac_core::physics {
 
-	inline T::Matrix_1D WaveEquationWaveform1D(
-		T::Matrix_1D F,
+	inline T::Matrix_1D AdditiveSynthesis1D(
+		const T::Matrix_1D& F,
 		const T::Matrix_1D& alpha,
 		const double& d,
 		const double& k,
@@ -63,8 +63,8 @@ namespace kac_core::physics {
 		return normalise(waveform);
 	}
 
-	inline T::Matrix_1D WaveEquationWaveform2D(
-		T::Matrix_2D F,
+	inline T::Matrix_1D AdditiveSynthesis2D(
+		const T::Matrix_2D& F,
 		const T::Matrix_2D& alpha,
 		const double& d,
 		const double& k,

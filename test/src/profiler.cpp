@@ -109,15 +109,7 @@ int main() {
 	}
 
 	// ./physics/modes
-	std::cout << "\nProfiler for `./physics/modes.\n";
-	std::cout << "Efficiency relative to " << N << " modes and a waveform of duration of " << t
-			  << " samples...\n";
-	T::Matrix_1D F_1d = p::linearSeries(N);
-	T::Matrix_1D A_1d = p::linearAmplitudes(0.5, N);
-	{
-		Timer timer("  WaveEquationWaveform2D");
-		T::Matrix_1D waveform = p::WaveEquationWaveform1D(F_1d, A_1d, 1.0, 1 / t, t);
-	}
+	std::cout << "\nProfiler for `./physics/modes`.\n";
 	std::cout << "Efficiency relative to a " << N << " X " << N << " matrix of modes...\n";
 	{
 		Timer timer("  circularChladniPattern");
@@ -135,13 +127,21 @@ int main() {
 		Timer timer("  rectangularCymatics");
 		T::Matrix_2D rectangular_pattern = p::rectangularCymatics(2, 2, N, N);
 	}
+	std::cout << "Efficiency relative to " << N << " modes and a waveform " << t
+			  << " samples in length...\n";
+	T::Matrix_1D F_1d = p::linearSeries(N);
+	T::Matrix_1D A_1d = p::linearAmplitudes(0.5, N);
+	{
+		Timer timer("  AdditiveSynthesis1D");
+		T::Matrix_1D waveform = p::AdditiveSynthesis1D(F_1d, A_1d, 1.0, 1 / t, t);
+	}
 	std::cout << "Efficiency relative to a " << N << " X " << N
-			  << " matrix of modes and a waveform of duration of " << t << " samples...\n";
+			  << " matrix of modes and a waveform " << t << " samples in length...\n";
 	T::Matrix_2D F_2d = p::rectangularSeries(N, N, 1);
 	T::Matrix_2D A_2d = p::rectangularAmplitudes(0.5, 0.5, N, N, 1);
 	{
-		Timer timer("  WaveEquationWaveform2D");
-		T::Matrix_1D waveform = p::WaveEquationWaveform2D(F_2d, A_2d, 1.0, 1 / t, t);
+		Timer timer("  AdditiveSynthesis2D");
+		T::Matrix_1D waveform = p::AdditiveSynthesis2D(F_2d, A_2d, 1.0, 1 / t, t);
 	}
 
 	return 0;

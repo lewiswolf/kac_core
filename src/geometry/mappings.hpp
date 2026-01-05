@@ -24,7 +24,7 @@ namespace kac_core::geometry {
 		*/
 
 		double u_2 = p.x * p.x;
-		double v_2 = p.y * p.x;
+		double v_2 = p.y * p.y;
 		double u_prime_1 = 2 + u_2 - v_2;
 		double u_prime_2 = 2 * sqrt2 * p.x;
 		double v_prime_1 = 2 - u_2 + v_2;

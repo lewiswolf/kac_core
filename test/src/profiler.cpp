@@ -113,7 +113,7 @@ int main() {
 	}
 
 	// ./physics/modes
-	printColouredText("\nProfiler for `./physics/modes.hpp`.", 36);
+	printColouredText("\nProfiler for `./physics/modes`.", 36);
 	printColouredText("Efficiency relative to" + N_string + "X" + N_string + "modes...", 35);
 	{
 		Timer timer("  circularChladniPattern");
@@ -155,7 +155,7 @@ int main() {
 	}
 
 	// ./physics/fdtd
-	printColouredText("\nProfiler for `./physics/fdtd.hpp`.", 36);
+	printColouredText("\nProfiler for `./physics/fdtd`.", 36);
 	printColouredText(
 		"Efficiency relative to a" + N_string + "X" + N_string + "matrix simulation and a waveform"
 			+ t_string + "samples in length...",

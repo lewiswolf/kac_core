@@ -28,7 +28,9 @@ struct Timer {
 	~Timer() {
 		auto end_tp = std::chrono::steady_clock::now();
 		auto duration = duration_cast<std::chrono::nanoseconds>(end_tp - start_tp).count();
-		std::cout << (name.empty() ? "" : name + ": ") << duration / 1000 << "us\n";
+		std::cout << (name.empty() ? "" : name + ": ") << "\033[32m"	// green
+				  << duration / 1000 << "us"
+				  << "\033[0m\n";										// reset
 	}
 };
 
@@ -58,4 +60,8 @@ void batchBooleanTest(
 			return;
 		}
 	}
+}
+
+void printColouredText(std::string S, short colour_code) {
+	std::cout << "\033[" << colour_code << "m" << S << "\033[0m\n";
 }

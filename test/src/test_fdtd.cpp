@@ -15,8 +15,8 @@ int main() {
 	*/
 	booleanTest(
 		"raisedCosine is accurate",
-		p::raisedCosine1D(10, 4, 1.)[4] == 1.
-			&& p::raisedCosine2D(10, 10, T::Point(4, 4), 1.)[4][4] == 1.
+		p::raisedCosine1D(0.5, 0.1, 11)[5] == 1.
+			&& p::raisedCosine2D(T::Point(0.5, 0.5), 0.1, 11, 11)[5][5] == 1.
 	);
 
 	/*

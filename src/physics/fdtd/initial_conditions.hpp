@@ -7,6 +7,7 @@ Functions for producing a raised cosine transform for different dimensionalities
 // core
 #include <math.h>
 #include <numbers>
+#include <stdexcept>
 #include <vector>
 using namespace std::numbers;
 
@@ -17,14 +18,14 @@ using namespace kac_core::types;
 namespace kac_core::physics {
 
 	inline Matrix_1D
-	raisedCosine1D(const unsigned long& size, const double& mu, const double& sigma) {
+	raisedCosine1D(const double& mu, const double& sigma, const std::size_t& size) {
 		/*
-		Calculate a one dimensional raised cosine distribution.
+		Calculate a one dimensional raised cosine distribution, normalised to a unit interval.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
 		input:
+			μ = a normalised point representing the maxima of the cosine ∈ [0, 1].
+			σ = normalised variance ∈ (0, ∞].
 			size = the size of the matrix.
-			μ = a cartesian point representing the maxima of the cosine.
-			σ = variance.
 		output:
 			{
 				(1 + cos(π(x - μ) / σ)) / 2,	|x - μ| ≤ σ
@@ -32,29 +33,32 @@ namespace kac_core::physics {
 			}
 		*/
 
-		Matrix_1D raised_cosine(size);
-		for (unsigned long x = 0; x < size; x++) {
-			double x_diff = fabs(x - mu);
-			if (x_diff <= sigma) {
-				raised_cosine[x] = 0.5 * (1 + cos(pi * x_diff / sigma));
+		Matrix_1D raised_cosine(size, 0.);
+		if (sigma > 0.) {
+			const double inv_X = (size > 1) ? 1. / static_cast<double>(size - 1) : 0.;
+			for (std::size_t i = 0; i < size; i++) {
+				double x_diff = abs((static_cast<double>(i) * inv_X) - mu);
+				if (x_diff <= sigma) {
+					raised_cosine[i] = 0.5 * (1. + cos(pi * x_diff / sigma));
+				}
 			}
 		}
 		return raised_cosine;
 	}
 
 	inline Matrix_2D raisedCosine2D(
-		const unsigned long& size_X,
-		const unsigned long& size_Y,
 		const T::Point& mu,
-		const double& sigma
+		const double& sigma,
+		const std::size_t& size_X,
+		const std::size_t& size_Y
 	) {
 		/*
-		Calculate a two dimensional raised cosine distribution.
+		Calculate a two dimensional raised cosine distribution, normalised to a unit interval.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.306.
 		input:
+			μ = a normalised point representing the maxima of the cosine ∈ [0, 1].
+			σ = normalised variance ∈ (0, ∞].
 			size = the size of the matrix.
-			μ = a cartesian point representing the maxima of the cosine.
-			σ = variance.
 		output:
 			l2_norm = ((x - mu_x)^2 + (y - mu_y)^2)^0.5
 			{
@@ -63,12 +67,17 @@ namespace kac_core::physics {
 			}
 		*/
 
-		Matrix_2D raised_cosine(size_X, Matrix_1D(size_Y, 0));
-		for (unsigned long x = 0; x < size_X; x++) {
-			for (unsigned long y = 0; y < size_Y; y++) {
-				double l2_norm = hypot(x - mu.x, y - mu.y);
-				if (l2_norm <= sigma) {
-					raised_cosine[x][y] = 0.5 * (1 + cos(pi * l2_norm / sigma));
+		Matrix_2D raised_cosine(size_X, Matrix_1D(size_Y, 0.));
+		if (sigma > 0.) {
+			const double inv_X = (size_X > 1) ? 1. / static_cast<double>(size_X - 1) : 0.;
+			const double inv_Y = (size_Y > 1) ? 1. / static_cast<double>(size_Y - 1) : 0.;
+			for (std::size_t i = 0; i < size_X; i++) {
+				double x = (static_cast<double>(i) * inv_X);
+				for (std::size_t j = 0; j < size_Y; j++) {
+					double l2_norm = std::hypot(x - mu.x, (static_cast<double>(j) * inv_Y) - mu.y);
+					if (l2_norm <= sigma) {
+						raised_cosine[i][j] = 0.5 * (1. + cos(pi * l2_norm / sigma));
+					}
 				}
 			}
 		}

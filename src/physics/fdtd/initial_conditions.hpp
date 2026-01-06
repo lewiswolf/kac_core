@@ -85,16 +85,16 @@ namespace kac_core::physics {
 	}
 
 	inline Matrix_1D raisedTriangle1D(
-		const unsigned long& size, const double& mu, const double& a, const double& b
+		const double& mu, const double& x_a, const double& x_b, const std::size_t& size
 	) {
 		/*
 		Calculate a one dimensional triangular distribution.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
 		input:
+			μ = a normalised point representing the maxima of the triangle ∈ [0, 1].
+			x_a = segment length of distribution such that a = μ - x_a.
+			x_b = segment length of distribution such that b = μ - x_b.
 			size = the size of the matrix.
-			μ = a cartesian point representing the maxima of the triangle.
-			a = minimum x value for the distribution.
-			b = maximum x value for the distribution.
 		output:
 			Λ(x) = {
 				0,								x < a
@@ -104,43 +104,47 @@ namespace kac_core::physics {
 			}
 		*/
 
-		Matrix_1D triangle(size);
-		for (unsigned long x = 0; x < size; x++) {
-			triangle[x] = a <= x && x <= mu ? double(x - a) / double(mu - a)
-						: mu < x && x <= b	? 1. - double(x - mu) / double(b - mu)
+		Matrix_1D triangle(size, 0.);
+		const double a = mu - x_a;
+		const double b = mu + x_b;
+		const double inv_X = (size > 1) ? 1. / static_cast<double>(size - 1) : 0.;
+		for (std::size_t i = 0; i < size; i++) {
+			double x = (static_cast<double>(i) * inv_X);
+			triangle[i] = a <= x && x <= mu ? (x - a) / (mu - a)
+						: mu < x && x <= b	? 1. - (x - mu) / (b - mu)
 											: 0.;
 		}
 		return triangle;
 	}
 
 	inline Matrix_2D raisedTriangle2D(
-		const unsigned long& size_X,
-		const unsigned long& size_Y,
 		const T::Point& mu,
 		const double& x_a,
 		const double& x_b,
 		const double& y_a,
-		const double& y_b
+		const double& y_b,
+		const std::size_t& size_X,
+		const std::size_t& size_Y
 	) {
 		/*
 		Calculate a two dimensional triangular distribution.
 		See https://reference.wolfram.com/language/ref/UnitTriangle.html
 		input:
+			μ = a normalised point representing the maxima of the triangle ∈ [0, 1].
+			x_a = segment length of horizontal distribution such that a = μ - x_a.
+			x_b = segment length of horizontal distribution such that b = μ - x_b.
+			y_a = segment length of vertical distribution such that a = μ - y_a.
+			y_b = segment length of vertical distribution such that b = μ - y_b.
 			size = the size of the matrix.
-			μ = a cartesian point representing the maxima of the triangle.
-			x_ab = minimum and maximum x value for the distribution.
-			y_ab = minimum and maximum y value for the distribution.
 		output:
 			Λ(x, y) = Λ(x) * Λ(y)
 		*/
 
-		Matrix_1D y_t = raisedTriangle1D(size_Y, mu.y, y_a, y_b);
-		Matrix_2D triangle(size_X, Matrix_1D(size_Y, 0));
-		for (unsigned long x = 0; x < size_X; x++) {
-			double x_t = x_a <= x && x <= mu.x ? double(x - x_a) / double(mu.x - x_a)
-					   : mu.x < x && x <= x_b  ? 1. - double(x - mu.x) / double(x_b - mu.x)
-											   : 0.;
-			for (unsigned long y = 0; y < size_Y; y++) { triangle[x][y] = x_t * y_t[y]; }
+		Matrix_2D triangle(size_X, Matrix_1D(size_Y, 0.));
+		Matrix_1D x_t = raisedTriangle1D(mu.x, x_a, x_b, size_X);
+		Matrix_1D y_t = raisedTriangle1D(mu.y, y_a, y_b, size_Y);
+		for (std::size_t x = 0; x < size_X; x++) {
+			for (std::size_t y = 0; y < size_Y; y++) { triangle[x][y] = x_t[x] * y_t[y]; }
 		}
 		return triangle;
 	}

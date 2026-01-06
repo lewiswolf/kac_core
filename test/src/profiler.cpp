@@ -156,6 +156,23 @@ int main() {
 
 	// ./physics/fdtd
 	printColouredText("\nProfiler for `./physics/fdtd`.", 36);
+	printColouredText("Efficiency relative to an" + N_string + "X" + N_string + "matrix...", 35);
+	{
+		Timer timer("  raisedCosine1D");
+		T::Matrix_1D waveform = p::raisedCosine1D(0.5, 0.1, N);
+	}
+	{
+		Timer timer("  raisedCosine2D");
+		T::Matrix_2D waveform = p::raisedCosine2D(T::Point(0.5, 0.5), 0.1, N, N);
+	}
+	{
+		Timer timer("  raisedTriangle1D");
+		T::Matrix_1D waveform = p::raisedTriangle1D(0.5, 0.1, 0.1, N);
+	}
+	{
+		Timer timer("  raisedTriangle2D");
+		T::Matrix_2D waveform = p::raisedTriangle2D(T::Point(0.5, 0.5), 0.1, 0.1, 0.1, 0.1, N, N);
+	}
 	printColouredText(
 		"Efficiency relative to a" + N_string + "X" + N_string + "matrix simulation and a waveform"
 			+ t_string + "samples in length...",

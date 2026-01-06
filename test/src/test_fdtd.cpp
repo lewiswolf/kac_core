@@ -20,6 +20,15 @@ int main() {
 	);
 
 	/*
+	Test raisedTriangle.
+	*/
+	booleanTest(
+		"raisedTriangle is accurate",
+		p::raisedTriangle1D(0.5, 0.1, 0.1, 11)[5] == 1.
+			&& p::raisedTriangle2D(T::Point(0.5, 0.5), 0.1, 0.1, 0.1, 0.1, 11, 11)[5][5] == 1.
+	);
+
+	/*
 	Create a square FDTD simulation.
 	*/
 	double cfl_2 = pow(1 / pow(2, 0.5), 2.);

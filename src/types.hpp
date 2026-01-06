@@ -29,6 +29,7 @@ namespace kac_core::types {
 		// constructors
 		Point() {}
 		Point(double x, double y): x(x), y(y) {}
+		Point(const std::array<double, 2>& a): x(a[0]), y(a[1]) {}
 
 		// methods
 		void updatePol(double r, double theta) {

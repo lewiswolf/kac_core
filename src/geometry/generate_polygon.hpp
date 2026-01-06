@@ -223,8 +223,12 @@ namespace kac_core::geometry {
 		Define a rectangle with unit area and an aspect ration epsilon.
 		*/
 
-		double x = 0.5 * epsilon;
-		double y = 0.5 / epsilon;
+		double x = 0.;
+		double y = std::numeric_limits<double>::infinity();
+		if (epsilon != 0.) {
+			x = 0.5 * epsilon;
+			y = 0.5 / epsilon;
+		}
 		return T::Polygon({T::Point(-x, -y), T::Point(-x, y), T::Point(x, y), T::Point(x, -y)});
 	}
 

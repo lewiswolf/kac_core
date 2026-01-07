@@ -5,7 +5,9 @@
 #pragma once
 
 // core
+#include <array>
 #include <math.h>
+#include <utility>
 #include <vector>
 
 namespace kac_core::types {

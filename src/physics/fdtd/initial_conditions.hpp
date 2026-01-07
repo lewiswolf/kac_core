@@ -23,7 +23,7 @@ namespace kac_core::physics {
 		Calculate a one dimensional raised cosine distribution, normalised to a unit interval.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
 		input:
-			μ = a normalised point representing the maxima of the cosine ∈ [0, 1].
+			μ = a normalised point representing the maxima of the distribution ∈ [0, 1].
 			σ = normalised variance ∈ (0, ∞].
 			size = the size of the matrix.
 		output:
@@ -56,7 +56,7 @@ namespace kac_core::physics {
 		Calculate a two dimensional raised cosine distribution, normalised to a unit interval.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.306.
 		input:
-			μ = a normalised point representing the maxima of the cosine ∈ [0, 1].
+			μ = a normalised point representing the maxima of the distribution ∈ [0, 1].
 			σ = normalised variance ∈ (0, ∞].
 			size = the size of the matrix.
 		output:
@@ -91,7 +91,7 @@ namespace kac_core::physics {
 		Calculate a one dimensional triangular distribution.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
 		input:
-			μ = a normalised point representing the maxima of the triangle ∈ [0, 1].
+			μ = a normalised point representing the maxima of the distribution ∈ [0, 1].
 			x_a = segment length of distribution such that a = μ - x_a.
 			x_b = segment length of distribution such that b = μ - x_b.
 			size = the size of the matrix.
@@ -100,13 +100,13 @@ namespace kac_core::physics {
 				0,								x < a
 				(x - a) / (μ - a),				a ≤ x ≤ μ
 				1. - (x - μ) / (b - μ),			μ < x ≤ b
-				0,								x > a
+				0,								x > b
 			}
 		*/
 
 		Matrix_1D triangle(size, 0.);
-		const double a = mu - x_a;
-		const double b = mu + x_b;
+		const double a = mu - std::max(x_a, 0.);
+		const double b = mu + std::max(x_b, 0.);
 		const double inv_X = (size > 1) ? 1. / static_cast<double>(size - 1) : 0.;
 		for (std::size_t i = 0; i < size; i++) {
 			double x = (static_cast<double>(i) * inv_X);
@@ -130,7 +130,7 @@ namespace kac_core::physics {
 		Calculate a two dimensional triangular distribution.
 		See https://reference.wolfram.com/language/ref/UnitTriangle.html
 		input:
-			μ = a normalised point representing the maxima of the triangle ∈ [0, 1].
+			μ = a normalised point representing the maxima of the distribution ∈ [0, 1].
 			x_a = segment length of horizontal distribution such that a = μ - x_a.
 			x_b = segment length of horizontal distribution such that b = μ - x_b.
 			y_a = segment length of vertical distribution such that a = μ - y_a.

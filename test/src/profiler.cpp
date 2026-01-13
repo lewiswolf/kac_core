@@ -4,7 +4,9 @@ Tests and profiling for /shapes.
 
 // core
 #include <iostream>
+#include <numbers>
 #include <stdlib.h>
+using namespace std::numbers;
 
 // src
 #include <kac_core.hpp>
@@ -44,6 +46,10 @@ int main() {
 	{
 		Timer timer("  generateUnitRectangle");
 		P_tmp = g::generateUnitRectangle(0.5);
+	}
+	{
+		Timer timer("  generateUnitTriangle");
+		P_tmp = g::generateUnitTriangle(1., pi / 2);
 	}
 
 	// geometry/mappings.hpp

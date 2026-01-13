@@ -17,10 +17,13 @@ Functions for generating polygons.
 #include "./lines.hpp"
 namespace T = kac_core::types;
 
+// random number generators
 static std::default_random_engine random_engine(time(0l));
 static std::uniform_real_distribution<double> uniform_distribution(-1., 1.);
 static std::uniform_int_distribution<long>
 	uniform_sequence(std::numeric_limits<long>::min(), std::numeric_limits<long>::max());
+// numerical constants
+constexpr double infinity = std::numeric_limits<double>::infinity();
 
 namespace kac_core::geometry {
 
@@ -224,12 +227,38 @@ namespace kac_core::geometry {
 		*/
 
 		double x = 0.;
-		double y = std::numeric_limits<double>::infinity();
+		double y = infinity;
 		if (epsilon != 0.) {
 			x = 0.5 * epsilon;
 			y = 0.5 / epsilon;
 		}
 		return T::Polygon({T::Point(-x, -y), T::Point(-x, y), T::Point(x, y), T::Point(x, -y)});
+	}
+
+	inline T::Polygon generateUnitTriangle(const double& r, const double& theta) {
+		/*
+		Define a triangle with unit area using a polar coordinate point mapped onto a lens.
+		See Guy, R. K. (1993). There are three times as many obtuse-angled triangles as there are
+		acute-angled ones.
+		*/
+
+		const double cos_theta = std::cos(theta);
+		const double sin_theta = std::sin(theta);
+		// map unit disk -> radial boundary of the lens
+		const double rho =
+			r * (std::sqrt(1. - 0.25 * sin_theta * sin_theta) - 0.5 * std::abs(cos_theta));
+		// calculate the mapped point
+		T::Point p = T::Point(rho * cos_theta, rho * sin_theta);
+		// enforce unit area
+		const double height = std::abs(p.y);
+		if (height == 0) {
+			return T::Polygon({T::Point(-1. * infinity, 0.), T::Point(infinity, 0.), p});
+		} else {
+			const double scale = 1. / std::sqrt(0.5 * height);
+			p.x *= scale;
+			p.y *= scale;
+			return T::Polygon({T::Point(-0.5 * scale, 0.), T::Point(0.5 * scale, 0.), p});
+		}
 	}
 
 }

@@ -1,5 +1,5 @@
 /*
-Functions for producing a raised cosine transform for different dimensionalities.
+Functions for generating the initial conditions of a physical model.
 */
 
 #pragma once
@@ -20,15 +20,15 @@ namespace kac_core::physics {
 	inline Matrix_1D
 	raisedCosine1D(const double& mu, const double& sigma, const std::size_t& size) {
 		/*
-		Calculate a one dimensional raised cosine distribution, normalised to a unit interval.
+		Calculate a one-dimensional raised cosine distribution, normalised to a unit interval.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
 		input:
 			μ = a normalised point representing the maxima of the distribution ∈ [0, 1].
-			σ = normalised variance ∈ (0, ∞].
+			σ = normalised half-width of the distribution ∈ (0, ∞].
 			size = the size of the matrix.
 		output:
 			{
-				(1 + cos(π(x - μ) / σ)) / 2,	|x - μ| ≤ σ
+				(1 + cos(π * |x - μ| / σ)) / 2,	|x - μ| ≤ σ
 				0,								|x - μ| > σ
 			}
 		*/
@@ -53,17 +53,17 @@ namespace kac_core::physics {
 		const std::size_t& size_Y
 	) {
 		/*
-		Calculate a two dimensional raised cosine distribution, normalised to a unit interval.
+		Calculate a two-dimensional raised cosine distribution, normalised to a unit interval.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.306.
 		input:
 			μ = a normalised point representing the maxima of the distribution ∈ [0, 1].
-			σ = normalised variance ∈ (0, ∞].
+			σ = normalised half-width of the distribution ∈ (0, ∞].
 			size = the size of the matrix.
 		output:
 			l2_norm = ((x - mu_x)^2 + (y - mu_y)^2)^0.5
 			{
-				(1 + cos(π(l2_norm) / σ)) / 2,	|l2_norm| ≤ σ
-				0,								|l2_norm| > σ
+				(1 + cos(π * l2_norm / σ)) / 2,	l2_norm ≤ σ
+				0,								l2_norm > σ
 			}
 		*/
 
@@ -88,12 +88,12 @@ namespace kac_core::physics {
 		const double& mu, const double& x_a, const double& x_b, const std::size_t& size
 	) {
 		/*
-		Calculate a one dimensional triangular distribution.
+		Calculate a one-dimensional triangular function, normalised to a unit interval.
 		See Bilbao, S. (2009) Numerical Sound Synthesis p.121.
 		input:
 			μ = a normalised point representing the maxima of the distribution ∈ [0, 1].
-			x_a = segment length of distribution such that a = μ - x_a.
-			x_b = segment length of distribution such that b = μ - x_b.
+			x_a = normalised segment length of distribution such that a = μ - x_a.
+			x_b = normalised segment length of distribution such that b = μ - x_b.
 			size = the size of the matrix.
 		output:
 			Λ(x) = {
@@ -127,14 +127,14 @@ namespace kac_core::physics {
 		const std::size_t& size_Y
 	) {
 		/*
-		Calculate a two dimensional triangular distribution.
+		Calculate a two-dimensional triangular function, normalised to a unit interval.
 		See https://reference.wolfram.com/language/ref/UnitTriangle.html
 		input:
 			μ = a normalised point representing the maxima of the distribution ∈ [0, 1].
-			x_a = segment length of horizontal distribution such that a = μ - x_a.
-			x_b = segment length of horizontal distribution such that b = μ - x_b.
-			y_a = segment length of vertical distribution such that a = μ - y_a.
-			y_b = segment length of vertical distribution such that b = μ - y_b.
+			x_a = normalised segment length of horizontal distribution such that a = μ - x_a.
+			x_b = normalised segment length of horizontal distribution such that b = μ - x_b.
+			y_a = normalised segment length of vertical distribution such that a = μ - y_a.
+			y_b = normalised segment length of vertical distribution such that b = μ - y_b.
 			size = the size of the matrix.
 		output:
 			Λ(x, y) = Λ(x) * Λ(y)

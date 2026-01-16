@@ -35,8 +35,8 @@ namespace kac_core::geometry {
 			y_max = std::max(y_max, P[n].y);
 		}
 		// center along x and y axes
-		const double x_shift = (x_min + x_max) / 2;
-		const double y_shift = (y_min + y_max) / 2;
+		const double x_shift = (x_min + x_max) * 0.5;
+		const double y_shift = (y_min + y_max) * 0.5;
 		for (std::size_t n = 0; n < N; n++) {
 			P[n].x -= x_shift;
 			P[n].y -= y_shift;

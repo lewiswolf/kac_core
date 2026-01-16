@@ -8,9 +8,11 @@ Functions for generating polygons.
 #include <algorithm>	// generate, min, max, shuffle, sort
 #include <limits>		// numeric_limits
 #include <math.h>		// abs
+#include <numbers>		// pi
 #include <random>		// default_random_engine
 #include <string>		// string
 #include <time.h>		// time
+using namespace std::numbers;
 
 // src
 #include "../types.hpp"
@@ -252,12 +254,16 @@ namespace kac_core::geometry {
 		// enforce unit area
 		const double height = std::abs(p.y);
 		if (height == 0) {
-			return T::Polygon({T::Point(-1. * infinity, 0.), T::Point(infinity, 0.), p});
+			return T::Polygon({T::Point(-1. * infinity, 0.), p, T::Point(infinity, 0.)});
 		} else {
 			const double scale = 1. / std::sqrt(0.5 * height);
 			p.x *= scale;
 			p.y *= scale;
-			return T::Polygon({T::Point(-0.5 * scale, 0.), T::Point(0.5 * scale, 0.), p});
+			if ((r > 0. && theta < pi) || (r < 0. && theta > pi)) {
+				return T::Polygon({T::Point(-0.5 * scale, 0.), p, T::Point(0.5 * scale, 0.)});
+			} else {
+				return T::Polygon({T::Point(-0.5 * scale, 0.), T::Point(0.5 * scale, 0.), p});
+			}
 		}
 	}
 

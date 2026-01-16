@@ -25,38 +25,37 @@ namespace kac_core::geometry {
 		*/
 
 		// first find minmax in both x & y
-		T::Matrix_1D X;
-		T::Matrix_1D Y;
-		const unsigned long N = P.size();
-		for (unsigned long n = 0; n < N; n++) {
-			X.push_back(P[n].x);
-			Y.push_back(P[n].y);
+		const std::size_t N = P.size();
+		double x_min = P[0].x, x_max = P[0].x;
+		double y_min = P[0].y, y_max = P[0].y;
+		for (std::size_t n = 1; n < N; ++n) {
+			x_min = std::min(x_min, P[n].x);
+			x_max = std::max(x_max, P[n].x);
+			y_min = std::min(y_min, P[n].y);
+			y_max = std::max(y_max, P[n].y);
 		}
-		auto x_min_max = std::minmax_element(begin(X), end(X));
-		auto y_min_max = std::minmax_element(begin(Y), end(Y));
 		// center along x and y axes
-		double x_shift = (*x_min_max.first + *x_min_max.second) / 2;
-		double y_shift = (*y_min_max.first + *y_min_max.second) / 2;
-		for (unsigned long n = 0; n < N; n++) {
+		const double x_shift = (x_min + x_max) / 2;
+		const double y_shift = (y_min + y_max) / 2;
+		for (std::size_t n = 0; n < N; n++) {
 			P[n].x -= x_shift;
 			P[n].y -= y_shift;
 		}
-		*x_min_max.first -= x_shift;
-		*x_min_max.second -= x_shift;
-		*y_min_max.first -= y_shift;
-		*y_min_max.second -= y_shift;
+		x_min -= x_shift;
+		x_max -= x_shift;
+		y_min -= y_shift;
+		y_max -= y_shift;
 		// find v_min and v_d (v_d = v_max - v_min)
-		double v_min = *x_min_max.first < *y_min_max.first ? *x_min_max.first : *y_min_max.first;
-		double v_d =
-			(*x_min_max.second > *y_min_max.second ? *x_min_max.second : *y_min_max.second) - v_min;
+		const double v_min = std::min(x_min, y_min);
+		const double v_d = std::max(x_max, y_max) - v_min;
 		// normalise
 		if (signed_norm) {
-			for (unsigned long n = 0; n < N; n++) {
+			for (std::size_t n = 0; n < N; n++) {
 				P[n].x = 2 * (P[n].x - v_min) / v_d - 1;
 				P[n].y = 2 * (P[n].y - v_min) / v_d - 1;
 			}
 		} else {
-			for (unsigned long n = 0; n < N; n++) {
+			for (std::size_t n = 0; n < N; n++) {
 				P[n].x = (P[n].x - v_min) / v_d;
 				P[n].y = (P[n].y - v_min) / v_d;
 			}
@@ -262,9 +261,9 @@ namespace kac_core::geometry {
 		vertices.
 		*/
 
-		double scale = std::sqrt(abs(a) / polygonArea(P));
+		double scale = std::sqrt(std::abs(a) / polygonArea(P));
 		T::Point centroid = polygonCentroid(P);
-		for (unsigned long n = 0; n < P.size(); n++) {
+		for (std::size_t n = 0; n < P.size(); n++) {
 			P[n].x = centroid.x + scale * (P[n].x - centroid.x);
 			P[n].y = centroid.y + scale * (P[n].y - centroid.y);
 		}

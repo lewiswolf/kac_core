@@ -6,7 +6,7 @@ Functions relating to the wave equation.
 
 // core
 #include <algorithm>	// max
-#include <math.h>
+#include <cmath>
 #include <numbers>
 #include <vector>
 using namespace std::numbers;
@@ -16,7 +16,7 @@ using namespace std::numbers;
 namespace T = kac_core::types;
 
 T::Matrix_1D normalise(T::Matrix_1D& waveform) {
-	double max_A = 0.0;
+	double max_A = 0.;
 	for (double& x: waveform) max_A = std::max(max_A, std::abs(x));
 	if (max_A != 0.) {
 		for (double& x: waveform) x /= max_A;
@@ -47,15 +47,15 @@ namespace kac_core::physics {
 
 		T::Matrix_1D waveform(T);
 		const std::size_t N = F.size();
-		const double radians = 2 * pi * k;
+		const double radians = 2. * pi * k;
 		const double d_step = std::exp(d);
-		double d_t = 1.0;
+		double d_t = 1.;
 		for (std::size_t t = 0; t < T; t++) {
 			double t_radians = t * radians;
 			for (std::size_t n = 0; n < N; n++) {
 				// 2009 - Bilbao, pp.65-66
 				// 2016 - Chaigne & Kergomard, p.154
-				waveform[t] += sin(F[n] * t_radians) * alpha[n];
+				waveform[t] += std::sin(F[n] * t_radians) * alpha[n];
 			}
 			waveform[t] *= d_t;
 			d_t *= d_step;
@@ -85,16 +85,16 @@ namespace kac_core::physics {
 		T::Matrix_1D waveform(T);
 		const std::size_t N = F.size();
 		const std::size_t M = F[0].size();
-		const double radians = 2 * pi * k;
+		const double radians = 2. * pi * k;
 		const double d_step = std::exp(d);
-		double d_t = 1.0;
+		double d_t = 1.;
 		for (std::size_t t = 0; t < T; t++) {
 			double t_radians = t * radians;
 			for (std::size_t n = 0; n < N; n++) {
 				for (std::size_t m = 0; m < M; m++) {
 					// 2009 - Bilbao, pp.65-66
 					// 2016 - Chaigne & Kergomard, p.154
-					waveform[t] += sin(F[n][m] * t_radians) * alpha[n][m];
+					waveform[t] += std::sin(F[n][m] * t_radians) * alpha[n][m];
 				}
 			}
 			waveform[t] *= d_t;

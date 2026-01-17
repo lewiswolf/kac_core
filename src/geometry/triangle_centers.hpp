@@ -6,6 +6,7 @@ https://faculty.evansville.edu/ck6/encyclopedia/ETC.html
 #pragma once
 
 // core
+#include <cmath>
 #include <stdexcept>
 
 // src
@@ -33,9 +34,9 @@ namespace kac_core::geometry::ETC {
 		*/
 
 		typeGuard(P);
-		double a = hypot(P[1].x - P[2].x, P[1].y - P[2].y);
-		double b = hypot(P[0].x - P[2].x, P[0].y - P[2].y);
-		double c = hypot(P[0].x - P[1].x, P[0].y - P[1].y);
+		double a = std::hypot(P[1].x - P[2].x, P[1].y - P[2].y);
+		double b = std::hypot(P[0].x - P[2].x, P[0].y - P[2].y);
+		double c = std::hypot(P[0].x - P[1].x, P[0].y - P[1].y);
 		return T::Point(
 			(a * P[0].x + b * P[1].x + c * P[2].x) / (a + b + c),
 			(a * P[0].y + b * P[1].y + c * P[2].y) / (a + b + c)
@@ -64,7 +65,7 @@ namespace kac_core::geometry::ETC {
 		const double a_2 = P[0].x * P[0].x + P[0].y * P[0].y;
 		const double b_2 = P[1].x * P[1].x + P[1].y * P[1].y;
 		const double c_2 = P[2].x * P[2].x + P[2].y * P[2].y;
-		const double d = 2
+		const double d = 2.
 					   * (P[0].x * (P[1].y - P[2].y) + P[1].x * (P[2].y - P[0].y)
 						  + P[2].x * (P[0].y + P[1].y));
 		return T::Point(

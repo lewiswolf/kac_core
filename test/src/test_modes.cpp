@@ -3,7 +3,7 @@ Tests for /modes.
 */
 
 // core
-#include <math.h>
+#include <cmath>
 
 // src
 #include <kac_core.hpp>
@@ -18,7 +18,8 @@ int main() {
 	*/
 	booleanTest(
 		"besselJ is accurate",
-		abs(p::besselJ(0, 4.2) - -0.37655) < 0.001 && abs(p::besselJ(1, 1.2) - 0.498289) < 0.001
+		std::abs(p::besselJ(0, 4.2) + 0.37655) < 0.001
+			&& std::abs(p::besselJ(1, 1.2) - 0.498289) < 0.001
 	);
 
 	/*

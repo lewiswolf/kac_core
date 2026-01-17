@@ -5,7 +5,7 @@ Functions for mappings from one domain ℝ^2 to another.
 #pragma once
 
 // core
-#include <math.h>
+#include <cmath>
 #include <numbers>
 #include <vector>
 using namespace std::numbers;
@@ -23,15 +23,19 @@ namespace kac_core::geometry {
 		of Mathematics (ICM). p.5
 		*/
 
-		double u_2 = p.x * p.x;
-		double v_2 = p.y * p.y;
-		double u_prime_1 = 2 + u_2 - v_2;
-		double u_prime_2 = 2 * sqrt2 * p.x;
-		double v_prime_1 = 2 - u_2 + v_2;
-		double v_prime_2 = 2 * sqrt2 * p.y;
+		const double u_2 = p.x * p.x;
+		const double v_2 = p.y * p.y;
+		const double u_prime_1 = 2. + u_2 - v_2;
+		const double u_prime_2 = 2. * sqrt2 * p.x;
+		const double v_prime_1 = 2. - u_2 + v_2;
+		const double v_prime_2 = 2. * sqrt2 * p.y;
 		return T::Point(
-			(0.5 * sqrt(abs(u_prime_1 + u_prime_2))) - (0.5 * sqrt(abs(u_prime_1 - u_prime_2))),
-			(0.5 * sqrt(abs(v_prime_1 + v_prime_2))) - (0.5 * sqrt(abs(v_prime_1 - v_prime_2)))
+			(std::sqrt(std::abs(u_prime_1 + u_prime_2))
+			 - std::sqrt(std::abs(u_prime_1 - u_prime_2)))
+				* 0.5,
+			(std::sqrt(std::abs(v_prime_1 + v_prime_2))
+			 - std::sqrt(std::abs(v_prime_1 - v_prime_2)))
+				* 0.5
 		);
 	}
 
@@ -42,7 +46,9 @@ namespace kac_core::geometry {
 		of Mathematics (ICM). p.5
 		*/
 
-		return T::Point(p.x * sqrt(1 - (p.y * p.y / 2)), p.y * sqrt(1 - (p.x * p.x / 2)));
+		return T::Point(
+			p.x * std::sqrt(1 - (p.y * p.y * 0.5)), p.y * std::sqrt(1. - (p.x * p.x * 0.5))
+		);
 	}
 
 }

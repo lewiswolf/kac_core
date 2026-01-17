@@ -6,7 +6,7 @@
 
 // core
 #include <array>
-#include <math.h>
+#include <cmath>
 #include <utility>
 #include <vector>
 
@@ -23,40 +23,42 @@ namespace kac_core::types {
 		*/
 
 		// vars
-		double x = 0.;
-		double y = 0.;
-		double r() { return hypot(x, y); }
-		double theta() { return atan2(y, x); }
+		double x {0.};
+		double y {0.};
 
 		// constructors
-		Point() {}
-		Point(double x, double y): x(x), y(y) {}
-		Point(std::array<double, 2> _array): x(_array[0]), y(_array[1]) {}
-		Point(std::pair<double, double> _pair): x(_pair.first), y(_pair.second) {}
+		constexpr Point() noexcept = default;
+		constexpr Point(double _x, double _y) noexcept: x(_x), y(_y) {}
+		explicit constexpr Point(const std::array<double, 2>& arr) noexcept: x(arr[0]), y(arr[1]) {}
+		explicit constexpr Point(const std::pair<double, double>& p) noexcept
+			: x(p.first), y(p.second) {}
 
-		// methods
-		void updatePol(double r, double theta) {
+		// accessors
+		[[nodiscard]] double r() const noexcept { return std::hypot(x, y); }
+		[[nodiscard]] double theta() const noexcept { return std::atan2(y, x); }
+
+		// mutators
+		void updatePolar(double r, double theta) noexcept {
 			/*
 			Update the point using polar coordinates.
 			*/
-
-			x = r * cos(theta);
-			y = r * sin(theta);
+			x = r * std::cos(theta);
+			y = r * std::sin(theta);
 		}
 	} Point;
 
 	typedef struct Line {
 		/*
-		A straight line from point a to point b.
+		A straight line segment from point a to point b.
 		*/
 
 		// vars
-		Point a;
-		Point b;
+		Point a {};
+		Point b {};
 
 		// constructors
-		Line() {}
-		Line(Point a, Point b): a(a), b(b) {}
+		constexpr Line() noexcept = default;
+		constexpr Line(const Point& _a, const Point& _b) noexcept: a(_a), b(_b) {}
 	} Line;
 
 	// A polygon defined on the Euclidean plane.

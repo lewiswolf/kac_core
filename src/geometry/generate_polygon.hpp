@@ -12,7 +12,6 @@ Functions for generating polygons.
 #include <random>		// default_random_engine
 #include <string>		// string
 #include <time.h>		// time
-using namespace std::numbers;
 
 // src
 #include "../types.hpp"
@@ -102,8 +101,8 @@ namespace kac_core::geometry {
 			y_max = std::max(P[n].y, y_max);
 		}
 		// center around origin
-		double x_shift = ((x_max - x_min) / 2.0) - x_max;
-		double y_shift = ((y_max - y_min) / 2.0) - y_max;
+		double x_shift = ((x_max - x_min) * 0.5) - x_max;
+		double y_shift = ((y_max - y_min) * 0.5) - y_max;
 		for (unsigned long n = 0; n < N; n++) {
 			P[n].x += x_shift;
 			P[n].y += y_shift;
@@ -139,8 +138,8 @@ namespace kac_core::geometry {
 		auto x_min_max = std::minmax_element(begin(X), end(X));
 		auto y_min_max = std::minmax_element(begin(Y), end(Y));
 		// center along x and y axes
-		double x_shift = (*x_min_max.first + *x_min_max.second) / 2;
-		double y_shift = (*y_min_max.first + *y_min_max.second) / 2;
+		double x_shift = (*x_min_max.first + *x_min_max.second) * 0.5;
+		double y_shift = (*y_min_max.first + *y_min_max.second) * 0.5;
 		for (unsigned long n = 0; n < N; n++) {
 			P.push_back(T::Point(X[n] -= x_shift, Y[n] -= y_shift));
 		}
@@ -223,6 +222,21 @@ namespace kac_core::geometry {
 		return P;
 	}
 
+	inline T::Polygon generateRegularPolygon(const std::size_t& N) {
+		/*
+		Generate a N-sided regular polygon.
+		*/
+
+		T::Polygon P;
+		double theta = std::numbers::pi * 0.5;
+		const double d_theta = 2. * std::numbers::pi / N;
+		for (std::size_t n = 0; n < N; n++) {
+			theta -= d_theta;
+			P.push_back(T::Point(std::cos(theta), std::sin(theta)));
+		}
+		return P;
+	}
+
 	inline T::Polygon generateUnitRectangle(const double& epsilon) {
 		/*
 		Define a rectangle with unit area and an aspect ration epsilon.
@@ -254,12 +268,12 @@ namespace kac_core::geometry {
 		// enforce unit area
 		const double height = std::abs(p.y);
 		if (height == 0) {
-			return T::Polygon({T::Point(-1. * infinity, 0.), p, T::Point(infinity, 0.)});
+			return T::Polygon({T::Point(-infinity, 0.), p, T::Point(infinity, 0.)});
 		} else {
 			const double scale = 1. / std::sqrt(0.5 * height);
 			p.x *= scale;
 			p.y *= scale;
-			if ((r > 0. && theta < pi) || (r < 0. && theta > pi)) {
+			if ((r > 0. && theta < std::numbers::pi) || (r < 0. && theta > std::numbers::pi)) {
 				return T::Polygon({T::Point(-0.5 * scale, 0.), p, T::Point(0.5 * scale, 0.)});
 			} else {
 				return T::Polygon({T::Point(-0.5 * scale, 0.), T::Point(0.5 * scale, 0.), p});

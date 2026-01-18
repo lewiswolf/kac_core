@@ -43,6 +43,10 @@ int main() {
 		P = g::generatePolygon(N);
 	}
 	{
+		Timer timer("  generateRegularPolygon");
+		P_tmp = g::generateRegularPolygon(N);
+	}
+	{
 		Timer timer("  generateUnitRectangle");
 		P_tmp = g::generateUnitRectangle(0.5);
 	}

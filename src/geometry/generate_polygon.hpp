@@ -227,12 +227,13 @@ namespace kac_core::geometry {
 		Generate a N-sided regular polygon.
 		*/
 
-		T::Polygon P;
+		T::Polygon P(N, T::Point());
 		double theta = std::numbers::pi * 0.5;
 		const double d_theta = 2. * std::numbers::pi / N;
 		for (std::size_t n = 0; n < N; n++) {
 			theta -= d_theta;
-			P.push_back(T::Point(std::cos(theta), std::sin(theta)));
+			P[n].x = std::cos(theta);
+			P[n].y = std::sin(theta);
 		}
 		return P;
 	}

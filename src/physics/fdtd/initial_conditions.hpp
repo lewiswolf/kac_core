@@ -9,7 +9,6 @@ Functions for generating the initial conditions of a physical model.
 #include <numbers>
 #include <stdexcept>
 #include <vector>
-using namespace std::numbers;
 
 // src
 #include "../../types.hpp"
@@ -39,7 +38,7 @@ namespace kac_core::physics {
 			for (std::size_t i = 0; i < size; i++) {
 				double x_diff = std::abs((static_cast<double>(i) * inv_X) - mu);
 				if (x_diff <= sigma) {
-					raised_cosine[i] = 0.5 * (1. + std::cos(pi * x_diff / sigma));
+					raised_cosine[i] = 0.5 * (1. + std::cos(std::numbers::pi * x_diff / sigma));
 				}
 			}
 		}
@@ -76,7 +75,8 @@ namespace kac_core::physics {
 				for (std::size_t j = 0; j < size_Y; j++) {
 					double l2_norm = std::hypot(x - mu.x, (static_cast<double>(j) * inv_Y) - mu.y);
 					if (l2_norm <= sigma) {
-						raised_cosine[i][j] = 0.5 * (1. + std::cos(pi * l2_norm / sigma));
+						raised_cosine[i][j] =
+							0.5 * (1. + std::cos(std::numbers::pi * l2_norm / sigma));
 					}
 				}
 			}

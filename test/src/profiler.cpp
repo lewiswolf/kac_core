@@ -6,7 +6,6 @@ Tests and profiling for /shapes.
 #include <iostream>
 #include <numbers>
 #include <stdlib.h>
-using namespace std::numbers;
 
 // src
 #include <kac_core.hpp>
@@ -18,8 +17,8 @@ namespace p = kac_core::physics;	 // physics
 #include "./utils.hpp"
 
 // magic numbers
-const unsigned long N = 200;
-const unsigned long t = 48000;
+const std::size_t N = 200;
+const std::size_t t = 48000;
 // implicit magic
 const std::string N_string = " " + std::to_string(N) + " ";
 const std::string t_string = " " + std::to_string(t) + " ";
@@ -49,7 +48,7 @@ int main() {
 	}
 	{
 		Timer timer("  generateUnitTriangle");
-		P_tmp = g::generateUnitTriangle(1., pi / 2);
+		P_tmp = g::generateUnitTriangle(1., std::numbers::pi * 0.5);
 	}
 
 	// geometry/mappings.hpp
@@ -57,11 +56,11 @@ int main() {
 	printColouredText("Efficiency relative to" + N_string + "points...", 35);
 	{
 		Timer timer("  circle2Square");
-		for (unsigned long n = 0; n < P.size(); n++) { g::simpleElliptic_Circle2Square(P[n]); }
+		for (std::size_t n = 0; n < P.size(); n++) { g::simpleElliptic_Circle2Square(P[n]); }
 	}
 	{
 		Timer timer("  square2Circle");
-		for (unsigned long n = 0; n < P.size(); n++) { g::simpleElliptic_Square2Circle(P[n]); }
+		for (std::size_t n = 0; n < P.size(); n++) { g::simpleElliptic_Square2Circle(P[n]); }
 	}
 
 	// geometry/morphisms.hpp
@@ -81,7 +80,7 @@ int main() {
 	}
 	{
 		Timer timer("  scalePolygonByArea");
-		g::scalePolygonByArea(P, 100.0);
+		g::scalePolygonByArea(P, 100.);
 	}
 
 	// geometry/polygon_properties.hpp
@@ -146,18 +145,18 @@ int main() {
 	T::Matrix_1D A_1d = p::linearAmplitudes(0.5, N);
 	{
 		Timer timer("  AdditiveSynthesis1D");
-		T::Matrix_1D waveform = p::AdditiveSynthesis1D(F_1d, A_1d, 1.0, 1 / t, t);
+		T::Matrix_1D waveform = p::AdditiveSynthesis1D(F_1d, A_1d, 1., 1 / t, t);
 	}
 	printColouredText(
 		"Efficiency relative to" + N_string + "X" + N_string + "modes and a waveform" + t_string
 			+ "samples in length...",
 		35
 	);
-	T::Matrix_2D F_2d = p::rectangularSeries(N, N, 1);
-	T::Matrix_2D A_2d = p::rectangularAmplitudes(0.5, 0.5, N, N, 1);
+	T::Matrix_2D F_2d = p::rectangularSeries(N, N, 1.);
+	T::Matrix_2D A_2d = p::rectangularAmplitudes(0.5, 0.5, N, N, 1.);
 	{
 		Timer timer("  AdditiveSynthesis2D");
-		T::Matrix_1D waveform = p::AdditiveSynthesis2D(F_2d, A_2d, 1.0, 1 / t, t);
+		T::Matrix_1D waveform = p::AdditiveSynthesis2D(F_2d, A_2d, 1., 1 / t, t);
 	}
 
 	// ./physics/fdtd
@@ -184,17 +183,17 @@ int main() {
 			+ t_string + "samples in length...",
 		35
 	);
-	double cfl_2 = pow(1 / pow(2, 0.5), 2.);
-	T::Matrix_2D u_0(N, std::vector<double>(N, 0.0));
-	T::Matrix_2D u_1(N, std::vector<double>(N, 0.0));
-	u_1[(unsigned long)N / 2][(unsigned long)N / 2] = 1;
+	double cfl_2 = pow(1 / std::numbers::sqrt2, 2.);
+	T::Matrix_2D u_1(N, std::vector<double>(N, 0.));
+	T::Matrix_2D u_0(N, std::vector<double>(N, 0.));
+	u_1[(std::size_t)N * 0.5][(std::size_t)N * 0.5] = 1.;
 	T::BooleanImage B(N, std::vector<short>(N, 1));
 	// dirichlet boundary
-	for (size_t i = 0; i < N; ++i) { B[i][0] = B[i][N - 1] = 0; }
-	for (size_t j = 0; j < N; ++j) { B[0][j] = B[N - 1][j] = 0; }
+	for (std::size_t i = 0; i < N; i++) { B[i][0] = B[i][N - 1] = 0; }
+	for (std::size_t j = 0; j < N; j++) { B[0][j] = B[N - 1][j] = 0; }
 	{
 		Timer timer("  FDTDWaveform2D");
-		p::FDTDWaveform2D(u_0, u_1, B, cfl_2, 2 - 4 * cfl_2, 1., t, T::Point(0.5, 0.5));
+		p::FDTDWaveform2D(u_0, u_1, B, cfl_2, 2. - 4. * cfl_2, 1., t, T::Point(0.5, 0.5));
 	}
 
 	return 0;

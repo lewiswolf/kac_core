@@ -51,8 +51,8 @@ namespace kac_core::geometry {
 		// normalise
 		if (signed_norm) {
 			for (std::size_t n = 0; n < N; n++) {
-				P[n].x = 2 * (P[n].x - v_min) / v_d - 1;
-				P[n].y = 2 * (P[n].y - v_min) / v_d - 1;
+				P[n].x = 2. * (P[n].x - v_min) / v_d - 1.;
+				P[n].y = 2. * (P[n].y - v_min) / v_d - 1.;
 			}
 		} else {
 			for (std::size_t n = 0; n < N; n++) {

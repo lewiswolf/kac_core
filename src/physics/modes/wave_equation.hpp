@@ -9,7 +9,6 @@ Functions relating to the wave equation.
 #include <cmath>
 #include <numbers>
 #include <vector>
-using namespace std::numbers;
 
 // src
 #include "../../types.hpp"
@@ -47,7 +46,7 @@ namespace kac_core::physics {
 
 		T::Matrix_1D waveform(T);
 		const std::size_t N = F.size();
-		const double radians = 2. * pi * k;
+		const double radians = 2. * std::numbers::pi * k;
 		const double d_step = std::exp(d);
 		double d_t = 1.;
 		for (std::size_t t = 0; t < T; t++) {
@@ -85,7 +84,7 @@ namespace kac_core::physics {
 		T::Matrix_1D waveform(T);
 		const std::size_t N = F.size();
 		const std::size_t M = F[0].size();
-		const double radians = 2. * pi * k;
+		const double radians = 2. * std::numbers::pi * k;
 		const double d_step = std::exp(d);
 		double d_t = 1.;
 		for (std::size_t t = 0; t < T; t++) {

@@ -8,7 +8,6 @@ Functions for mappings from one domain ℝ^2 to another.
 #include <cmath>
 #include <numbers>
 #include <vector>
-using namespace std::numbers;
 
 // src
 #include "../types.hpp"
@@ -26,9 +25,9 @@ namespace kac_core::geometry {
 		const double u_2 = p.x * p.x;
 		const double v_2 = p.y * p.y;
 		const double u_prime_1 = 2. + u_2 - v_2;
-		const double u_prime_2 = 2. * sqrt2 * p.x;
+		const double u_prime_2 = 2. * std::numbers::sqrt2 * p.x;
 		const double v_prime_1 = 2. - u_2 + v_2;
-		const double v_prime_2 = 2. * sqrt2 * p.y;
+		const double v_prime_2 = 2. * std::numbers::sqrt2 * p.y;
 		return T::Point(
 			(std::sqrt(std::abs(u_prime_1 + u_prime_2))
 			 - std::sqrt(std::abs(u_prime_1 - u_prime_2)))

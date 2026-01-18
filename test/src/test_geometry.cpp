@@ -4,7 +4,6 @@ Tests for /geometry.
 
 // core
 #include <numbers>
-using namespace std::numbers;
 
 // src
 #include <kac_core.hpp>
@@ -58,8 +57,14 @@ int main() {
 	};
 	booleanTest("isConvex holds for counter-clockwise ordered polygons", g::isConvex(square_anti));
 	booleanTest("isConvex holds for clockwise ordered polygons", g::isConvex(square_clockwise));
-	booleanTest("largestVector works anticlockwise", g::largestVector(square_anti).first == sqrt2);
-	booleanTest("largestVector works clockwise", g::largestVector(square_clockwise).first == sqrt2);
+	booleanTest(
+		"largestVector works anticlockwise",
+		g::largestVector(square_anti).first == std::numbers::sqrt2
+	);
+	booleanTest(
+		"largestVector works clockwise",
+		g::largestVector(square_clockwise).first == std::numbers::sqrt2
+	);
 
 	/*
 	Test that isPointInsideConvexPolygon and isPointInsidePolygon are accurate.

@@ -6,10 +6,9 @@ equation.
 #pragma once
 
 // core
-#include <math.h>
+#include <cmath>
 #include <numbers>
 #include <vector>
-using namespace std::numbers;
 
 // src
 #include "../../types.hpp"
@@ -17,27 +16,50 @@ namespace T = kac_core::types;
 
 namespace kac_core::physics {
 
-	inline T::Matrix_1D linearAmplitudes(const double& x, const unsigned long& N) {
+	inline T::Matrix_1D linearAmplitudes(
+		const double& x,
+		const std::size_t& N,
+		const std::pair<bool, bool> boundary_conditions = {true, true}
+	) {
 		/*
-		Calculate the amplitudes of the 1D eigenmodes relative to a strike location.
+		Calculate the spatial eigenfunction of a 1D domain relative to a strike location.
 		input:
 			x = strike location
 			N = number of modes
+			boundary_conditions = boolean pair indicating the boundary conditions
+				- first = left boundary condition (true = fixed, false = free)
+				- second = right boundary condition (true = fixed, false = free)
 		output:
-			A = { abs(sin(nxπ)) | a ∈ ℝ, 0 < n <= N }
+			α_n = {
+				sin((n + 1)πx),			dirichlet boundary conditions
+				cos(nπx),				neumann boundary conditions
+				sin((n + 0.5)πx),		mixed boundary conditions
+				| α ∈ ℝ, 0 <= n < N
+			}
 		*/
 
-		T::Matrix_1D A(N);
-		double x_pi = x * pi;
-		for (unsigned long n = 0; n < N; n++) { A[n] = abs(sin((n + 1) * x_pi)); };
+		T::Matrix_1D A(N, 0.);
+		const double x_pi = x * std::numbers::pi;
+		if (boundary_conditions.first && boundary_conditions.second) {
+			// dirichlet boundary
+			for (std::size_t n = 0; n < N; n++) { A[n] = std::abs(std::sin((n + 1) * x_pi)); }
+		} else if (!boundary_conditions.first && !boundary_conditions.second) {
+			// neumann boundary
+			for (std::size_t n = 0; n < N; n++) { A[n] = std::abs(std::cos(n * x_pi)); }
+		} else {
+			// mixed boundary
+			for (std::size_t n = 0; n < N; n++) { A[n] = std::abs(std::sin((n + 0.5) * x_pi)); }
+		};
 		return A;
 	}
 
 	inline T::Matrix_1D linearCymatics(
-		const double& n, const unsigned long& H, const std::pair<bool, bool>& boundary_conditions
+		const double& n,
+		const std::size_t& H,
+		const std::pair<bool, bool> boundary_conditions = {true, true}
 	) {
 		/*
-		Produce the 1D continuos cymatic diagram for a particular mode of a linear domain.
+		Produce a cymatic diagram of a 1D domain for a particular mode n.
 		input:
 			n = nth modal index
 			H = length of the X axis
@@ -45,50 +67,59 @@ namespace kac_core::physics {
 				- first = left boundary condition (true = fixed, false = free)
 				- second = right boundary condition (true = fixed, false = free)
 		output:
-			M = {
-				sin(nπx/H),			(true, true)
-				cos(nπx/H),			(false, false)
-				sin((n-0.5)πx/H),	(true, false) || (false, true)
+			U = {
+				sin((n + 1) πx/H),		dirichlet boundary conditions
+				cos(nπx/H),				neumann boundary conditions
+				sin((n + 0.5)πx/H),		mixed boundary conditions
+				| U ∈ ℝ^1, 0 <= n < N
 			}
 		*/
 
-		T::Matrix_1D M(H);
+		T::Matrix_1D U(H, 0.);
 		double omega = 0.0;
-		if (boundary_conditions.first) {
-			if (boundary_conditions.second) {
-				// fixed left and right boundary condition
-				omega = n * pi / H;
-				for (unsigned long x = 0; x < H; x++) { M[x] = sin(omega * x); }
-			} else {
-				// fixed left, free right boundary condition
-				omega = (n - 0.5) * pi / H;
-				for (unsigned long x = 0; x < H; x++) { M[x] = sin(omega * x); }
-			}
+		if (boundary_conditions.first && boundary_conditions.second) {
+			// dirichlet boundary
+			omega = (n + 1) * std::numbers::pi / H;
+			for (std::size_t x = 0; x < H; x++) { U[x] = sin(omega * x); }
+		} else if (!boundary_conditions.first && !boundary_conditions.second) {
+			// neumann boundary
+			omega = n * std::numbers::pi / H;
+			for (std::size_t x = 0; x < H; x++) { U[x] = cos(omega * x); }
 		} else {
-			if (boundary_conditions.second) {
-				// fixed right, free left boundary condition
-				omega = (n - 0.5) * pi / H;
-				for (unsigned long x = 0; x < H; x++) { M[x] = sin(omega * (H - 1 - x)); }
-			} else {
-				// free left and right boundary condition
-				omega = n * pi / H;
-				for (unsigned long x = 0; x < H; x++) { M[x] = cos(omega * x); }
-			}
+			// mixed boundary
+			omega = (n + 0.5) * std::numbers::pi / H;
+			for (std::size_t x = 0; x < H; x++) { U[x] = sin(omega * x); }
 		}
-		return M;
+		return U;
 	}
 
-	inline T::Matrix_1D linearSeries(const unsigned long& N) {
+	inline T::Matrix_1D linearSeries(
+		const std::size_t& N, const std::pair<bool, bool> boundary_conditions = {true, true}
+	) {
 		/*
-		Calculate the the harmonic series.
+		Calculate the eigenvalues of a 1D domain.
 		input:
 			N = number of modes
 		output:
-			S = { n | s ∈ ℕ, 0 < n <= N }
+			λ_n = {
+				n + 1,					dirichlet boundary conditions
+				n,						neumann boundary conditions
+				n + 0.5,				mixed boundary conditions
+				| s ∈ ℝ, 0 <= n < N
+			}
 		*/
 
-		T::Matrix_1D S(N);
-		for (unsigned long n = 0; n < N; n++) { S[n] = n + 1; };
+		T::Matrix_1D S(N, 0.);
+		if (boundary_conditions.first && boundary_conditions.second) {
+			// dirichlet boundary
+			for (std::size_t n = 0; n < N; n++) { S[n] = n + 1; }
+		} else if (!boundary_conditions.first && !boundary_conditions.second) {
+			// neumann boundary
+			for (std::size_t n = 0; n < N; n++) { S[n] = n; }
+		} else {
+			// mixed boundary
+			for (std::size_t n = 0; n < N; n++) { S[n] = n + 0.5; }
+		};
 		return S;
 	}
 

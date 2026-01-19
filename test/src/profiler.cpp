@@ -124,6 +124,18 @@ int main() {
 	// ./physics/modes
 	printColouredText("\nProfiler for `./physics/modes`.", 36);
 	printColouredText("Efficiency relative to" + N_string + "X" + N_string + "modes...", 35);
+	{
+		Timer timer("  linearAmplitudes");
+		T::Matrix_1D linear_pattern = p::linearAmplitudes(0.5, N);
+	}
+	{
+		Timer timer("  linearCymatics");
+		T::Matrix_1D linear_pattern = p::linearCymatics(2, N);
+	}
+	{
+		Timer timer("  linearSeries");
+		T::Matrix_1D linear_pattern = p::linearSeries(N);
+	}
 	T::Matrix_2D _S = p::circularSeries(N, N);
 	{
 		Timer timer("  circularAmplitudes");

@@ -124,6 +124,11 @@ int main() {
 	// ./physics/modes
 	printColouredText("\nProfiler for `./physics/modes`.", 36);
 	printColouredText("Efficiency relative to" + N_string + "X" + N_string + "modes...", 35);
+	T::Matrix_2D _S = p::circularSeries(N, N);
+	{
+		Timer timer("  circularAmplitudes");
+		T::Matrix_2D circular_pattern = p::circularAmplitudes(0.5, 0.5, _S);
+	}
 	{
 		Timer timer("  circularChladniPattern");
 		T::BooleanImage circular_pattern = p::circularChladniPattern(2, 2, N, 0.1);
@@ -133,12 +138,24 @@ int main() {
 		T::Matrix_2D circular_pattern = p::circularCymatics(2, 2, N);
 	}
 	{
+		Timer timer("  circularSeries");
+		T::Matrix_2D circular_pattern = p::circularSeries(N, N);
+	}
+	{
+		Timer timer("  rectangularAmplitudes");
+		T::Matrix_2D rectangular_pattern = p::rectangularAmplitudes(0.5, 0.5, N, N, 1.);
+	}
+	{
 		Timer timer("  rectangularChladniPattern");
 		T::BooleanImage rectangular_pattern = p::rectangularChladniPattern(2, 2, N, N, 0.1);
 	}
 	{
 		Timer timer("  rectangularCymatics");
 		T::Matrix_2D rectangular_pattern = p::rectangularCymatics(2, 2, N, N);
+	}
+	{
+		Timer timer("  rectangularSeries");
+		T::Matrix_2D rectangular_pattern = p::rectangularSeries(N, N, 1.);
 	}
 	printColouredText(
 		"Efficiency relative to" + N_string + "modes and a waveform" + t_string

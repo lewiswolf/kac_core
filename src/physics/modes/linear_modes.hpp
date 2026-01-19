@@ -76,19 +76,19 @@ namespace kac_core::physics {
 		*/
 
 		T::Matrix_1D U(H, 0.);
-		double omega = 0.0;
+		double omega = std::numbers::pi / H;
 		if (boundary_conditions.first && boundary_conditions.second) {
 			// dirichlet boundary
-			omega = (n + 1) * std::numbers::pi / H;
-			for (std::size_t x = 0; x < H; x++) { U[x] = sin(omega * x); }
+			omega *= (n + 1);
+			for (std::size_t x = 0; x < H; x++) { U[x] = std::sin(omega * x); }
 		} else if (!boundary_conditions.first && !boundary_conditions.second) {
 			// neumann boundary
-			omega = n * std::numbers::pi / H;
-			for (std::size_t x = 0; x < H; x++) { U[x] = cos(omega * x); }
+			omega *= n;
+			for (std::size_t x = 0; x < H; x++) { U[x] = std::cos(omega * x); }
 		} else {
 			// mixed boundary
-			omega = (n + 0.5) * std::numbers::pi / H;
-			for (std::size_t x = 0; x < H; x++) { U[x] = sin(omega * x); }
+			omega *= (n + 0.5);
+			for (std::size_t x = 0; x < H; x++) { U[x] = std::sin(omega * x); }
 		}
 		return U;
 	}

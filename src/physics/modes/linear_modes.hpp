@@ -34,7 +34,7 @@ namespace kac_core::physics {
 				sin((n + 1)πx),			dirichlet boundary conditions
 				cos(nπx),				neumann boundary conditions
 				sin((n + 0.5)πx),		mixed boundary conditions
-				| α ∈ ℝ, 0 <= n < N
+				| α ∈ ℝ, n ∈ [0, N)
 			}
 		*/
 
@@ -71,7 +71,7 @@ namespace kac_core::physics {
 				sin((n + 1) πx/H),		dirichlet boundary conditions
 				cos(nπx/H),				neumann boundary conditions
 				sin((n + 0.5)πx/H),		mixed boundary conditions
-				| U ∈ ℝ^1, 0 <= n < N
+				| U ∈ ℝ^1, n ∈ [0, N)
 			}
 		*/
 
@@ -108,7 +108,7 @@ namespace kac_core::physics {
 				n + 1,					dirichlet boundary conditions
 				n,						neumann boundary conditions
 				n + 0.5,				mixed boundary conditions
-				| s ∈ ℝ, 0 <= n < N
+				| λ ∈ ℝ, n ∈ [0, N)
 			}
 		*/
 

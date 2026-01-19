@@ -100,6 +100,9 @@ namespace kac_core::physics {
 		Calculate the eigenvalues of a 1D domain.
 		input:
 			N = number of modes
+			boundary_conditions = boolean pair indicating the boundary conditions
+				- first = left boundary condition (true = fixed, false = free)
+				- second = right boundary condition (true = fixed, false = free)
 		output:
 			λ_n = {
 				n + 1,					dirichlet boundary conditions

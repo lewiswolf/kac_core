@@ -124,7 +124,7 @@ namespace kac_core::physics {
 		const double pi_x = std::numbers::pi / (X - 1);
 		const double pi_y = std::numbers::pi / (Y - 1);
 		// boundary condition lambda
-		auto BCLambda = [](const std::size_t mode,
+		auto BCLambda = [](const double mode,
 						   const double scalar,
 						   const bool minima,
 						   const bool maxima) -> double {
@@ -174,7 +174,7 @@ namespace kac_core::physics {
 				4: y-axis maxima boundary condition
 			tolerance = thickness-dependent of the nodal lines
 		output:
-			B = abs(U_xy) ≈ 0
+			B_xy = abs(U_xy) ≈ 0
 		*/
 
 		T::Matrix_2D U = rectangularCymatics(m, n, X, Y, boundary_conditions);

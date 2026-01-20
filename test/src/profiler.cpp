@@ -6,6 +6,7 @@ Tests and profiling for /shapes.
 #include <iostream>
 #include <numbers>
 #include <stdlib.h>
+#include <string>
 
 // src
 #include <kac_core.hpp>
@@ -159,11 +160,11 @@ int main() {
 	}
 	{
 		Timer timer("  rectangularChladniPattern");
-		T::BooleanImage rectangular_pattern = p::rectangularChladniPattern(2, 2, N, N, 0.1);
+		T::BooleanImage rectangular_pattern = p::rectangularChladniPattern(2., 2., N, N);
 	}
 	{
 		Timer timer("  rectangularCymatics");
-		T::Matrix_2D rectangular_pattern = p::rectangularCymatics(2, 2, N, N);
+		T::Matrix_2D rectangular_pattern = p::rectangularCymatics(2., 2., N, N);
 	}
 	{
 		Timer timer("  rectangularSeries");

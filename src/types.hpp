@@ -15,7 +15,8 @@ namespace kac_core::types {
 	// Matrices
 	typedef std::vector<double> Matrix_1D;
 	typedef std::vector<std::vector<double>> Matrix_2D;
-	typedef std::vector<std::vector<short>> BooleanImage;
+	typedef std::vector<short> BooleanImage_1D;
+	typedef std::vector<std::vector<short>> BooleanImage_2D;
 
 	typedef struct Point {
 		/*

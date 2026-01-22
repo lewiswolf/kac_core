@@ -7,7 +7,7 @@ domain method.
 
 // core
 #include <array>
-#include <math.h>
+#include <cmath>
 #include <stdexcept>
 #include <vector>
 
@@ -20,7 +20,7 @@ namespace kac_core::physics {
 	inline T::Matrix_1D FDTDWaveform2D(
 		T::Matrix_2D u_0,
 		T::Matrix_2D u_1,
-		const T::BooleanImage& B,
+		const T::BooleanImage_2D& B,
 		const double& c_0,
 		const double& c_1,
 		const double& c_2,
@@ -54,8 +54,8 @@ namespace kac_core::physics {
 			throw std::invalid_argument("u_0 and B differ in size.");
 		}
 		// lambda for sampling the 2D matrix using bilinear interpolation.
-		const std::size_t x_0 = floor(w.x * (u_0.size() - 2));
-		const std::size_t y_0 = floor(w.y * (u_0[0].size() - 2));
+		const std::size_t x_0 = std::floor(w.x * (u_0.size() - 2));
+		const std::size_t y_0 = std::floor(w.y * (u_0[0].size() - 2));
 		const double a = w.x * (u_0.size() - 2) - x_0;
 		const double b = w.y * (u_0[0].size() - 2) - y_0;
 		const double coef_0 = (1 - a) * (1 - b);
@@ -78,20 +78,20 @@ namespace kac_core::physics {
 		// forward loop to find the first ones
 		for (std::size_t x = 1; x < B_dim_X - 1; x++) {
 			for (std::size_t y = 1; y < B_dim_Y - 1; y++) {
-				if (B[x][y] == 1) {
-					x_range[0] = x_range[0] > x ? x : x_range[0];
-					y_range[0] = y_range[0] > y ? y : y_range[0];
-					continue;
+				if (B[x][y]) {
+					x_range[0] = std::min(x, x_range[0]);
+					y_range[0] = std::min(y, y_range[0]);
+					break;
 				}
 			}
 		}
 		// backwards loop to find the last ones
 		for (std::size_t x = B_dim_X - 2; x > 0; x--) {
 			for (std::size_t y = B_dim_Y - 2; y > 0; y--) {
-				if (B[x][y] == 1) {
-					x_range[1] = x_range[1] < x ? x : x_range[1];
-					y_range[1] = y_range[1] < y ? y : y_range[1];
-					continue;
+				if (B[x][y]) {
+					x_range[1] = std::max(x, x_range[1]);
+					y_range[1] = std::max(y, y_range[1]);
+					break;
 				}
 			}
 		}
@@ -100,7 +100,7 @@ namespace kac_core::physics {
 			for (std::size_t x = x_range[0]; x <= x_range[1]; x++) {
 				for (std::size_t y = y_range[0]; y <= y_range[1]; y++) {
 					// dirichlet boundary conditions
-					if (B[x][y] != 0) {
+					if (B[x][y]) {
 						// update in place
 						u_a[x][y] =
 							(u_b[x][y + 1] + u_b[x + 1][y] + u_b[x][y - 1] + u_b[x - 1][y]) * c_0
@@ -122,7 +122,7 @@ namespace kac_core::physics {
 	inline T::Matrix_2D FDTDUpdate2D(
 		T::Matrix_2D& u_0,
 		const T::Matrix_2D& u_1,
-		const T::BooleanImage& B,
+		const T::BooleanImage_2D& B,
 		const double& c_0,
 		const double& c_1,
 		const double& c_2,
@@ -149,7 +149,7 @@ namespace kac_core::physics {
 		for (std::size_t x = x_range[0]; x <= x_range[1]; x++) {
 			for (std::size_t y = y_range[0]; y <= y_range[1]; y++) {
 				// dirichlet boundary conditions
-				if (B[x][y] != 0) {
+				if (B[x][y]) {
 					// update in place
 					u_0[x][y] =
 						(u_1[x][y + 1] + u_1[x + 1][y] + u_1[x][y - 1] + u_1[x - 1][y]) * c_0

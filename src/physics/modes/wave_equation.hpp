@@ -102,4 +102,41 @@ namespace kac_core::physics {
 		return normalise(waveform);
 	}
 
+	inline T::BooleanImage_1D
+	ChladniPattern1D(const T::Matrix_1D& U, const double& tolerance = 0.1) {
+		/*
+		Produce a Chladni pattern from a 1-dimensional cymatic diagram.
+		input:
+			U = spatial eigenfunction ∈ [-1, 1]
+			tolerance = thickness-dependent of the nodal lines
+		output:
+			B_x = abs(U_x) ≈ 0
+		*/
+
+		const std::size_t X = U.size();
+		T::BooleanImage_1D B(X, 0);
+		for (std::size_t x = 0; x < X; x++) { B[0][x] = std::abs(U[x]) < tolerance ? 1 : 0; }
+		return B;
+	}
+
+	inline T::BooleanImage_2D
+	ChladniPattern2D(const T::Matrix_2D& U, const double& tolerance = 0.1) {
+		/*
+		Produce a Chladni pattern from a 2-dimensional cymatic diagram.
+		input:
+			U = spatial eigenfunction ∈ [-1, 1]
+			tolerance = thickness-dependent of the nodal lines
+		output:
+			B_xy = abs(U_xy) ≈ 0
+		*/
+
+		const std::size_t X = U.size();
+		const std::size_t Y = U[0].size();
+		T::BooleanImage_2D B(X, std::vector<short>(Y, 0));
+		for (std::size_t x = 0; x < X; x++) {
+			for (std::size_t y = 0; y < Y; y++) { B[x][y] = std::abs(U[x][y]) < tolerance ? 1 : 0; }
+		}
+		return B;
+	}
+
 }

@@ -143,10 +143,6 @@ int main() {
 		T::Matrix_2D circular_pattern = p::circularAmplitudes(0.5, 0.5, _S);
 	}
 	{
-		Timer timer("  circularChladniPattern");
-		T::BooleanImage circular_pattern = p::circularChladniPattern(2, 2, N, 0.1);
-	}
-	{
 		Timer timer("  circularCymatics");
 		T::Matrix_2D circular_pattern = p::circularCymatics(2, 2, N);
 	}
@@ -157,10 +153,6 @@ int main() {
 	{
 		Timer timer("  rectangularAmplitudes");
 		T::Matrix_2D rectangular_pattern = p::rectangularAmplitudes(0.5, 0.5, N, N, 1.);
-	}
-	{
-		Timer timer("  rectangularChladniPattern");
-		T::BooleanImage rectangular_pattern = p::rectangularChladniPattern(2., 2., N, N);
 	}
 	{
 		Timer timer("  rectangularCymatics");

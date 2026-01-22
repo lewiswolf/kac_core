@@ -5,6 +5,7 @@ Functions for calculating the linear approximation of the 2-dimensional rectangu
 #pragma once
 
 // core
+#include <array>
 #include <cmath>
 #include <numbers>
 #include <vector>
@@ -27,7 +28,7 @@ namespace kac_core::physics {
 		Calculate the spatial eigenfunction of a rectangular 2-dimensional domain relative to a
 		cartesian strike location.
 		input:
-			( x , y ) = cartesian strike location
+			(x, y) = cartesian strike location
 			M = number of modes across the Mth axis
 			N = number of modes across the Nth axis
 			epsilon = aspect ratio of the rectangle
@@ -150,41 +151,6 @@ namespace kac_core::physics {
 		return U;
 	}
 
-	inline T::BooleanImage rectangularChladniPattern(
-		const double& m,
-		const double& n,
-		const std::size_t& X,
-		const std::size_t& Y,
-		const std::array<bool, 4> boundary_conditions = {true, true, true, true},
-		const double& tolerance = 0.1
-	) {
-		/*
-		Produce the Chladni pattern of a 2-dimensional rectangular domain for a particular
-		mode λ_mn.
-		input:
-			m = mth modal index
-			n = nth modal index
-			X = length of the X axis
-			Y = length of the Y axis
-			boundary_conditions = boolean array indicating the boundary conditions
-				(true = fixed, false = free)
-				1: x-axis minima boundary condition
-				2: x-axis maxima boundary condition
-				3: y-axis minima boundary condition
-				4: y-axis maxima boundary condition
-			tolerance = thickness-dependent of the nodal lines
-		output:
-			B_xy = abs(U_xy) ≈ 0
-		*/
-
-		T::Matrix_2D U = rectangularCymatics(m, n, X, Y, boundary_conditions);
-		T::BooleanImage B(X, std::vector<short>(Y, 0));
-		for (std::size_t x = 0; x < X; x++) {
-			for (std::size_t y = 0; y < Y; y++) { B[x][y] = std::abs(U[x][y]) < tolerance ? 1 : 0; }
-		}
-		return B;
-	}
-
 	inline T::Matrix_2D rectangularSeries(
 		const std::size_t& M,
 		const std::size_t& N,
@@ -243,7 +209,7 @@ namespace kac_core::physics {
 				BCLambda(m, epsilon_recip, boundary_conditions[0], boundary_conditions[1]);
 			for (std::size_t n = 0; n < N; n++) {
 				S[m][n] = std::sqrt(
-					BCLambda(n, epsilon, boundary_conditions[2], boundary_conditions[3]) + m_hat
+					m_hat + BCLambda(n, epsilon, boundary_conditions[2], boundary_conditions[3])
 				);
 			}
 		}

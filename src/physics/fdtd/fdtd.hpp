@@ -6,6 +6,7 @@ domain method.
 #pragma once
 
 // core
+#include <algorithm>
 #include <array>
 #include <cmath>
 #include <stdexcept>

@@ -213,7 +213,7 @@ int main() {
 	T::Matrix_2D u_1(N, std::vector<double>(N, 0.));
 	T::Matrix_2D u_0(N, std::vector<double>(N, 0.));
 	u_1[(std::size_t)N * 0.5][(std::size_t)N * 0.5] = 1.;
-	T::BooleanImage B(N, std::vector<short>(N, 1));
+	T::BooleanImage_2D B(N, std::vector<short>(N, 1));
 	// dirichlet boundary
 	for (std::size_t i = 0; i < N; i++) { B[i][0] = B[i][N - 1] = 0; }
 	for (std::size_t j = 0; j < N; j++) { B[0][j] = B[N - 1][j] = 0; }

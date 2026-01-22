@@ -115,7 +115,7 @@ namespace kac_core::physics {
 
 		const std::size_t X = U.size();
 		T::BooleanImage_1D B(X, 0);
-		for (std::size_t x = 0; x < X; x++) { B[0][x] = std::abs(U[x]) < tolerance ? 1 : 0; }
+		for (std::size_t x = 0; x < X; x++) { B[x] = std::abs(U[x]) < tolerance ? 1 : 0; }
 		return B;
 	}
 

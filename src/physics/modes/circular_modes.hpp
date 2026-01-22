@@ -112,32 +112,6 @@ namespace kac_core::physics {
 		return M;
 	}
 
-	inline T::BooleanImage circularChladniPattern(
-		const double& n, const double& m, const unsigned long& H, const double& tolerance = 0.1
-	) {
-		/*
-		Produce the 2D Chladni pattern for a circular plate.
-		http://paulbourke.net/geometry/chladni/
-		input:
-			n = nth modal index
-			m = mth modal index
-			H = length of the X and Y axis
-			tolerance = the standard deviation between the calculation and the final pattern
-		output:
-			B = abs({
-				J_n(z_nm * r) * (cos(nθ) + sin(nθ)) ≈ 0
-			}) < tolerance
-		*/
-
-		// calculate pattern
-		T::Matrix_2D M = circularCymatics(n, m, H);
-		T::BooleanImage B(H, std::vector<short>(H, 0));
-		for (unsigned long x = 0; x < H; x++) {
-			for (unsigned long y = 0; y < H; y++) { B[x][y] = abs(M[x][y]) < tolerance ? 1 : 0; }
-		}
-		return B;
-	}
-
 	inline T::Matrix_2D circularSeries(const unsigned long& N, const unsigned long& M) {
 		/*
 		Calculate the eigenmodes of a circle.

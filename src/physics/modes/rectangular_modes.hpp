@@ -94,6 +94,8 @@ namespace kac_core::physics {
 		/*
 		Produce the cymatic diagram of a 2-dimensional rectangular domain for a particular
 		mode λ_mn.
+		For creative use, m and n have been defined as real numbers to create continuous animations,
+		however for analytics these should be interpreted as integers.
 		input:
 			m = mth modal index
 			n = nth modal index
@@ -158,7 +160,7 @@ namespace kac_core::physics {
 		const std::array<bool, 4> boundary_conditions = {true, true, true, true}
 	) {
 		/*
-		Calculate the eigenvalues of a 2-dimensional rectangular domain.
+		Calculate the wavenumbers of a 2-dimensional rectangular domain.
 		input:
 			M = number of modes across the Mth axis
 			N = number of modes across the Nth axis
@@ -203,7 +205,7 @@ namespace kac_core::physics {
 				return (i + 0.5) * (i + 0.5) * scalar;
 			}
 		};
-		// produce the eigenvalues
+		// produce the wavenumbers
 		for (std::size_t m = 0; m < M; m++) {
 			double m_hat =
 				BCLambda(m, epsilon_recip, boundary_conditions[0], boundary_conditions[1]);

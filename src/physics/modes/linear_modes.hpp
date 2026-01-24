@@ -98,7 +98,7 @@ namespace kac_core::physics {
 		const std::size_t& N, const std::array<bool, 2> boundary_conditions = {true, true}
 	) {
 		/*
-		Calculate the eigenvalues of a 1-dimensional domain.
+		Calculate the wavenumbers of a 1-dimensional domain.
 		input:
 			N = number of modes
 			boundary_conditions = boolean array indicating the boundary conditions

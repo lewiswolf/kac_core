@@ -6,126 +6,166 @@ wave equation.
 #pragma once
 
 // core
-#include <math.h>
+#include <cmath>
+#include <limits>
 #include <numbers>
 #include <vector>
-using namespace std::numbers;
 
 // dependencies
 #include <boost/math/special_functions/bessel.hpp>
+#include <boost/math/special_functions/bessel_prime.hpp>
+#include <boost/math/tools/roots.hpp>
 
 // src
 #include "../../types.hpp"
 namespace T = kac_core::types;
 
+// root finding constants
+const auto root_finder_tolerance = boost::math::tools::eps_tolerance<double>(50);
+
 namespace kac_core::physics {
-
-	inline double besselJ(const long& n, const double& x) {
-		/*
-		Calculates the bessel function of the first kind J_n(x).
-		input:
-			n = order of the bessel function
-			x = x coordinate
-		output:
-			y = J_n(x) | y ∈ ℝ
-		*/
-
-		return boost::math::cyl_bessel_j(n, x);
-	}
-
-	inline double besselJZero(const double& n, const long& m) {
-		/*
-		Calculates the mth zero crossing of the bessel functions of the first kind.
-		input:
-			n = order of the bessel function
-			m = mth zero
-		output:
-			z_nm = mth zero crossing of J_n() | z_mn ∈ ℝ
-		*/
-
-		return boost::math::cyl_bessel_j_zero(n, m);
-	}
 
 	inline T::Matrix_2D
 	circularAmplitudes(const double& r, const double& theta, const T::Matrix_2D& S) {
 		/*
-		Calculate the amplitudes of the circular eigenmodes relative to a polar strike location.
+		Calculate the spatial eigenfunction of a circular 2-dimensional domain relative to a
+		polar strike location. The boundary conditions for this spatial eigenfunction are
+		determined by the input series of wavenumbers λ_mn.
 		input:
 			(r, θ) = polar strike location
-			S = { z_nm | s ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M }
+			S = { λ_mn | λ ∈ ℝ }
 		output:
-			A = {
-				abs(J_n(z_nm * r) * (2 ** 0.5) * sin(nθ + π/4))
-				| a ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M
+			α_mn = {
+				J_m(λ_mn * r) * √2 * sin(mθ + π/4)
+				| α ∈ ℝ, m ∈ [0, M), n ∈ (0, N]
 			}
 		*/
 
-		const unsigned long N = S.size();
-		const unsigned long M = S[0].size();
-		const double pi_4 = pi / 4;
-		T::Matrix_2D A(N, T::Matrix_1D(M, 0));
-		for (unsigned long n = 0; n < N; n++) {
-			double angular = n != 0 ? sqrt2 * sin(n * theta + pi_4) : 1.;
-			for (unsigned long m = 0; m < M; m++) {
-				A[n][m] = abs(boost::math::cyl_bessel_j(n, S[n][m] * r) * angular);
+		const std::size_t M = S.size();
+		const std::size_t N = S[0].size();
+		T::Matrix_2D A(M, T::Matrix_1D(N, 0.));
+		const double pi_4 = std::numbers::pi * 0.25;
+		for (std::size_t m = 0; m < M; m++) {
+			double angular = m == 0 ? 1. : std::numbers::sqrt2 * std::sin(m * theta + pi_4);
+			for (std::size_t n = 0; n < N; n++) {
+				A[m][n] = boost::math::cyl_bessel_j(m, S[m][n] * r) * angular;
 			};
 		}
 		return A;
 	}
 
-	inline T::Matrix_2D circularCymatics(const double& n, const double& m, const unsigned long& H) {
+	inline T::Matrix_2D circularCymatics(
+		const double& m,
+		const double& n,
+		const std::size_t& H,
+		const bool boundary_conditions = true
+	) {
 		/*
-		Produce the 2D continuos cymatic diagram for a particular mode of a circular domain.
+		Produce the cymatic diagram of a 2-dimensional circular domain for a particular mode λ_mn.
+		For creative use, m and n have been defined as real numbers to create continuous animations,
+		however for analytics these should be interpreted as integers.
 		http://paulbourke.net/geometry/chladni/
 		input:
-			n = nth modal index
 			m = mth modal index
-			H = length of the X and Y axis
+			n = nth modal index
+			H = length of the X and Y axes
+			boundary_conditions = (true = fixed, false = free)
 		output:
-			M = {
-				J_n(z_nm * r) * (cos(nθ) + sin(nθ)) ≈ 0
+			U_rθ = {
+				J_n(z_nm * r) * (cos(nθ) + sin(nθ))
+				| U ∈ ℝ^2
 			}
 		*/
 
 		// interpolate n and z_mn
-		double n_round = round(2. * n) / 2.;
-		double m_floor = floor(m);
-		double z_mn_floor = boost::math::cyl_bessel_j_zero(n, m_floor);
-		double z_mn = z_mn_floor
-					+ ((boost::math::cyl_bessel_j_zero(n, ceil(m)) - z_mn_floor) * (m - m_floor));
+		double z_mn = 0.;
+		if (boundary_conditions) {
+			const double n_hat = n + 1.;
+			const double n_floor = std::floor(n_hat);
+			const double z_mn_floor = boost::math::cyl_bessel_j_zero(m, n_floor);
+			z_mn = z_mn_floor
+				 + ((boost::math::cyl_bessel_j_zero(m, std::ceil(n_hat)) - z_mn_floor)
+					* (n_hat - n_floor));
+		} else {
+			const double n_floor = std::floor(n);
+			const auto j_prime = [m](double _x) { return boost::math::cyl_bessel_j_prime(m, _x); };
+			const double lower_bound = n_floor == 0. ? std::numeric_limits<double>::epsilon()
+													 : boost::math::cyl_bessel_j_zero(m, n_floor);
+			const double mid_bound = boost::math::cyl_bessel_j_zero(m, n_floor + 1);
+			const double upper_bound = boost::math::cyl_bessel_j_zero(m, n_floor + 2);
+			const double z_mn_floor = (m == 0. && n < 1.)
+										? 0.
+										: boost::math::tools::bisect(
+											  j_prime, lower_bound, mid_bound, root_finder_tolerance
+										  )
+											  .first;
+			const double z_mn_ceil =
+				boost::math::tools::bisect(j_prime, mid_bound, upper_bound, root_finder_tolerance)
+					.first;
+			z_mn = z_mn_floor + ((z_mn_ceil - z_mn_floor) * (n - n_floor));
+		}
 		// calculate pattern
-		T::Matrix_2D M(H, T::Matrix_1D(H, 0));
-		for (unsigned long x = 0; x < H; x++) {
-			double x_prime = (2. * x / H) - 1.;
-			for (unsigned long y = 0; y < H; y++) {
-				double y_prime = (2. * y / H) - 1.;
-				double r = hypot(x_prime, y_prime);
-				if (r > 1.) {
-					continue;
-				} else {
-					double theta = atan2(y_prime, x_prime);
-					M[x][y] = boost::math::cyl_bessel_j(n, z_mn * r)
-							* (cos(n_round * theta) + sin(n_round * theta));
+		T::Matrix_2D U(H, T::Matrix_1D(H, 0.));
+		const double H_2 = 2. / H;
+		const double m_round = std::round(2. * m) * 0.5;
+		for (std::size_t x = 0; x < H; x++) {
+			double x_prime = (x * H_2) - 1.;
+			for (std::size_t y = 0; y < H; y++) {
+				double y_prime = (y * H_2) - 1.;
+				double r = std::hypot(x_prime, y_prime);
+				if (r <= 1.) {
+					double theta = std::atan2(y_prime, x_prime);
+					U[x][y] = boost::math::cyl_bessel_j(m, z_mn * r)
+							* (std::cos(m_round * theta) + std::sin(m_round * theta));
 				}
 			}
 		}
-		return M;
+		return U;
 	}
 
-	inline T::Matrix_2D circularSeries(const unsigned long& N, const unsigned long& M) {
+	inline T::Matrix_2D circularSeries(
+		const std::size_t& M, const std::size_t& N, const bool boundary_conditions = true
+	) {
 		/*
-		Calculate the eigenmodes of a circle.
+		Calculate the wavenumbers of a 2-dimensional circular domain.
 		input:
-			N = number of modal orders
-			M = number of modes per order
+			M = number of modes across the Mth axis
+			N = number of modes across the Nth axis
+			boundary_conditions = (true = fixed, false = free)
 		output:
-			S = { z_nm | s ∈ ℝ, J_n(z_nm) = 0, 0 <= n < N, 0 < m <= M }
+			λ_mn = {
+				J_m(λ_mn) = 0 					dirichlet boundary condition
+				J'_m(λ_mn) = 0 					neumann boundary condition
+				| λ ∈ ℝ, m ∈ [0, M), n ∈ (0, N]
+			}
 		*/
 
-		T::Matrix_2D S(N, T::Matrix_1D(M, 0));
-		for (unsigned long n = 0; n < N; n++) {
-			for (unsigned long m = 0; m < M; m++) {
-				S[n][m] = boost::math::cyl_bessel_j_zero((double)n, m + 1);
+		T::Matrix_2D S(M, T::Matrix_1D(N, 0.));
+		if (boundary_conditions) {
+			for (std::size_t m = 0; m < M; m++) {
+				double nu = static_cast<double>(m);
+				for (std::size_t n = 0; n < N; n++) {
+					S[m][n] = boost::math::cyl_bessel_j_zero(nu, n + 1);
+				}
+			}
+		} else {
+			double lower_bound = 0., upper_bound = 0.;
+			for (std::size_t m = 0; m < M; m++) {
+				double nu = static_cast<double>(m);
+				auto j_prime = [nu](double _x) { return boost::math::cyl_bessel_j_prime(nu, _x); };
+				for (std::size_t n = 0; n < N; n++) {
+					lower_bound = n == 0 ? std::numeric_limits<double>::epsilon() : upper_bound;
+					upper_bound = boost::math::cyl_bessel_j_zero(nu, n + 1);
+					// rigid body mode
+					if (m == 0 && n == 0) {
+						S[m][n] = 0.;
+						continue;
+					}
+					S[m][n] = boost::math::tools::bisect(
+								  j_prime, lower_bound, upper_bound, root_finder_tolerance
+					)
+								  .first;
+				}
 			}
 		}
 		return S;

@@ -14,15 +14,6 @@ namespace p = kac_core::physics;
 
 int main() {
 	/*
-	Test Bessel function.
-	*/
-	booleanTest(
-		"besselJ is accurate",
-		std::abs(p::besselJ(0, 4.2) + 0.37655) < 0.001
-			&& std::abs(p::besselJ(1, 1.2) - 0.498289) < 0.001
-	);
-
-	/*
 	Test linear modes.
 	*/
 	booleanTest("the 0th element from linearSeries is 1", p::linearSeries(10)[0] == 1);

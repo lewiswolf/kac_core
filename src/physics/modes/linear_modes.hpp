@@ -40,10 +40,10 @@ namespace kac_core::physics {
 
 		T::Matrix_1D A(N, 0.);
 		const double x_pi = x * std::numbers::pi;
-		if (boundary_conditions[0] && boundary_conditions[0]) {
+		if (boundary_conditions[0] && boundary_conditions[1]) {
 			// dirichlet boundary
 			for (std::size_t n = 0; n < N; n++) { A[n] = std::sin((n + 1.) * x_pi); }
-		} else if (!boundary_conditions[0] && !boundary_conditions[0]) {
+		} else if (!boundary_conditions[0] && !boundary_conditions[1]) {
 			// neumann boundary
 			for (std::size_t n = 0; n < N; n++) { A[n] = std::cos(n * x_pi); }
 		} else {

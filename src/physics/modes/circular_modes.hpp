@@ -36,7 +36,7 @@ namespace kac_core::physics {
 			S = { λ_mn | λ ∈ ℝ }
 		output:
 			α_mn = {
-				J_m(λ_mn * r) * √2 * sin(mθ + π/4)
+				J_m(λ_mn * r√π) * √2 * sin(mθ + π/4)
 				| α ∈ ℝ, m ∈ [0, M), n ∈ (0, N]
 			}
 		*/
@@ -48,7 +48,8 @@ namespace kac_core::physics {
 		for (std::size_t m = 0; m < M; m++) {
 			double angular = m == 0 ? 1. : std::numbers::sqrt2 * std::sin(m * theta + pi_4);
 			for (std::size_t n = 0; n < N; n++) {
-				A[m][n] = boost::math::cyl_bessel_j(m, S[m][n] * r) * angular;
+				A[m][n] = boost::math::cyl_bessel_j(m, S[m][n] * r * std::sqrt(std::numbers::pi))
+						* angular;
 			};
 		}
 		return A;
@@ -133,11 +134,12 @@ namespace kac_core::physics {
 			N = number of modes across the Nth axis
 			boundary_conditions = (true = fixed, false = free)
 		output:
-			λ_mn = {
-				J_m(λ_mn) = 0 					dirichlet boundary condition
-				J'_m(λ_mn) = 0 					neumann boundary condition
-				| λ ∈ ℝ, m ∈ [0, M), n ∈ (0, N]
+			z_mn = {
+				J_m(z_mn) = 0 					dirichlet boundary condition
+				J'_m(z_mn) = 0 					neumann boundary condition
+				| m ∈ [0, M), n ∈ (0, N]
 			}
+			λ_mn { z_mn / √π | λ ∈ ℝ }
 		*/
 
 		T::Matrix_2D S(M, T::Matrix_1D(N, 0.));
@@ -145,7 +147,8 @@ namespace kac_core::physics {
 			for (std::size_t m = 0; m < M; m++) {
 				double nu = static_cast<double>(m);
 				for (std::size_t n = 0; n < N; n++) {
-					S[m][n] = boost::math::cyl_bessel_j_zero(nu, n + 1);
+					S[m][n] =
+						boost::math::cyl_bessel_j_zero(nu, n + 1) / std::sqrt(std::numbers::pi);
 				}
 			}
 		} else {
@@ -158,13 +161,13 @@ namespace kac_core::physics {
 					upper_bound = boost::math::cyl_bessel_j_zero(nu, n + 1);
 					// rigid body mode
 					if (m == 0 && n == 0) {
-						S[m][n] = 0.;
 						continue;
 					}
 					S[m][n] = boost::math::tools::bisect(
 								  j_prime, lower_bound, upper_bound, root_finder_tolerance
-					)
-								  .first;
+							  )
+								  .first
+							/ std::sqrt(std::numbers::pi);
 				}
 			}
 		}

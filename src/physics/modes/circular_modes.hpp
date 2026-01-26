@@ -29,10 +29,10 @@ namespace kac_core::physics {
 	circularAmplitudes(const double& r, const double& theta, const T::Matrix_2D& S) {
 		/*
 		Calculate the spatial eigenfunction of a circular 2-dimensional domain relative to a
-		polar strike location. The boundary conditions for this spatial eigenfunction are
+		polar excitation. The boundary conditions for this spatial eigenfunction are
 		determined by the input series of wavenumbers λ_mn.
 		input:
-			(r, θ) = polar strike location
+			(r, θ) = polar excitation
 			S = { λ_mn | λ ∈ ℝ }
 		output:
 			α_mn = {

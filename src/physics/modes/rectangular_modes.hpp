@@ -26,9 +26,9 @@ namespace kac_core::physics {
 	) {
 		/*
 		Calculate the spatial eigenfunction of a rectangular 2-dimensional domain relative to a
-		cartesian strike location.
+		cartesian excitation.
 		input:
-			(x, y) = cartesian strike location
+			(x, y) = cartesian excitation
 			M = number of modes across the Mth axis
 			N = number of modes across the Nth axis
 			epsilon = aspect ratio of the rectangle
@@ -42,13 +42,15 @@ namespace kac_core::physics {
 			X_m = {
 				sin((m + 1)xπ / √Є),	dirichlet boundary condition
 				cos(mxπ / √Є),			neumann boundary condition
-				sin((m + 0.5)xπ / √Є),	mixed boundary conditions
+				sin((m + 0.5)xπ / √Є),	minima fixed, maxima free
+				cos((m + 0.5)xπ / √Є),	minima free, maxima fixed
 				| m ∈ [0, M)
 			}
 			Y_n = {
 				sin((n + 1)yπ√Є),		dirichlet boundary condition
 				cos(nyπ√Є),				neumann boundary condition
-				sin((n + 0.5)yπ√Є),		mixed boundary conditions
+				sin((n + 0.5)yπ√Є),		minima fixed, maxima free
+				cos((m + 0.5)yπ√Є),		minima free, maxima fixed
 				| n ∈ [0, N)
 			}
 			α_mn = { X_m * Y_n | α ∈ ℝ }
@@ -69,9 +71,12 @@ namespace kac_core::physics {
 			} else if (!minima && !maxima) {
 				// neumann boundary
 				return std::cos(i * scalar);
-			} else {
-				// mixed boundary
+			} else if (minima) {
+				// minima fixed, maxima free
 				return std::sin((i + 0.5) * scalar);
+			} else {
+				// minima free, maxima fixed
+				return std::cos((i + 0.5) * scalar);
 			}
 		};
 		// produce the spatial eigenfunction
@@ -111,13 +116,15 @@ namespace kac_core::physics {
 			X_m = {
 				sin((m + 1)xπ / X),		dirichlet boundary condition
 				cos(mxπ / X),			neumann boundary condition
-				sin((m + 0.5)xπ / X),	mixed boundary conditions
+				sin((m + 0.5)xπ / X),	minima fixed, maxima free
+				cos((m + 0.5)xπ / X),	minima free, maxima fixed
 				| m ∈ [0, ∞)
 			}
 			Y_n = {
 				sin((n + 1)yπ / Y),		dirichlet boundary condition
 				cos(nyπ / Y),			neumann boundary condition
-				sin((n + 0.5)yπ / Y),	mixed boundary conditions
+				sin((n + 0.5)yπ / Y),	minima fixed, maxima free
+				cos((n + 0.5)yπ / Y),	minima free, maxima fixed
 				| n ∈ [0, ∞)
 			}
 			U_xy = { X_m * Y_n | U ∈ ℝ^2 }
@@ -137,9 +144,12 @@ namespace kac_core::physics {
 			} else if (!minima && !maxima) {
 				// neumann boundary
 				return std::cos(mode * scalar);
-			} else {
-				// mixed boundary
+			} else if (minima) {
+				// minima fixed, maxima free
 				return std::sin((mode + 0.5) * scalar);
+			} else {
+				// minima free, maxima fixed
+				return std::cos((mode + 0.5) * scalar);
 			}
 		};
 		// produce domain U

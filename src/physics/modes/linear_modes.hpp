@@ -21,9 +21,10 @@ namespace kac_core::physics {
 		const std::array<bool, 2> boundary_conditions = {true, true}
 	) {
 		/*
-		Calculate the spatial eigenfunction of a 1-dimensional domain relative to a strike location.
+		Calculate the spatial eigenfunction of a 1-dimensional domain relative to a excitation
+		location.
 		input:
-			x = strike location
+			x = excitation location
 			N = number of modes
 			boundary_conditions = boolean array indicating the boundary conditions
 				(true = fixed, false = free)
@@ -33,7 +34,8 @@ namespace kac_core::physics {
 			α_n = {
 				sin((n + 1)πx),			dirichlet boundary condition
 				cos(nπx),				neumann boundary condition
-				sin((n + 0.5)πx),		mixed boundary conditions
+				sin((n + 0.5)πx),		minima fixed, maxima free
+				cos((n + 0.5)πx),		minima free, maxima fixed
 				| α ∈ ℝ, n ∈ [0, N)
 			}
 		*/
@@ -46,10 +48,13 @@ namespace kac_core::physics {
 		} else if (!boundary_conditions[0] && !boundary_conditions[1]) {
 			// neumann boundary
 			for (std::size_t n = 0; n < N; n++) { A[n] = std::cos(n * x_pi); }
-		} else {
-			// mixed boundary
+		} else if (boundary_conditions[0]) {
+			// minima fixed, maxima free
 			for (std::size_t n = 0; n < N; n++) { A[n] = std::sin((n + 0.5) * x_pi); }
-		};
+		} else {
+			// minima free, maxima fixed
+			for (std::size_t n = 0; n < N; n++) { A[n] = std::cos((n + 0.5) * x_pi); }
+		}
 		return A;
 	}
 
@@ -71,7 +76,8 @@ namespace kac_core::physics {
 			U_x = {
 				sin((n + 1) πx/H),		dirichlet boundary condition
 				cos(nπx/H),				neumann boundary condition
-				sin((n + 0.5)πx/H),		mixed boundary conditions
+				sin((n + 0.5)πx/H),		minima fixed, maxima free
+				cos((n + 0.5)πx/H),		minima free, maxima fixed
 				| U ∈ ℝ^1, n ∈ [0, ∞)
 			}
 		*/
@@ -87,9 +93,14 @@ namespace kac_core::physics {
 			omega *= n;
 			for (std::size_t x = 0; x < X; x++) { U[x] = std::cos(omega * x); }
 		} else {
-			// mixed boundary
 			omega *= (n + 0.5);
-			for (std::size_t x = 0; x < X; x++) { U[x] = std::sin(omega * x); }
+			if (boundary_conditions[0]) {
+				// minima fixed, maxima free
+				for (std::size_t x = 0; x < X; x++) { U[x] = std::sin(omega * x); }
+			} else {
+				// minima free, maxima fixed
+				for (std::size_t x = 0; x < X; x++) { U[x] = std::cos(omega * x); }
+			}
 		}
 		return U;
 	}

@@ -5,7 +5,7 @@ Functions for generating polygons.
 #pragma once
 
 // core
-#include <algorithm>	// generate, min, max, shuffle, sort
+#include <algorithm>	// min, max, shuffle, sort
 #include <cmath>		// abs cos sin
 #include <limits>		// numeric_limits
 #include <numbers>		// pi
@@ -78,13 +78,13 @@ namespace kac_core::geometry {
 			}
 		}
 		// randomly combine x and y
-		shuffle(Y.begin(), Y.end(), random_engine);
+		std::shuffle(Y.begin(), Y.end(), random_engine);
 		for (std::size_t n = 0; n < N; n++) {
 			P[n].x = X[n];
 			P[n].y = Y[n];
 		}
 		// sort by polar angle
-		sort(P.begin(), P.end(), [](T::Point& p1, T::Point& p2) {
+		std::sort(P.begin(), P.end(), [](T::Point& p1, T::Point& p2) {
 			return p1.theta() < p2.theta();
 		});
 		// arrange points end to end to form a polygon
@@ -105,8 +105,8 @@ namespace kac_core::geometry {
 			y_max = std::max(P[n].y, y_max);
 		}
 		// center around origin
-		double x_shift = ((x_max - x_min) * 0.5) - x_max;
-		double y_shift = ((y_max - y_min) * 0.5) - y_max;
+		const double x_shift = ((x_max - x_min) * 0.5) - x_max;
+		const double y_shift = ((y_max - y_min) * 0.5) - y_max;
 		for (std::size_t n = 0; n < N; n++) {
 			P[n].x += x_shift;
 			P[n].y += y_shift;
@@ -152,7 +152,9 @@ namespace kac_core::geometry {
 			P[n].y = P[n].r() * std::sin(P[n].theta()) / std::numbers::sqrt2;
 		}
 		// sort by polar angle
-		sort(P.begin(), P.end(), [](T::Point& a, T::Point& b) { return a.theta() < b.theta(); });
+		std::sort(P.begin(), P.end(), [](T::Point& a, T::Point& b) {
+			return a.theta() < b.theta();
+		});
 		return P;
 	}
 

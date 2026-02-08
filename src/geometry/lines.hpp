@@ -7,7 +7,6 @@ Utility functions for working with lines and curves.
 // core
 #include <algorithm>
 #include <cmath>
-#include <string>
 #include <utility>
 
 // src
@@ -38,7 +37,9 @@ namespace kac_core::geometry {
 		return isColinear(A.a, A.b, p);
 	}
 
-	inline std::pair<std::string, T::Point> lineIntersection(const T::Line& A, const T::Line& B) {
+	enum class IntersectionType { None, Intersect, Vertex, Branch, Colinear };
+	inline std::pair<IntersectionType, T::Point>
+	lineIntersection(const T::Line& A, const T::Line& B) {
 		/*
 		This function determines whether a line has an intersection, and returns it's type as well
 		as the point of intersection (if one exists).
@@ -63,20 +64,21 @@ namespace kac_core::geometry {
 
 		// search for shared vertices
 		if (A.a.x == B.a.x && A.a.y == B.a.y || A.a.x == B.b.x && A.a.y == B.b.y) {
-			return std::make_pair("vertex", A.a);
+			return {IntersectionType::Vertex, A.a};
 		} else if (A.b.x == B.a.x && A.b.y == B.a.y || A.b.x == B.b.x && A.b.y == B.b.y) {
-			return std::make_pair("vertex", A.b);
+			return {IntersectionType::Vertex, A.b};
 		}
 		// test for colinear cases.
 		if (isColinear(A.a, A.b, B.a) && isColinear(A.a, A.b, B.b)) {
 			if (isPointOnLine(A.a, B) || isPointOnLine(A.b, B) || isPointOnLine(B.a, A)
 				|| isPointOnLine(B.b, A)) {
-				return std::make_pair(
-					"colinear",
+				return {
+					IntersectionType::Colinear,
 					T::Point(
-						(A.a.x + A.b.x + B.a.x + B.b.x) / 4, (A.a.y + A.b.y + B.a.y + B.b.y) / 4
+						(A.a.x + A.b.x + B.a.x + B.b.x) * 0.25,
+						(A.a.y + A.b.y + B.a.y + B.b.y) * 0.25
 					)
-				);
+				};
 			}
 		} else {
 			// calculate the general case using distance to intersection point.
@@ -84,24 +86,24 @@ namespace kac_core::geometry {
 					   / ((B.b.y - B.a.y) * (A.b.x - A.a.x) - (B.b.x - B.a.x) * (A.b.y - A.a.y));
 			double u_B = ((A.b.x - A.a.x) * (A.a.y - B.a.y) - (A.b.y - A.a.y) * (A.a.x - B.a.x))
 					   / ((B.b.y - B.a.y) * (A.b.x - A.a.x) - (B.b.x - B.a.x) * (A.b.y - A.a.y));
-			if (u_A >= 0 && u_A <= 1 && u_B >= 0 && u_B <= 1) {
+			if (u_A >= 0. && u_A <= 1. && u_B >= 0. && u_B <= 1.) {
 				T::Point p = T::Point(A.a.x + u_A * (A.b.x - A.a.x), A.a.y + u_A * (A.b.y - A.a.y));
 				// test for adjacent case
 				if (A.a.x == p.x && A.a.y == p.y) {
-					return std::make_pair("adjacent", A.a);
+					return {IntersectionType::Branch, A.a};
 				} else if (A.b.x == p.x && A.b.y == p.y) {
-					return std::make_pair("adjacent", A.b);
+					return {IntersectionType::Branch, A.b};
 				} else if (B.a.x == p.x && B.a.y == p.y) {
-					return std::make_pair("adjacent", B.a);
+					return {IntersectionType::Branch, B.a};
 				} else if (B.b.x == p.x && B.b.y == p.y) {
-					return std::make_pair("adjacent", B.b);
+					return {IntersectionType::Branch, B.b};
 				}
 				// return general case
-				return std::make_pair("intersect", p);
+				return {IntersectionType::Intersect, p};
 			}
 		}
 		// return the null case
-		return std::make_pair("none", T::Point());
+		return {IntersectionType::None, T::Point()};
 	}
 
 	inline T::Point lineMidpoint(const T::Line& L) {

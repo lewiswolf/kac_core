@@ -10,7 +10,6 @@ Functions for generating polygons.
 #include <math.h>		// abs
 #include <numbers>		// pi
 #include <random>		// default_random_engine
-#include <string>		// string
 #include <time.h>		// time
 
 // src
@@ -148,7 +147,7 @@ namespace kac_core::geometry {
 		return P;
 	}
 
-	inline T::Polygon generatePolygon(const unsigned long& N, const time_t& seed = 0l) {
+	inline T::Polygon generatePolygon(const std::size_t& N, const time_t& seed = 0l) {
 		/*
 		This algorithm is based on a method of eliminating self-intersections in a polygon by
 		using the Lin and Kerningham '2-opt' moves. Such a move eliminates an intersection between
@@ -165,35 +164,34 @@ namespace kac_core::geometry {
 		*/
 
 		// initialise variables
-		T::Polygon P;
+		T::Polygon P(N, T::Point(0., 0.));
 		// initialise and sort random coordinates
 		if (seed != 0l) {
 			random_engine.seed(seed);
 		}
-		for (unsigned long n = 0; n < N; n++) {
-			P.push_back(
-				T::Point(uniform_distribution(random_engine), uniform_distribution(random_engine))
-			);
+		for (std::size_t n = 0; n < N; n++) {
+			P[n].x = uniform_distribution(random_engine);
+			P[n].y = uniform_distribution(random_engine);
 		}
 		// 2 opt loop
-		std::vector<std::pair<long, long>> indices;
-		std::string intersection_type = "";
+		std::vector<std::pair<std::size_t, std::size_t>> indices;
 		bool intersections = true;
 		while (intersections) {
 			bool restarted = false;
-			for (unsigned long i = 0; i < N - 2 && !restarted; i++) {
-				for (unsigned long j = i + 1; j < N && !restarted; j++) {
+			for (std::size_t i = 0; i < N - 1 && !restarted; i++) {
+				for (std::size_t j = i + 1; j < N && !restarted; j++) {
 					// collect indices of lines which should be crossed
-					intersection_type =
+					auto intersection_type =
 						lineIntersection(T::Line(P[i], P[i + 1]), T::Line(P[j], P[(j + 1) % N]))
 							.first;
-					if (intersection_type == "none" || intersection_type == "vertex") {
+					if (intersection_type == IntersectionType::None
+						|| intersection_type == IntersectionType::Vertex) {
 						continue;
-					} else if (intersection_type == "intersect") {
+					} else if (intersection_type == IntersectionType::Intersect) {
 						indices.emplace_back(i + 1, j + 1);
-					} else if (intersection_type == "adjacent") {
+					} else if (intersection_type == IntersectionType::Branch) {
 						indices.emplace_back(i, j);
-					} else if (intersection_type == "colinear") {
+					} else if (intersection_type == IntersectionType::Colinear) {
 						std::reverse(
 							P.begin() + i + (P[i].x < P[i + 1].x ? 0 : 1),
 							P.begin() + j + (P[j].x > P[j + 1].x ? 0 : 1)
@@ -212,7 +210,7 @@ namespace kac_core::geometry {
 				// close loop
 				intersections = false;
 			} else {
-				std::pair<long, long> swap =
+				std::pair<std::size_t, std::size_t> swap =
 					indices[abs(uniform_sequence(random_engine)) % indices.size()];
 				std::reverse(P.begin() + swap.first, P.begin() + swap.second);
 				// restart loop
@@ -227,13 +225,13 @@ namespace kac_core::geometry {
 		Generate a N-sided regular polygon.
 		*/
 
-		T::Polygon P(N, T::Point());
-		double theta = std::numbers::pi * 0.5;
+		T::Polygon P(N, T::Point(0., 0.));
+		double theta = 0.;
 		const double d_theta = 2. * std::numbers::pi / N;
 		for (std::size_t n = 0; n < N; n++) {
-			theta += d_theta;
 			P[n].x = std::cos(theta);
 			P[n].y = std::sin(theta);
+			theta += d_theta;
 		}
 		return P;
 	}

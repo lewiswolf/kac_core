@@ -8,7 +8,6 @@ Utility functions for working with polygons.
 #include <algorithm>
 #include <cmath>
 #include <math.h>
-#include <string>
 #include <utility>
 
 // src
@@ -78,14 +77,14 @@ namespace kac_core::geometry {
 			=> https://paulbourke.net/geometry/polygonmesh/
 		*/
 
-		const unsigned long N = P.size();
+		const std::size_t N = P.size();
 		// create a ray that extends to the right of the polygon
 		double max_x = 0.;
-		for (unsigned long n = 0; n < N; n++) { max_x = std::max(P[n].x, max_x); }
+		for (std::size_t n = 0; n < N; n++) { max_x = std::max(P[n].x, max_x); }
 		T::Line ray = T::Line(p, T::Point(max_x + 1., p.y));
 		// count the number of times the ray is intersected
-		unsigned long count = 0;
-		for (unsigned long n = 0; n < N; n++) {
+		std::size_t count = 0;
+		for (std::size_t n = 0; n < N; n++) {
 			// return true if point is a vertex
 			if (P[n].x == p.x && P[n].y == p.y) {
 				return true;
@@ -96,7 +95,7 @@ namespace kac_core::geometry {
 				return true;
 			}
 			// general case
-			if (lineIntersection(ray, A).first == "intersect") {
+			if (lineIntersection(ray, A).first == IntersectionType::Intersect) {
 				count++;
 			}
 		}
@@ -106,14 +105,16 @@ namespace kac_core::geometry {
 	inline bool isSimple(const T::Polygon& P) {
 		/*
 		Determine if a polygon is simple by checking for intersections.
+		See: Computational Geometry in C by O'Rourke p.1
 		*/
 
-		const unsigned long N = P.size();
-		for (unsigned long i = 0; i < N - 2; i++) {
-			for (unsigned long j = i + 1; j < N; j++) {
-				std::string intersection_type =
+		const std::size_t N = P.size();
+		for (std::size_t i = 0; i < N - 1; i++) {
+			for (std::size_t j = i + 1; j < N; j++) {
+				auto intersection_type =
 					lineIntersection(T::Line(P[i], P[i + 1]), T::Line(P[j], P[(j + 1) % N])).first;
-				if (intersection_type != "none" && intersection_type != "vertex") {
+				if (intersection_type != IntersectionType::None
+					&& intersection_type != IntersectionType::Vertex) {
 					return false;
 				}
 			}

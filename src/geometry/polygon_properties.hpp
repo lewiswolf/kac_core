@@ -6,6 +6,7 @@ Utility functions for working with polygons.
 
 // core
 #include <algorithm>
+#include <cmath>
 #include <math.h>
 #include <string>
 #include <utility>
@@ -21,22 +22,22 @@ namespace kac_core::geometry {
 		/*
 		Tests whether or not a given array of vertices forms a convex polygon. This is achieved
 		using the resultant sign of the cross product for each vertex:
-			[(x_i - x_i-1), (y_i - y_i-1)] × [(x_i+1 - x_i), (y_i+1 - y_i)]
+			(x_n - x_n-1)(y_n+1 - y_n) - (x_n+1 - x_n)(y_n - y_n-1)
 		See => http://paulbourke.net/geometry/polygonmesh/ 'Determining whether or not a polygon
 		(2D) has its vertices ordered clockwise or counter-clockwise'.
 		*/
 
 		// cross product - z component only, see np.cross =>
 		// https://numpy.org/doc/stable/reference/generated/numpy.cross.html
-		auto crossProductZ = [](T::Point p, T::Point p_plus, T::Point p_minus) {
-			return (p.x - p_minus.x) * (p_plus.y - p.y) - (p_plus.x - p.x) * (p.y - p_minus.y);
+		const auto crossProductZ = [](T::Point a, T::Point b, T::Point c) -> double {
+			return (b.x - a.x) * (c.y - b.y) - (c.x - b.x) * (b.y - a.y);
 		};
 		// determine the direction of the initial point using the cross product
-		const unsigned long N = P.size();
-		bool clockwise = crossProductZ(P[0], P[1], P[N - 1]) < 0;
+		const std::size_t N = P.size();
+		const bool clockwise = crossProductZ(P[N - 1], P[0], P[1]) < 0.;
 		// loop over remaining points
-		for (unsigned long n = 1; n < N; n++) {
-			if (crossProductZ(P[n], P[(n + 1) % N], P[n - 1]) < 0 != clockwise) {
+		for (std::size_t n = 1; n < N; n++) {
+			if (crossProductZ(P[n - 1], P[n], P[(n + 1) % N]) < 0. != clockwise) {
 				return false;
 			}
 		}

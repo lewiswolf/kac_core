@@ -6,9 +6,8 @@ Functions for generating polygons.
 
 // core
 #include <algorithm>	// generate, min, max, shuffle, sort
-#include <cmath>		// abs
+#include <cmath>		// abs cos sin
 #include <limits>		// numeric_limits
-#include <math.h>		// abs
 #include <numbers>		// pi
 #include <random>		// default_random_engine
 #include <time.h>		// time
@@ -21,14 +20,15 @@ namespace T = kac_core::types;
 // random number generators
 static std::default_random_engine random_engine(time(0l));
 static std::uniform_real_distribution<double> bipolar_distribution(-1., 1.);
-static std::uniform_int_distribution<long>
-	uniform_sequence(std::numeric_limits<long>::min(), std::numeric_limits<long>::max());
+static std::uniform_int_distribution<std::size_t> uniform_sequence(
+	std::numeric_limits<std::size_t>::min(), std::numeric_limits<std::size_t>::max()
+);
 // numerical constants
 constexpr double infinity = std::numeric_limits<double>::infinity();
 
 namespace kac_core::geometry {
 
-	inline T::Polygon generateConvexPolygon(const unsigned long& N, const time_t& seed = 0l) {
+	inline T::Polygon generateConvexPolygon(const std::size_t& N, const time_t& seed = 0l) {
 		/*
 		Generate convex shapes according to Pavel Valtr's 1995 algorithm.
 		Adapted from Sander Verdonschot's Java version, found here:
@@ -41,27 +41,25 @@ namespace kac_core::geometry {
 		*/
 
 		// initialise variables
-		T::Polygon P;
-		std::vector<double> X(N);
-		std::vector<double> Y(N);
-		std::vector<double> X_rand(N);
-		std::vector<double> Y_rand(N);
-		unsigned long last_true = 0;
-		unsigned long last_false = 0;
+		T::Polygon P(N, T::Point());
+		std::vector<double> X(N, 0.);
+		std::vector<double> Y(N, 0.);
+		std::vector<double> X_rand(N, 0.);
+		std::vector<double> Y_rand(N, 0.);
+		std::size_t last_true = 0;
+		std::size_t last_false = 0;
 		// initialise and sort random coordinates
 		if (seed != 0l) {
 			random_engine.seed(seed);
 		}
-		std::generate(X_rand.begin(), X_rand.end(), []() {
-			return bipolar_distribution(random_engine);
-		});
-		std::generate(Y_rand.begin(), Y_rand.end(), []() {
-			return bipolar_distribution(random_engine);
-		});
+		for (std::size_t n = 1; n < N; n++) {
+			X_rand[n] = bipolar_distribution(random_engine);
+			Y_rand[n] = bipolar_distribution(random_engine);
+		}
 		std::sort(X_rand.begin(), X_rand.end());
 		std::sort(Y_rand.begin(), Y_rand.end());
 		// divide the interior points into two chains
-		for (unsigned long n = 1; n < N; n++) {
+		for (std::size_t n = 1; n < N; n++) {
 			if (n != N - 1) {
 				if (uniform_sequence(random_engine) % 2 == 1) {
 					X[n] = X_rand[n] - X_rand[last_true];
@@ -81,16 +79,22 @@ namespace kac_core::geometry {
 		}
 		// randomly combine x and y
 		shuffle(Y.begin(), Y.end(), random_engine);
-		for (unsigned long n = 0; n < N; n++) { P.push_back(T::Point(X[n], Y[n])); }
+		for (std::size_t n = 0; n < N; n++) {
+			P[n].x = X[n];
+			P[n].y = Y[n];
+		}
 		// sort by polar angle
 		sort(P.begin(), P.end(), [](T::Point& p1, T::Point& p2) {
 			return p1.theta() < p2.theta();
 		});
 		// arrange points end to end to form a polygon
-		double x_min, x_max, y_min, y_max = 0;
-		double x = 0.0;
-		double y = 0.0;
-		for (unsigned long n = 0; n < N; n++) {
+		double x_min = infinity;
+		double x_max = -infinity;
+		double y_min = infinity;
+		double y_max = -infinity;
+		double x = 0.;
+		double y = 0.;
+		for (std::size_t n = 0; n < N; n++) {
 			T::Point p = T::Point(x, y);
 			x += P[n].x;
 			y += P[n].y;
@@ -103,7 +107,7 @@ namespace kac_core::geometry {
 		// center around origin
 		double x_shift = ((x_max - x_min) * 0.5) - x_max;
 		double y_shift = ((y_max - y_min) * 0.5) - y_max;
-		for (unsigned long n = 0; n < N; n++) {
+		for (std::size_t n = 0; n < N; n++) {
 			P[n].x += x_shift;
 			P[n].y += y_shift;
 		}
@@ -216,7 +220,7 @@ namespace kac_core::geometry {
 				intersections = false;
 			} else {
 				std::pair<std::size_t, std::size_t> swap =
-					indices[abs(uniform_sequence(random_engine)) % indices.size()];
+					indices[uniform_sequence(random_engine) % indices.size()];
 				std::reverse(P.begin() + swap.first, P.begin() + swap.second);
 				// restart loop
 				indices.clear();

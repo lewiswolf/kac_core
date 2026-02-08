@@ -7,7 +7,6 @@ Utility functions for working with polygons.
 // core
 #include <algorithm>
 #include <cmath>
-#include <math.h>
 #include <utility>
 
 // src
@@ -26,7 +25,7 @@ namespace kac_core::geometry {
 		(2D) has its vertices ordered clockwise or counter-clockwise'.
 		*/
 
-		// cross product - z component only, see np.cross =>
+		// AB x BC cross product - z component only, see np.cross =>
 		// https://numpy.org/doc/stable/reference/generated/numpy.cross.html
 		const auto crossProductZ = [](T::Point a, T::Point b, T::Point c) -> double {
 			return (b.x - a.x) * (c.y - b.y) - (c.x - b.x) * (b.y - a.y);
@@ -49,20 +48,22 @@ namespace kac_core::geometry {
 		Solution 3 => http://paulbourke.net/geometry/polygonmesh/
 		*/
 
-		auto crossProductZ = [](T::Point a, T::Point b, T::Point p) {
-			return (b.x - a.x) * (p.y - a.y) - (p.x - a.x) * (b.y - a.y);
-		};
-		// determine if the polygon is ordered clockwise
-		const short clockwise = crossProductZ(P[0], P[1], P[2]) > 0 ? -1 : 1;
 		// go through each of the vertices, and test with p
-		const unsigned long N = P.size();
-		for (unsigned long n = 0; n < N; n++) {
+		const std::size_t N = P.size();
+		for (std::size_t n = 0; n < N; n++) {
 			if (p.x == P[n].x && p.y == P[n].y) {
 				return true;
 			}
 		}
+		// AB x AC cross product - z component only, see np.cross =>
+		// https://numpy.org/doc/stable/reference/generated/numpy.cross.html
+		const auto crossProductZ = [](T::Point a, T::Point b, T::Point c) {
+			return (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+		};
+		// determine if the polygon is ordered clockwise
+		const short clockwise = crossProductZ(P[0], P[1], P[2]) > 0. ? -1 : 1;
 		// determine if the point is always on the right side of the line
-		for (unsigned long n = 0; n < N; n++) {
+		for (std::size_t n = 0; n < N; n++) {
 			if (crossProductZ(P[n], P[(n + 1) % N], p) * clockwise > 0.) {
 				return false;
 			}

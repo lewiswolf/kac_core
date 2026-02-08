@@ -136,18 +136,10 @@ namespace kac_core::geometry {
 			Y[n] = bipolar_distribution(random_engine);
 		}
 		// center along x and y axes
-		double x_min = infinity;
-		double x_max = -infinity;
-		double y_min = infinity;
-		double y_max = -infinity;
-		for (std::size_t n = 0; n < N; n++) {
-			x_min = std::min(X[n], x_min);
-			x_max = std::max(X[n], x_max);
-			y_min = std::min(Y[n], y_min);
-			y_max = std::max(Y[n], y_max);
-		}
-		const double x_shift = (x_min + x_max) * 0.5;
-		const double y_shift = (y_min + y_max) * 0.5;
+		const auto x_min_max = std::minmax_element(begin(X), end(X));
+		const auto y_min_max = std::minmax_element(begin(Y), end(Y));
+		const double x_shift = (*x_min_max.first + *x_min_max.second) * 0.5;
+		const double y_shift = (*y_min_max.first + *y_min_max.second) * 0.5;
 		for (std::size_t n = 0; n < N; n++) {
 			P[n].x = X[n] - x_shift;
 			P[n].y = Y[n] - y_shift;

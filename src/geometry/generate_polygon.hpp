@@ -6,6 +6,7 @@ Functions for generating polygons.
 
 // core
 #include <algorithm>	// generate, min, max, shuffle, sort
+#include <cmath>		// abs
 #include <limits>		// numeric_limits
 #include <math.h>		// abs
 #include <numbers>		// pi
@@ -19,7 +20,7 @@ namespace T = kac_core::types;
 
 // random number generators
 static std::default_random_engine random_engine(time(0l));
-static std::uniform_real_distribution<double> uniform_distribution(-1., 1.);
+static std::uniform_real_distribution<double> bipolar_distribution(-1., 1.);
 static std::uniform_int_distribution<long>
 	uniform_sequence(std::numeric_limits<long>::min(), std::numeric_limits<long>::max());
 // numerical constants
@@ -52,10 +53,10 @@ namespace kac_core::geometry {
 			random_engine.seed(seed);
 		}
 		std::generate(X_rand.begin(), X_rand.end(), []() {
-			return uniform_distribution(random_engine);
+			return bipolar_distribution(random_engine);
 		});
 		std::generate(Y_rand.begin(), Y_rand.end(), []() {
-			return uniform_distribution(random_engine);
+			return bipolar_distribution(random_engine);
 		});
 		std::sort(X_rand.begin(), X_rand.end());
 		std::sort(Y_rand.begin(), Y_rand.end());
@@ -109,7 +110,7 @@ namespace kac_core::geometry {
 		return P;
 	}
 
-	inline T::Polygon generateIrregularStar(const unsigned long& N, const time_t& seed = 0l) {
+	inline T::Polygon generateIrregularStar(const std::size_t& N, const time_t& seed = 0l) {
 		/*
 		This is a fast method for generating concave polygons, particularly with a large number of
 		vertices. This approach generates polygons by ordering a series of random points around a
@@ -122,25 +123,37 @@ namespace kac_core::geometry {
 		*/
 
 		// initialise variables
-		T::Matrix_1D X;
-		T::Matrix_1D Y;
-		T::Polygon P;
+		T::Matrix_1D X(N, 0.);
+		T::Matrix_1D Y(N, 0.);
+		T::Polygon P(N, T::Point(0., 0.));
 		// initialise and sort random coordinates
 		if (seed != 0l) {
 			random_engine.seed(seed);
 		}
 		// first find minmax in both x & y
-		for (unsigned long n = 0; n < N; n++) {
-			X.push_back(uniform_distribution(random_engine));
-			Y.push_back(uniform_distribution(random_engine));
+		for (std::size_t n = 0; n < N; n++) {
+			X[n] = bipolar_distribution(random_engine);
+			Y[n] = bipolar_distribution(random_engine);
 		}
-		auto x_min_max = std::minmax_element(begin(X), end(X));
-		auto y_min_max = std::minmax_element(begin(Y), end(Y));
 		// center along x and y axes
-		double x_shift = (*x_min_max.first + *x_min_max.second) * 0.5;
-		double y_shift = (*y_min_max.first + *y_min_max.second) * 0.5;
-		for (unsigned long n = 0; n < N; n++) {
-			P.push_back(T::Point(X[n] -= x_shift, Y[n] -= y_shift));
+		double x_min = infinity;
+		double x_max = -infinity;
+		double y_min = infinity;
+		double y_max = -infinity;
+		for (std::size_t n = 0; n < N; n++) {
+			x_min = std::min(X[n], x_min);
+			x_max = std::max(X[n], x_max);
+			y_min = std::min(Y[n], y_min);
+			y_max = std::max(Y[n], y_max);
+		}
+		const double x_shift = (x_min + x_max) * 0.5;
+		const double y_shift = (y_min + y_max) * 0.5;
+		for (std::size_t n = 0; n < N; n++) {
+			P[n].x = X[n] - x_shift;
+			P[n].y = Y[n] - y_shift;
+			// normalise to unit circle
+			P[n].x = P[n].r() * std::cos(P[n].theta()) / std::numbers::sqrt2;
+			P[n].y = P[n].r() * std::sin(P[n].theta()) / std::numbers::sqrt2;
 		}
 		// sort by polar angle
 		sort(P.begin(), P.end(), [](T::Point& a, T::Point& b) { return a.theta() < b.theta(); });
@@ -170,8 +183,8 @@ namespace kac_core::geometry {
 			random_engine.seed(seed);
 		}
 		for (std::size_t n = 0; n < N; n++) {
-			P[n].x = uniform_distribution(random_engine);
-			P[n].y = uniform_distribution(random_engine);
+			P[n].x = bipolar_distribution(random_engine);
+			P[n].y = bipolar_distribution(random_engine);
 		}
 		// 2 opt loop
 		std::vector<std::pair<std::size_t, std::size_t>> indices;

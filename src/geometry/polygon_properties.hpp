@@ -121,41 +121,46 @@ namespace kac_core::geometry {
 		return true;
 	}
 
-	inline std::pair<double, std::pair<unsigned long, unsigned long>>
+	inline std::pair<double, std::pair<std::size_t, std::size_t>>
 	largestVector(const T::Polygon& P) {
 		/*
 		This function tests each pair of vertices in a given polygon to find the largest vector, and
 		returns the length of the vector and its indices.
 		*/
 
-		const unsigned long N = P.size();
-		std::pair<unsigned long, unsigned long> index = std::make_pair(0, 0);
-		double vec_max = 0.;
-		for (unsigned long i = 0; i < N; i++) {
-			for (unsigned long j = i + 1; j < N; j++) {
-				double vec = hypot(P[i].x - P[j].x, P[i].y - P[j].y);
-				if (vec > vec_max) {
+		const std::size_t N = P.size();
+		std::pair<std::size_t, std::size_t> index = {0, 0};
+		double vec_max2 = 0.;
+		for (std::size_t i = 0; i < N; i++) {
+			for (std::size_t j = i + 1; j < N; j++) {
+				double dx = P[i].x - P[j].x;
+				double dy = P[i].y - P[j].y;
+				double vec2 = dx * dx + dy * dy;
+				if (vec2 > vec_max2) {
 					index.first = i;
 					index.second = j;
-					vec_max = vec;
+					vec_max2 = vec2;
 				}
 			}
 		}
-		return std::make_pair(vec_max, index);
+		return {std::sqrt(vec_max2), index};
 	}
 
 	inline double polygonArea(const T::Polygon& P) {
 		/*
 		An implementation of the polygon area algorithm derived using Green's Theorem.
-		https://math.blogoverflow.com/2014/06/04/greens-theorem-and-area-of-polygons/
+		Green's theorem enforces that polygon's with anti-clockwise oriented vertices have positive
+		area, and those with clockwise oriented vertices have negative area.
+		See: https://math.blogoverflow.com/2014/06/04/greens-theorem-and-area-of-polygons/
 		*/
 
-		const unsigned long N = P.size();
+		const std::size_t N = P.size();
 		double out = 0.;
-		for (unsigned long n = 0; n < N; n++) {
-			out += (P[(n + 1) % N].x + P[n].x) * (P[(n + 1) % N].y - P[n].y);
+		for (std::size_t n = 0; n < N; n++) {
+			T::Point P_1 = P[(n + 1) % N];
+			out += (P_1.x + P[n].x) * (P_1.y - P[n].y);
 		}
-		return abs(out) * 0.5;
+		return out * 0.5;
 	}
 
 	inline T::Point polygonCentroid(const T::Polygon& P) {
@@ -177,7 +182,7 @@ namespace kac_core::geometry {
 			)
 		 */
 
-		const unsigned long N = P.size();
+		const std::size_t N = P.size();
 		if (N == 3) {
 			// Triangles have a much simpler formula, and so these are
 			// calculated separately.
@@ -186,13 +191,14 @@ namespace kac_core::geometry {
 		double area = 0.;
 		double out_x = 0.;
 		double out_y = 0.;
-		for (unsigned long n = 0; n < N; n++) {
-			area += (P[(n + 1) % N].x + P[n].x) * (P[(n + 1) % N].y - P[n].y);
-			double scalar = (P[n].x * P[(n + 1) % N].y - P[(n + 1) % N].x * P[n].y);
-			out_x += (P[n].x + P[(n + 1) % N].x) * scalar;
-			out_y += (P[n].y + P[(n + 1) % N].y) * scalar;
+		for (std::size_t n = 0; n < N; n++) {
+			T::Point P_1 = P[(n + 1) % N];
+			area += (P_1.x + P[n].x) * (P_1.y - P[n].y);
+			double scalar = (P[n].x * P_1.y - P_1.x * P[n].y);
+			out_x += (P[n].x + P_1.x) * scalar;
+			out_y += (P[n].y + P_1.y) * scalar;
 		}
-		return T::Point(out_x / (3 * area), out_y / (3 * area));
+		return T::Point(out_x / (3. * area), out_y / (3. * area));
 	}
 
 }

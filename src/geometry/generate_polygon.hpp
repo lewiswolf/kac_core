@@ -231,7 +231,7 @@ namespace kac_core::geometry {
 		double theta = std::numbers::pi * 0.5;
 		const double d_theta = 2. * std::numbers::pi / N;
 		for (std::size_t n = 0; n < N; n++) {
-			theta -= d_theta;
+			theta += d_theta;
 			P[n].x = std::cos(theta);
 			P[n].y = std::sin(theta);
 		}
@@ -249,7 +249,7 @@ namespace kac_core::geometry {
 			x = 0.5 * epsilon;
 			y = 0.5 / epsilon;
 		}
-		return T::Polygon({T::Point(-x, -y), T::Point(-x, y), T::Point(x, y), T::Point(x, -y)});
+		return T::Polygon({T::Point(x, y), T::Point(-x, y), T::Point(-x, -y), T::Point(x, -y)});
 	}
 
 	inline T::Polygon generateUnitTriangle(const double& r, const double& theta) {
@@ -274,10 +274,10 @@ namespace kac_core::geometry {
 			const double scale = 1. / std::sqrt(0.5 * height);
 			p.x *= scale;
 			p.y *= scale;
-			if ((r > 0. && theta < std::numbers::pi) || (r < 0. && theta > std::numbers::pi)) {
-				return T::Polygon({T::Point(-0.5 * scale, 0.), p, T::Point(0.5 * scale, 0.)});
-			} else {
+			if (p.y > 0.) {
 				return T::Polygon({T::Point(-0.5 * scale, 0.), T::Point(0.5 * scale, 0.), p});
+			} else {
+				return T::Polygon({T::Point(0.5 * scale, 0.), T::Point(-0.5 * scale, 0.), p});
 			}
 		}
 	}

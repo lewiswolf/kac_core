@@ -20,7 +20,7 @@ namespace T = kac_core::types;
 // random number generators
 static std::default_random_engine random_engine(time(0l));
 static std::uniform_real_distribution<double> bipolar_distribution(-1., 1.);
-static std::uniform_int_distribution<std::size_t> uniform_sequence(
+static std::uniform_int_distribution<std::size_t> natural_number(
 	std::numeric_limits<std::size_t>::min(), std::numeric_limits<std::size_t>::max()
 );
 // numerical constants
@@ -61,7 +61,7 @@ namespace kac_core::geometry {
 		// divide the interior points into two chains
 		for (std::size_t n = 1; n < N; n++) {
 			if (n != N - 1) {
-				if (uniform_sequence(random_engine) % 2 == 1) {
+				if (natural_number(random_engine) % 2 == 1) {
 					X[n] = X_rand[n] - X_rand[last_true];
 					Y[n] = Y_rand[n] - Y_rand[last_true];
 					last_true = n;
@@ -78,7 +78,7 @@ namespace kac_core::geometry {
 			}
 		}
 		// randomly combine x and y
-		shuffle(Y.begin(), Y.end(), random_engine);
+		std::shuffle(Y.begin(), Y.end(), random_engine);
 		for (std::size_t n = 0; n < N; n++) {
 			P[n].x = X[n];
 			P[n].y = Y[n];
@@ -222,7 +222,7 @@ namespace kac_core::geometry {
 				intersections = false;
 			} else {
 				std::pair<std::size_t, std::size_t> swap =
-					indices[uniform_sequence(random_engine) % indices.size()];
+					indices[natural_number(random_engine) % indices.size()];
 				std::reverse(P.begin() + swap.first, P.begin() + swap.second);
 				// restart loop
 				indices.clear();
@@ -233,7 +233,7 @@ namespace kac_core::geometry {
 
 	inline T::Polygon generateRegularPolygon(const std::size_t& N) {
 		/*
-		Generate a N-sided regular polygon.
+		Generate an N-sided regular polygon.
 		*/
 
 		T::Polygon P(N, T::Point(0., 0.));

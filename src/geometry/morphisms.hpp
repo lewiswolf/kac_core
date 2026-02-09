@@ -271,7 +271,7 @@ namespace kac_core::geometry {
 			p.y = centroid.y + scale * (p.y - centroid.y);
 		}
 		// enforce signed area
-		if ((polygonArea(P) > 0) != (a > 0)) {
+		if ((polygonArea(P) > 0.) != (a > 0.)) {
 			std::reverse(P.begin(), P.end());
 		}
 		return P;

@@ -41,7 +41,7 @@ namespace kac_core::geometry {
 		*/
 
 		// initialise variables
-		T::Polygon P(N, T::Point());
+		T::Polygon P(N, T::Point(0., 0.));
 		std::vector<double> X(N, 0.);
 		std::vector<double> Y(N, 0.);
 		std::vector<double> X_rand(N, 0.);
@@ -78,7 +78,7 @@ namespace kac_core::geometry {
 			}
 		}
 		// randomly combine x and y
-		std::shuffle(Y.begin(), Y.end(), random_engine);
+		shuffle(Y.begin(), Y.end(), random_engine);
 		for (std::size_t n = 0; n < N; n++) {
 			P[n].x = X[n];
 			P[n].y = Y[n];
@@ -107,9 +107,9 @@ namespace kac_core::geometry {
 		// center around origin
 		const double x_shift = ((x_max - x_min) * 0.5) - x_max;
 		const double y_shift = ((y_max - y_min) * 0.5) - y_max;
-		for (std::size_t n = 0; n < N; n++) {
-			P[n].x += x_shift;
-			P[n].y += y_shift;
+		for (T::Point& p: P) {
+			p.x += x_shift;
+			p.y += y_shift;
 		}
 		return P;
 	}
@@ -180,9 +180,9 @@ namespace kac_core::geometry {
 		if (seed != 0l) {
 			random_engine.seed(seed);
 		}
-		for (std::size_t n = 0; n < N; n++) {
-			P[n].x = bipolar_distribution(random_engine);
-			P[n].y = bipolar_distribution(random_engine);
+		for (T::Point& p: P) {
+			p.x = bipolar_distribution(random_engine);
+			p.y = bipolar_distribution(random_engine);
 		}
 		// 2 opt loop
 		std::vector<std::pair<std::size_t, std::size_t>> indices;
@@ -239,9 +239,9 @@ namespace kac_core::geometry {
 		T::Polygon P(N, T::Point(0., 0.));
 		double theta = 0.;
 		const double d_theta = 2. * std::numbers::pi / N;
-		for (std::size_t n = 0; n < N; n++) {
-			P[n].x = std::cos(theta);
-			P[n].y = std::sin(theta);
+		for (T::Point& p: P) {
+			p.x = std::cos(theta);
+			p.y = std::sin(theta);
 			theta += d_theta;
 		}
 		return P;

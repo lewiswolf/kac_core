@@ -75,6 +75,12 @@ namespace kac_core::physics {
 			waveform[t] = linearInterpolation(u_0);
 			std::swap(u_0, u_1);
 		}
+		// normalise
+		double max_x = 0.;
+		for (double& x: waveform) max_x = std::max(max_x, std::abs(x));
+		if (max_x != 0.) {
+			for (double& x: waveform) x /= max_x;
+		}
 		return waveform;
 	}
 
@@ -176,6 +182,12 @@ namespace kac_core::physics {
 			FDTDUpdate2D(u_0, u_1);
 			waveform[t] = bilinearInterpolation(u_0);
 			std::swap(u_0, u_1);
+		}
+		// normalise
+		double max_x = 0.;
+		for (double& x: waveform) max_x = std::max(max_x, std::abs(x));
+		if (max_x != 0.) {
+			for (double& x: waveform) x /= max_x;
 		}
 		return waveform;
 	}

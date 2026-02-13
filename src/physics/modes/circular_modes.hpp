@@ -37,7 +37,7 @@ namespace kac_core::physics {
 		output:
 			α_mn = {
 				J_m(λ_mn * r√π) * √2 * sin(mθ + π/4)
-				| α ∈ ℝ, m ∈ [0, M), n ∈ (0, N]
+				| α ∈ ℝ, m ∈ [0, M), n ∈ [1, N]
 			}
 		*/
 
@@ -137,7 +137,7 @@ namespace kac_core::physics {
 			z_mn = {
 				J_m(z_mn) = 0 					dirichlet boundary condition
 				J'_m(z_mn) = 0 					neumann boundary condition
-				| m ∈ [0, M), n ∈ (0, N]
+				| m ∈ [0, M), n ∈ [1, N]
 			}
 			λ_mn { z_mn / √π | λ ∈ ℝ }
 		*/
@@ -145,20 +145,20 @@ namespace kac_core::physics {
 		T::Matrix_2D S(M, T::Matrix_1D(N, 0.));
 		if (boundary_conditions) {
 			for (std::size_t m = 0; m < M; m++) {
-				double nu = static_cast<double>(m);
+				double mu = static_cast<double>(m);
 				for (std::size_t n = 0; n < N; n++) {
 					S[m][n] =
-						boost::math::cyl_bessel_j_zero(nu, n + 1) / std::sqrt(std::numbers::pi);
+						boost::math::cyl_bessel_j_zero(mu, n + 1) / std::sqrt(std::numbers::pi);
 				}
 			}
 		} else {
 			double lower_bound = 0., upper_bound = 0.;
 			for (std::size_t m = 0; m < M; m++) {
-				double nu = static_cast<double>(m);
-				auto j_prime = [nu](double _x) { return boost::math::cyl_bessel_j_prime(nu, _x); };
+				double mu = static_cast<double>(m);
+				auto j_prime = [mu](double _x) { return boost::math::cyl_bessel_j_prime(mu, _x); };
 				for (std::size_t n = 0; n < N; n++) {
 					lower_bound = n == 0 ? std::numeric_limits<double>::epsilon() : upper_bound;
-					upper_bound = boost::math::cyl_bessel_j_zero(nu, n + 1);
+					upper_bound = boost::math::cyl_bessel_j_zero(mu, n + 1);
 					// rigid body mode
 					if (m == 0 && n == 0) {
 						continue;

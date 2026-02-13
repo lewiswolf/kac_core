@@ -18,9 +18,9 @@ while getopts "DRV" opt; do
 			;;
 		*)
 			echo "Usage: $0 [-D] [-R] [-V]"
-			echo "-D causes ctest to build the library in Debug (default)."
-			echo "-R causes ctest to build the library in Release."
-			echo "-V causes ctest to print it's the entire output including calls to std::cout."
+			echo "-D causes cmake to build the library in Debug. (default)"
+			echo "-R causes cmake to build the library in Release."
+			echo "-V causes ctest to print it's entire output including calls to std::cout."
 			exit 1
 			;;
 	esac

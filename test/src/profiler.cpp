@@ -205,21 +205,33 @@ int main() {
 		T::Matrix_2D waveform = p::raisedTriangle2D(T::Point(0.5, 0.5), 0.1, 0.1, 0.1, 0.1, N, N);
 	}
 	printColouredText(
+		"Efficiency relative to a" + N_string + "matrix simulation and a waveform" + t_string
+			+ "samples in length...",
+		35
+	);
+	T::Matrix_1D u1_1(N, 0.);
+	T::Matrix_1D u1_0(N, 0.);
+	u1_1[(std::size_t)N * 0.5] = 1.;
+	{
+		Timer timer("  FDTDWaveform1D");
+		p::FDTDWaveform1D(u1_0, u1_1, 1., 2. - 4., 1., t, 0.5);
+	}
+	printColouredText(
 		"Efficiency relative to a" + N_string + "X" + N_string + "matrix simulation and a waveform"
 			+ t_string + "samples in length...",
 		35
 	);
 	double cfl_2 = pow(1 / std::numbers::sqrt2, 2.);
-	T::Matrix_2D u_1(N, std::vector<double>(N, 0.));
-	T::Matrix_2D u_0(N, std::vector<double>(N, 0.));
-	u_1[(std::size_t)N * 0.5][(std::size_t)N * 0.5] = 1.;
+	T::Matrix_2D u2_1(N, std::vector<double>(N, 0.));
+	T::Matrix_2D u2_0(N, std::vector<double>(N, 0.));
+	u2_1[(std::size_t)N * 0.5][(std::size_t)N * 0.5] = 1.;
 	T::BooleanImage_2D B(N, std::vector<short>(N, 1));
 	// dirichlet boundary
 	for (std::size_t i = 0; i < N; i++) { B[i][0] = B[i][N - 1] = 0; }
 	for (std::size_t j = 0; j < N; j++) { B[0][j] = B[N - 1][j] = 0; }
 	{
 		Timer timer("  FDTDWaveform2D");
-		p::FDTDWaveform2D(u_0, u_1, B, cfl_2, 2. - 4. * cfl_2, 1., t, T::Point(0.5, 0.5));
+		p::FDTDWaveform2D(u2_0, u2_1, B, cfl_2, 2. - 4. * cfl_2, 1., t, T::Point(0.5, 0.5));
 	}
 
 	return 0;

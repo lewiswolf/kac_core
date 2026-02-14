@@ -211,8 +211,8 @@ namespace kac_core::physics {
 			u = c_0 * (u_1_x+1 + u_1_x-1) + c_1 * u_1_x - c_2 * u_0_x
 		*/
 
-		const std::size_t H = u_0.size();
-		for (std::size_t x = 1; x <= H - 1; x++) {
+		const std::size_t X = u_0.size() - 1;
+		for (std::size_t x = 1; x < X; x++) {
 			// update in place
 			u_0[x] = c_0 * (u_1[x + 1] + u_1[x - 1]) + c_1 * u_1[x] - c_2 * u_0[x];
 		}
@@ -241,9 +241,8 @@ namespace kac_core::physics {
 			x_range = range across the x-axis of the boundary condition (for optimisation).
 			y_range = range across the y-axis of the boundary condition (for optimisation).
 		output:
-			u = c_0 * (
-				u_1_x+1_y + u_1_x_y+1 + u_1_x-1_y + u_1_x_y-1
-			) + c_1 * u_1_x_y - c_2 * (u_0_x_y)
+			u = c_0 * (u_1_x+1_y + u_1_x_y+1 + u_1_x-1_y + u_1_x_y-1)
+				+ c_1 * u_1_x_y - c_2 * u_0_x_y
 		*/
 
 		for (std::size_t x = x_range[0]; x <= x_range[1]; x++) {

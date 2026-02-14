@@ -21,17 +21,18 @@ namespace kac_core::physics {
 		const double& y,
 		const std::size_t& M,
 		const std::size_t& N,
-		const double& epsilon,
 		const std::array<bool, 4> boundary_conditions = {true, true, true, true}
 	) {
 		/*
 		Calculate the spatial eigenfunction of a rectangular 2-dimensional domain relative to a
 		cartesian excitation.
 		input:
-			(x, y) = cartesian excitation
+			(x, y) = normalised cartesian excitation where [0, 1] represents the mappings onto
+				an aspect ratio Є
+				x ∈ [0, 1] -> x ∈ [1, √Є]
+				y ∈ [0, 1] -> y ∈ [1, 1 / √Є]
 			M = number of modes across the Mth axis
 			N = number of modes across the Nth axis
-			epsilon = aspect ratio of the rectangle
 			boundary_conditions = boolean array indicating the boundary conditions
 				(true = fixed, false = free)
 				1: x-axis minima boundary condition
@@ -40,25 +41,24 @@ namespace kac_core::physics {
 				4: y-axis maxima boundary condition
 		output:
 			X_m = {
-				sin((m + 1)xπ / √Є),	dirichlet boundary condition
-				cos(mxπ / √Є),			neumann boundary condition
-				sin((m + 0.5)xπ / √Є),	minima fixed, maxima free
-				cos((m + 0.5)xπ / √Є),	minima free, maxima fixed
+				sin((m + 1)xπ),		dirichlet boundary condition
+				cos(mxπ),			neumann boundary condition
+				sin((m + 0.5)xπ),	minima fixed, maxima free
+				cos((m + 0.5)xπ),	minima free, maxima fixed
 				| m ∈ [0, M)
 			}
 			Y_n = {
-				sin((n + 1)yπ√Є),		dirichlet boundary condition
-				cos(nyπ√Є),				neumann boundary condition
-				sin((n + 0.5)yπ√Є),		minima fixed, maxima free
-				cos((m + 0.5)yπ√Є),		minima free, maxima fixed
+				sin((n + 1)yπ),		dirichlet boundary condition
+				cos(nyπ),			neumann boundary condition
+				sin((n + 0.5)yπ),	minima fixed, maxima free
+				cos((m + 0.5)yπ),	minima free, maxima fixed
 				| n ∈ [0, N)
 			}
 			α_mn = { X_m * Y_n | α ∈ ℝ }
 		*/
 
-		const double epsilon_root = std::sqrt(epsilon);
-		const double x_hat = x * std::numbers::pi / epsilon_root;
-		const double y_hat = y * std::numbers::pi * epsilon_root;
+		const double x_hat = x * std::numbers::pi;
+		const double y_hat = y * std::numbers::pi;
 		T::Matrix_2D A(M, T::Matrix_1D(N, 0.));
 		// boundary condition lambda
 		auto BCLambda = [](const std::size_t i,

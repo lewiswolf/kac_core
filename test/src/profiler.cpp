@@ -152,7 +152,7 @@ int main() {
 	}
 	{
 		Timer timer("  rectangularAmplitudes");
-		T::Matrix_2D rectangular_pattern = p::rectangularAmplitudes(0.5, 0.5, N, N, 1.);
+		T::Matrix_2D rectangular_pattern = p::rectangularAmplitudes(0.5, 0.5, N, N);
 	}
 	{
 		Timer timer("  rectangularCymatics");
@@ -179,7 +179,7 @@ int main() {
 		35
 	);
 	T::Matrix_2D F_2d = p::rectangularSeries(N, N, 1.);
-	T::Matrix_2D A_2d = p::rectangularAmplitudes(0.5, 0.5, N, N, 1.);
+	T::Matrix_2D A_2d = p::rectangularAmplitudes(0.5, 0.5, N, N);
 	{
 		Timer timer("  AdditiveSynthesis2D");
 		T::Matrix_1D waveform = p::AdditiveSynthesis2D(F_2d, A_2d, 1., 1 / t, t);

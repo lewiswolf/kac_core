@@ -57,10 +57,6 @@ namespace kac_core::physics {
 		const auto linearInterpolation = [=](const T::Matrix_1D& u) {
 			return coef_0 * u[x_0] + a * u[x_0 + 1];
 		};
-		// initialise output
-		T::Matrix_1D waveform(T);
-		waveform[0] = linearInterpolation(u_0);
-		waveform[1] = linearInterpolation(u_1);
 		// lambda for the update equation
 		const auto FDTDUpdate1D = [=](T::Matrix_1D& u_a, const T::Matrix_1D& u_b) {
 			for (std::size_t x = 1; x <= X; x++) {
@@ -68,6 +64,10 @@ namespace kac_core::physics {
 				u_a[x] = c_0 * (u_b[x + 1] + u_b[x - 1]) + c_1 * u_b[x] - c_2 * u_a[x];
 			};
 		};
+		// initialise output
+		T::Matrix_1D waveform(T, 0.);
+		waveform[0] = linearInterpolation(u_0);
+		waveform[1] = linearInterpolation(u_1);
 		// main loop
 		for (std::size_t t = 2; t < T; t++) {
 			// maintain memory efficiency - only two matrices need to be in memory at any time
@@ -133,10 +133,6 @@ namespace kac_core::physics {
 			return coef_0 * u[x_0][y_0] + coef_1 * u[x_0][y_0 + 1] + coef_2 * u[x_0 + 1][y_0]
 				 + coef_3 * u[x_0 + 1][y_0 + 1];
 		};
-		// initialise output
-		T::Matrix_1D waveform(T);
-		waveform[0] = bilinearInterpolation(u_0);
-		waveform[1] = bilinearInterpolation(u_1);
 		// for efficiency, calculate the loop range relative to dirichlet boundary conditions
 		const std::size_t B_dim_X = B.size();
 		const std::size_t B_dim_Y = B[0].size();
@@ -176,6 +172,10 @@ namespace kac_core::physics {
 				};
 			}
 		};
+		// initialise output
+		T::Matrix_1D waveform(T, 0.);
+		waveform[0] = bilinearInterpolation(u_0);
+		waveform[1] = bilinearInterpolation(u_1);
 		// main loop
 		for (std::size_t t = 2; t < T; t++) {
 			// maintain memory efficiency - only two matrices need to be in memory at any time

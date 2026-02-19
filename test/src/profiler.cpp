@@ -60,12 +60,20 @@ int main() {
 	printColouredText("\nProfiler for `./geometry/mappings.hpp`.", 36);
 	printColouredText("Efficiency relative to" + N_string + "points...", 35);
 	{
-		Timer timer("  circle2Square");
-		for (std::size_t n = 0; n < P.size(); n++) { g::simpleElliptic_Circle2Square(P[n]); }
+		Timer timer("  circleToSquare");
+		for (std::size_t n = 0; n < P.size(); n++) { g::circleToSquare(P[n]); }
 	}
 	{
-		Timer timer("  square2Circle");
-		for (std::size_t n = 0; n < P.size(); n++) { g::simpleElliptic_Square2Circle(P[n]); }
+		Timer timer("  squareToCircle");
+		for (std::size_t n = 0; n < P.size(); n++) { g::squareToCircle(P[n]); }
+	}
+	{
+		Timer timer("  squareToTriangle");
+		for (std::size_t n = 0; n < P.size(); n++) { g::squareToTriangle(P[n]); }
+	}
+	{
+		Timer timer("  triangleToSquare");
+		for (std::size_t n = 0; n < P.size(); n++) { g::triangleToSquare(P[n]); }
 	}
 
 	// geometry/morphisms.hpp

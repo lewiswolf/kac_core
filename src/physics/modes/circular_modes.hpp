@@ -36,7 +36,7 @@ namespace kac_core::physics {
 			S = { λ_mn | λ ∈ ℝ }
 		output:
 			α_mn = {
-				J_m(λ_mn * r√π) * √2 * sin(mθ + π/4)
+				J_m(λ_mn * r√π) * e^(imθ)
 				| α ∈ ℝ, m ∈ [0, M), n ∈ [1, N]
 			}
 		*/
@@ -44,9 +44,8 @@ namespace kac_core::physics {
 		const std::size_t M = S.size();
 		const std::size_t N = S[0].size();
 		T::Matrix_2D A(M, T::Matrix_1D(N, 0.));
-		const double pi_4 = std::numbers::pi * 0.25;
 		for (std::size_t m = 0; m < M; m++) {
-			double angular = m == 0 ? 1. : std::numbers::sqrt2 * std::sin(m * theta + pi_4);
+			double angular = std::cos(m * theta);
 			for (std::size_t n = 0; n < N; n++) {
 				A[m][n] = boost::math::cyl_bessel_j(m, S[m][n] * r * std::sqrt(std::numbers::pi))
 						* angular;
@@ -73,7 +72,7 @@ namespace kac_core::physics {
 			boundary_conditions = (true = fixed, false = free)
 		output:
 			U_rθ = {
-				J_n(z_nm * r) * (cos(nθ) + sin(nθ))
+				J_n(z_nm * r) * e^(imθ)
 				| U ∈ ℝ^2
 			}
 		*/
@@ -116,8 +115,7 @@ namespace kac_core::physics {
 				double r = std::hypot(x_prime, y_prime);
 				if (r <= 1.) {
 					double theta = std::atan2(y_prime, x_prime);
-					U[x][y] = boost::math::cyl_bessel_j(m, z_mn * r)
-							* (std::cos(m_round * theta) + std::sin(m_round * theta));
+					U[x][y] = boost::math::cyl_bessel_j(m, z_mn * r) * std::cos(m_round * theta);
 				}
 			}
 		}

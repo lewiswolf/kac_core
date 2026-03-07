@@ -74,7 +74,7 @@ namespace kac_core::physics {
 				2: x-axis maxima boundary condition
 		output:
 			U_x = {
-				sin((n + 1) πx/X),		dirichlet boundary condition
+				sin((n + 1)πx/X),		dirichlet boundary condition
 				cos(nπx/X),				neumann boundary condition
 				sin((n + 0.5)πx/X),		minima fixed, maxima free
 				cos((n + 0.5)πx/X),		minima free, maxima fixed

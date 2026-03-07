@@ -48,6 +48,10 @@ int main() {
 		P_tmp = g::generateRegularPolygon(N);
 	}
 	{
+		Timer timer("  generateRegularStar");
+		P_tmp = g::generateRegularStar((2 * N) + 1, N);
+	}
+	{
 		Timer timer("  generateUnitRectangle");
 		P_tmp = g::generateUnitRectangle(0.5);
 	}

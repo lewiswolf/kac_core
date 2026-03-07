@@ -247,6 +247,47 @@ namespace kac_core::geometry {
 		return P;
 	}
 
+	inline T::Polygon generateRegularStar(const std::size_t& p, const std::size_t& q) {
+		/*
+		Generate a regular star polygon via a specified Schläfli symbol.
+		See: https://en.wikipedia.org/wiki/Star_polygon
+		input:
+			{p, q} = Schläfli symbol
+		*/
+
+		if (p < 3 || p < ((2 * q) + 1)) {
+			throw std::invalid_argument(
+				"A polygon does not exist for this Schläfli symbol - this function requires that"
+				"p >= 2q + 1. and p >= 3"
+			);
+		}
+		// variables
+		T::Polygon P(q > 1 ? 2 * p : p, T::Point(0., 0.));
+		const double outer_step = 2. * std::numbers::pi / static_cast<double>(p);
+		// q == 1 just produces a regular polygon
+		if (q > 1) {
+			const double inner_step = outer_step * 0.5;
+			const double radius_inner = std::cos(q * inner_step) / std::cos((q - 1) * inner_step);
+			for (std::size_t n = 0; n < p; n++) {
+				double outer_angle = outer_step * n;
+				double inner_angle = outer_angle + inner_step;
+				// outer vertex
+				P[2 * n].x = std::cos(outer_angle);
+				P[2 * n].y = std::sin(outer_angle);
+				// inner intersection vertex
+				P[2 * n + 1].x = radius_inner * std::cos(inner_angle);
+				P[2 * n + 1].y = radius_inner * std::sin(inner_angle);
+			}
+		} else {
+			for (std::size_t n = 0; n < p; n++) {
+				double outer_angle = outer_step * n;
+				P[n].x = std::cos(outer_angle);
+				P[n].y = std::sin(outer_angle);
+			}
+		}
+		return P;
+	}
+
 	inline T::Polygon generateUnitRectangle(const double& epsilon) {
 		/*
 		Define a rectangle with unit area and an aspect ration epsilon.

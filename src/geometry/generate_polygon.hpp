@@ -10,6 +10,7 @@ Functions for generating polygons.
 #include <limits>		// numeric_limits
 #include <numbers>		// pi
 #include <random>		// default_random_engine
+#include <stdexcept>	// error handler
 #include <time.h>		// time
 
 // src

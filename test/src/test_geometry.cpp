@@ -4,7 +4,6 @@ Tests for /geometry.
 
 // core
 #include <numbers>
-using namespace std::numbers;
 
 // src
 #include <kac_core.hpp>
@@ -58,8 +57,36 @@ int main() {
 	};
 	booleanTest("isConvex holds for counter-clockwise ordered polygons", g::isConvex(square_anti));
 	booleanTest("isConvex holds for clockwise ordered polygons", g::isConvex(square_clockwise));
-	booleanTest("largestVector works anticlockwise", g::largestVector(square_anti).first == sqrt2);
-	booleanTest("largestVector works clockwise", g::largestVector(square_clockwise).first == sqrt2);
+	booleanTest(
+		"largestVector works anticlockwise",
+		g::largestVector(square_anti).first == std::numbers::sqrt2
+	);
+	booleanTest(
+		"largestVector works clockwise",
+		g::largestVector(square_clockwise).first == std::numbers::sqrt2
+	);
+
+	/*
+	Test that isPointInsideConvexPolygon and isPointInsidePolygon are accurate.
+	*/
+	// booleanTest(
+	// 	"isPointInsideConvexPolygon holds.",
+	// 	g::isPointInsideConvexPolygon(T::Point(0.5, 0.5), square_clockwise)
+	// );
+	// booleanTest(
+	// 	"isPointInsidePolygon holds.", g::isPointInsidePolygon(T::Point(0.5, 0.5), square_clockwise)
+	// );
+
+	/*
+	Test that _polygonCentroid works for negative values.
+	*/
+	T::Polygon square_negative = {
+		T::Point(-11., -10.), T::Point(-10., -9.), T::Point(-9., -10.), T::Point(-10., -11.)
+	};
+	T::Point centroid = g::polygonCentroid(square_negative);
+	booleanTest(
+		"polygonCentroid holds for negative centroids", centroid.x == -10. && centroid.y == -10.
+	);
 
 	/*
 	Test normaliseConvexPolygon.
@@ -78,7 +105,7 @@ int main() {
 		"X(1) produces the correct output.",
 		(incenter.x - 0.707107) < 0.001 && (incenter.y - 0.292893) < 0.001
 	);
-	T::Point centroid = g::ETC::centroid(tri);
+	centroid = g::ETC::centroid(tri);
 	booleanTest(
 		"X(2) produces the correct output.",
 		(centroid.x - (2. / 3.)) < 0.001 && (centroid.y - (1. / 3.)) < 0.001
@@ -90,6 +117,47 @@ int main() {
 	T::Point orthocenter = g::ETC::orthocenter(tri);
 	booleanTest(
 		"X(4) produces the correct output.", (orthocenter.x == 1.) && (orthocenter.y == 0.)
+	);
+
+	/*
+	Test isPointOnLine is accurate.
+	*/
+	T::Line test_line = T::Line(T::Point(0., 0.), T::Point(1., 1.));
+	booleanTest(
+		"isPointOnLine identifies a point on the line.",
+		g::isPointOnLine(T::Point(0.5, 0.5), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point on the line.",
+		g::isPointOnLine(T::Point(0., 0.), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point on the line.",
+		g::isPointOnLine(T::Point(1., 1.), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(0.501, 0.5), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(0.5, 0.501), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(1.001, 1.001), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(-0.001, -0.001), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(-1., -1.), test_line)
+	);
+	booleanTest(
+		"isPointOnLine identifies a point not on the line.",
+		!g::isPointOnLine(T::Point(2., 2.), test_line)
 	);
 
 	return 0;

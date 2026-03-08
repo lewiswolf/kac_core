@@ -6,6 +6,7 @@ https://faculty.evansville.edu/ck6/encyclopedia/ETC.html
 #pragma once
 
 // core
+#include <cmath>
 #include <stdexcept>
 
 // src
@@ -33,9 +34,9 @@ namespace kac_core::geometry::ETC {
 		*/
 
 		typeGuard(P);
-		double a = sqrt(pow(P[1].x - P[2].x, 2) + pow(P[1].y - P[2].y, 2));
-		double b = sqrt(pow(P[0].x - P[2].x, 2) + pow(P[0].y - P[2].y, 2));
-		double c = sqrt(pow(P[0].x - P[1].x, 2) + pow(P[0].y - P[1].y, 2));
+		double a = std::hypot(P[1].x - P[2].x, P[1].y - P[2].y);
+		double b = std::hypot(P[0].x - P[2].x, P[0].y - P[2].y);
+		double c = std::hypot(P[0].x - P[1].x, P[0].y - P[1].y);
 		return T::Point(
 			(a * P[0].x + b * P[1].x + c * P[2].x) / (a + b + c),
 			(a * P[0].y + b * P[1].y + c * P[2].y) / (a + b + c)
@@ -64,7 +65,7 @@ namespace kac_core::geometry::ETC {
 		const double a_2 = P[0].x * P[0].x + P[0].y * P[0].y;
 		const double b_2 = P[1].x * P[1].x + P[1].y * P[1].y;
 		const double c_2 = P[2].x * P[2].x + P[2].y * P[2].y;
-		const double d = 2
+		const double d = 2.
 					   * (P[0].x * (P[1].y - P[2].y) + P[1].x * (P[2].y - P[0].y)
 						  + P[2].x * (P[0].y + P[1].y));
 		return T::Point(
@@ -89,6 +90,19 @@ namespace kac_core::geometry::ETC {
 			(a * (P[2].y - P[1].y) - b * (P[2].y - P[0].y)) / (c - d),
 			(a * (P[2].x - P[1].x) - b * (P[2].x - P[0].x)) / (d - c)
 		);
+	}
+
+	T::Point ninePointCenter(const T::Polygon& P) {
+		/*
+		X(5) Nine-Point Center
+		output:
+			( x, y ) = coordinates of the nine-point center.
+		*/
+
+		typeGuard(P);
+		T::Point o = orthocenter(P);
+		T::Point c = circumcenter(P);
+		return T::Point((o.x + c.x) * 0.5, (o.y + c.y) * 0.5);
 	}
 
 }

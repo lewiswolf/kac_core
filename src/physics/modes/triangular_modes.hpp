@@ -30,7 +30,7 @@ namespace kac_core::physics {
 			M = number of modes per order
 		output:
 			A = {
-				abs(sin(nxπ) sin(nyπ) sin(nzπ))
+				abs(sin(nuπ) sin(nvπ) sin(nwπ))
 				| a ∈ ℝ, 0 < n <= N, 0 < m <= M
 			}
 		*/
@@ -62,9 +62,9 @@ namespace kac_core::physics {
 
 		T::Matrix_2D S(N, T::Matrix_1D(M, 0));
 		for (unsigned long n = 1; n < N + 1; n++) {
-			double n_hat = pow(n, 2);
+			double n_hat = n * n;
 			for (unsigned long m = 1; m < M + 1; m++) {
-				S[n - 1][m - 1] = sqrt(pow(m, 2) + n_hat + (m * n));
+				S[n - 1][m - 1] = sqrt((m * m) + n_hat + (m * n));
 			}
 		}
 		return S;

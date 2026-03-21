@@ -57,7 +57,7 @@ namespace kac_core::physics {
 	inline T::Matrix_2D circularCymatics(
 		const double& m,
 		const double& n,
-		const std::size_t& H,
+		const std::size_t& D,
 		const bool boundary_conditions = true
 	) {
 		/*
@@ -68,7 +68,7 @@ namespace kac_core::physics {
 		input:
 			m = mth modal index
 			n = nth modal index
-			H = length of the X and Y axes
+			D = Diameter of the circle (pixels)
 			boundary_conditions = (true = fixed, false = free)
 		output:
 			U_rθ = {
@@ -105,13 +105,13 @@ namespace kac_core::physics {
 			z_mn = z_mn_floor + ((z_mn_ceil - z_mn_floor) * (n - n_floor));
 		}
 		// calculate pattern
-		T::Matrix_2D U(H, T::Matrix_1D(H, 0.));
-		const double H_2 = 2. / H;
+		T::Matrix_2D U(D, T::Matrix_1D(D, 0.));
+		const double D_2 = 2. / D;
 		const double m_round = std::round(2. * m) * 0.5;
-		for (std::size_t x = 0; x < H; x++) {
-			double x_prime = (x * H_2) - 1.;
-			for (std::size_t y = 0; y < H; y++) {
-				double y_prime = (y * H_2) - 1.;
+		for (std::size_t x = 0; x < D; x++) {
+			double x_prime = (x * D_2) - 1.;
+			for (std::size_t y = 0; y < D; y++) {
+				double y_prime = (y * D_2) - 1.;
 				double r = std::hypot(x_prime, y_prime);
 				if (r <= 1.) {
 					double theta = std::atan2(y_prime, x_prime);

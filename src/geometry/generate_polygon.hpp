@@ -61,21 +61,19 @@ namespace kac_core::geometry {
 		std::sort(Y_rand.begin(), Y_rand.end());
 		// divide the interior points into two chains
 		for (std::size_t n = 1; n < N; n++) {
-			if (n != N - 1) {
-				if (natural_number(random_engine) % 2 == 1) {
-					X[n] = X_rand[n] - X_rand[last_true];
-					Y[n] = Y_rand[n] - Y_rand[last_true];
-					last_true = n;
-				} else {
-					X[n] = X_rand[last_false] - X_rand[n];
-					Y[n] = Y_rand[last_false] - Y_rand[n];
-					last_false = n;
-				}
-			} else {
+			if (n == N - 1) {
 				X[0] = X_rand[n] - X_rand[last_true];
 				Y[0] = Y_rand[n] - Y_rand[last_true];
 				X[n] = X_rand[last_false] - X_rand[n];
 				Y[n] = Y_rand[last_false] - Y_rand[n];
+			} else if (natural_number(random_engine) % 2 == 1) {
+				X[n] = X_rand[n] - X_rand[last_true];
+				Y[n] = Y_rand[n] - Y_rand[last_true];
+				last_true = n;
+			} else {
+				X[n] = X_rand[last_false] - X_rand[n];
+				Y[n] = Y_rand[last_false] - Y_rand[n];
+				last_false = n;
 			}
 		}
 		// randomly combine x and y

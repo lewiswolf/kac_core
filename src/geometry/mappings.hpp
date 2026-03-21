@@ -55,7 +55,7 @@ namespace kac_core::geometry {
 
 		if (method == SquareToCircleMethod::Elliptic) {
 			return T::Point(
-				p.x * std::sqrt(1 - (p.y * p.y * 0.5)), p.y * std::sqrt(1. - (p.x * p.x * 0.5))
+				p.x * std::sqrt(1. - (p.y * p.y * 0.5)), p.y * std::sqrt(1. - (p.x * p.x * 0.5))
 			);
 		}
 		return T::Point(0., 0.);

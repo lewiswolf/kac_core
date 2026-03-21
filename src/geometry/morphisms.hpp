@@ -53,8 +53,8 @@ namespace kac_core::geometry {
 		// normalise
 		if (signed_norm) {
 			for (T::Point& p: P) {
-				p.x = 2 * (p.x - v_min) / v_d - 1;
-				p.y = 2 * (p.y - v_min) / v_d - 1;
+				p.x = 2. * (p.x - v_min) / v_d - 1.;
+				p.y = 2. * (p.y - v_min) / v_d - 1.;
 			}
 		} else {
 			for (T::Point& p: P) {

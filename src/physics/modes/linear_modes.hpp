@@ -67,7 +67,7 @@ namespace kac_core::physics {
 		Produce the cymatic diagram of a 1-dimensional domain for a particular mode λ_n.
 		input:
 			n = nth modal index
-			X = length of the X axis
+			X = length of the X axis (pixels)
 			boundary_conditions = boolean array indicating the boundary conditions
 				(true = fixed, false = free)
 				1: x-axis minima boundary condition

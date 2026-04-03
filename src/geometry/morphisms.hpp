@@ -39,27 +39,19 @@ namespace kac_core::geometry {
 		// center along x and y axes
 		const double x_shift = (x_min + x_max) * 0.5;
 		const double y_shift = (y_min + y_max) * 0.5;
-		for (T::Point& p: P) {
-			p.x -= x_shift;
-			p.y -= y_shift;
-		}
-		x_min -= x_shift;
-		x_max -= x_shift;
-		y_min -= y_shift;
-		y_max -= y_shift;
 		// find v_min and v_d (v_d = v_max - v_min)
-		const double v_min = std::min(x_min, y_min);
-		const double v_d = std::max(x_max, y_max) - v_min;
-		// normalise
+		const double v_min = std::min(x_min - x_shift, y_min - y_shift);
+		const double v_d = std::max(x_max - x_shift, y_max - y_shift) - v_min;
+		// normalise & center
 		if (signed_norm) {
 			for (T::Point& p: P) {
-				p.x = 2. * (p.x - v_min) / v_d - 1.;
-				p.y = 2. * (p.y - v_min) / v_d - 1.;
+				p.x = 2. * (p.x - x_shift - v_min) / v_d - 1.;
+				p.y = 2. * (p.y - y_shift - v_min) / v_d - 1.;
 			}
 		} else {
 			for (T::Point& p: P) {
-				p.x = (p.x - v_min) / v_d;
-				p.y = (p.y - v_min) / v_d;
+				p.x = (p.x - x_shift - v_min) / v_d;
+				p.y = (p.y - y_shift - v_min) / v_d;
 			}
 		}
 		// enforce that each polygon is anti-clockwise

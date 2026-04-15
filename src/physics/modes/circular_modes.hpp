@@ -87,21 +87,27 @@ namespace kac_core::physics {
 				 + ((boost::math::cyl_bessel_j_zero(m, std::ceil(n_hat)) - z_mn_floor)
 					* (n_hat - n_floor));
 		} else {
-			const double n_floor = std::floor(n);
 			const auto j_prime = [m](double _x) { return boost::math::cyl_bessel_j_prime(m, _x); };
-			const double lower_bound = n_floor == 0. ? std::numeric_limits<double>::epsilon()
-													 : boost::math::cyl_bessel_j_zero(m, n_floor);
+			const double n_floor = std::floor(n);
 			const double mid_bound = boost::math::cyl_bessel_j_zero(m, n_floor + 1);
-			const double upper_bound = boost::math::cyl_bessel_j_zero(m, n_floor + 2);
-			const double z_mn_floor = (m == 0. && n < 1.)
-										? 0.
-										: boost::math::tools::bisect(
-											  j_prime, lower_bound, mid_bound, root_finder_tolerance
-										  )
-											  .first;
-			const double z_mn_ceil =
-				boost::math::tools::bisect(j_prime, mid_bound, upper_bound, root_finder_tolerance)
-					.first;
+			const double z_mn_floor =
+				(m == 0. && n <= 1.)
+					? 0.
+					: boost::math::tools::bisect(
+						  j_prime,
+						  n_floor == 0. ? std::numeric_limits<double>::epsilon()
+										: boost::math::cyl_bessel_j_zero(m, n_floor),
+						  mid_bound,
+						  root_finder_tolerance
+					  )
+						  .first;
+			const double z_mn_ceil = boost::math::tools::bisect(
+										 j_prime,
+										 mid_bound,
+										 boost::math::cyl_bessel_j_zero(m, n_floor + 2),
+										 root_finder_tolerance
+			)
+										 .first;
 			z_mn = z_mn_floor + ((z_mn_ceil - z_mn_floor) * (n - n_floor));
 		}
 		// calculate pattern

@@ -29,10 +29,11 @@ namespace kac_core::types {
 
 		// constructors
 		constexpr Point() noexcept = default;
-		constexpr Point(double _x, double _y) noexcept: x(_x), y(_y) {}
-		explicit constexpr Point(const std::array<double, 2>& arr) noexcept: x(arr[0]), y(arr[1]) {}
+		constexpr Point(double _x, double _y) noexcept: x(_x), y(_y) { }
+		explicit constexpr Point(const std::array<double, 2>& arr) noexcept
+			: x(arr[0]), y(arr[1]) { }
 		explicit constexpr Point(const std::pair<double, double>& p) noexcept
-			: x(p.first), y(p.second) {}
+			: x(p.first), y(p.second) { }
 
 		// accessors
 		[[nodiscard]] double r() const noexcept { return std::hypot(x, y); }
@@ -59,7 +60,7 @@ namespace kac_core::types {
 
 		// constructors
 		constexpr Line() noexcept = default;
-		constexpr Line(const Point& _a, const Point& _b) noexcept: a(_a), b(_b) {}
+		constexpr Line(const Point& _a, const Point& _b) noexcept: a(_a), b(_b) { }
 	} Line;
 
 	// A polygon defined on the Euclidean plane.

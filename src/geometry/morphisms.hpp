@@ -10,6 +10,7 @@ Functions for producing group theoretic transformations.
 #include <cmath>
 #include <iterator>
 #include <utility>
+#include <vector>
 
 // src
 #include "../types.hpp"
@@ -267,6 +268,79 @@ namespace kac_core::geometry {
 			std::reverse(P.begin(), P.end());
 		}
 		return P;
+	}
+
+	inline std::vector<T::Polygon> triangulateConvexPolygon(const T::Polygon& P) {
+		/*
+		Transform a convex N-gon into an N-2 array of triangles.
+		Using the fan method: https://www.cs.princeton.edu/~chazelle/temp/423/tri.pdf
+		*/
+
+		const std::size_t N = P.size() - 2;
+		const T::Point p_0 = P[0];
+		std::vector<T::Polygon> triangles(N, T::Polygon(3, T::Point(0., 0.)));
+		for (std::size_t n = 0; n < N; n++) {
+			triangles[n][0] = p_0;
+			triangles[n][1] = P[n + 1];
+			triangles[n][2] = P[n + 2];
+		}
+		return triangles;
+	}
+
+	inline std::vector<T::Polygon> triangulatePolygon(T::Polygon P) {
+		/*
+		Transform a simple N-gon into an array of triangles.
+		Using the ear trimming method: https://www.cs.princeton.edu/~chazelle/temp/423/tri.pdf
+		*/
+
+		// enforce that each polygon is anti-clockwise
+		// reverse the polygon if the vertices are clockwise
+		if (polygonArea(P) < 0.) {
+			std::reverse(P.begin(), P.end());
+		}
+		// output
+		std::vector<T::Polygon> triangles;
+		while (P.size() > 3) {
+			bool foundEar = false;
+			const std::size_t N = P.size();
+			for (std::size_t n = 0; n < N; n++) {
+				const std::size_t prev = (n + N - 1) % N;
+				const std::size_t next = (n + 1) % N;
+				// ear must be convex
+				if (((P[n].x - P[prev].x) * (P[next].y - P[n].y)
+					 - (P[n].y - P[prev].y) * (P[next].x - P[n].x))
+					<= 0.) {
+					continue;
+				}
+				bool ear = true;
+				// check whether any other vertex lies inside the ear
+				for (std::size_t m = 0; m < N; m++) {
+					if (m == prev || m == n || m == next) {
+						continue;
+					}
+					if (isPointInsideConvexPolygon(P[m], {P[prev], P[n], P[next]})) {
+						ear = false;
+						break;
+					}
+				}
+				// emit triangle
+				if (!ear) {
+					continue;
+				}
+				triangles.push_back({P[prev], P[n], P[next]});
+				// remove ear tip
+				P.erase(P.begin() + n);
+				foundEar = true;
+				break;
+			}
+			// invalid / self-intersecting polygon
+			if (!foundEar) {
+				return {};
+			}
+		}
+		// final triangle
+		triangles.push_back(P);
+		return triangles;
 	}
 
 }

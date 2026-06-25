@@ -99,6 +99,14 @@ int main() {
 		Timer timer("  scalePolygonByArea");
 		g::scalePolygonByArea(P, 100.);
 	}
+	{
+		Timer timer("  triangulateConvexPolygon");
+		g::triangulateConvexPolygon(P);
+	}
+	{
+		Timer timer("  triangulatePolygon");
+		g::triangulateConvexPolygon(P);
+	}
 
 	// geometry/polygon_properties.hpp
 	printColouredText("\nProfiler for `./geometry/polygon_properties.hpp`.", 36);
